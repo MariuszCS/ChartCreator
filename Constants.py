@@ -1,0 +1,5 @@
+SMALL_FONT = ('Helvetica', '10')
+SMALL_BOLD_FONT = ('Helvetica', '10', "bold")
+MEDIUM_BOLD_FONT = ("Helvetica", "12", "bold")
+MEDIUM_FONT = ("Helvetica", "12")
+BIG_FONT = ('Helvetica', '16')
