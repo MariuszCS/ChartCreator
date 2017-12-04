@@ -239,3 +239,70 @@ legend_properties_dict = dict(
         "frameon": True
     }
 )
+
+legend_properties_UI_dict = dict(
+    {
+        #"visible": True,
+        #"draggable": False,
+        "Location": dict(
+            {
+                0: "Best",
+                1: "Upper right",
+                2: "Upper left",
+                3: "Lower left",
+                4: "Lower right",
+                5: "Right",
+                6: "Center left",
+                7: "Center right",
+                8: "Lower center",
+                9: "Upper center",
+                10: "Center",
+            }
+        ),
+        "numpoints": {x: str(x) for x in range(1, 4)},
+        "markerscale": {(x / 10): str(x / 10) for x in range(1, 11)},
+        "Marker position": dict(
+            {
+                True: "Left",
+                False: "Right"
+            }
+        ),
+        "scatterpoints": {x: str(x) for x in range(1, 4)},
+        "scatteryoffsets": [0.375, 0.5, 0.3125],
+        #"prop": SMALL_FONT,
+        "fontsize": {x: str(x) for x in range(1, 14)},
+        "borderpad": {x: str(x) for x in range(0, 6)},
+        "labelspacing": {x: str(x) for x in range(0, 6)},
+        "handletextpad": {x: str(x) for x in range(0, 6)},
+        "borderaxespad": {x: str(x) for x in range(0, 6)},
+        "columnspacing": {x: str(x) for x in range(0, 6)},
+        "Number of columns": {x: str(x) for x in range(1, 6)},
+        #"mode": None,
+        "Box layout": dict(
+            {
+                True: "Fancy",
+                False: "Normal"
+            }
+        ),
+        "Box shadow": dict(
+            {
+                True: "On",
+                False: "Off"
+            }
+        ),
+        "Title": "Legend",
+        "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Border color": create_color_dict(),
+        "Background color": create_color_dict(),
+        #"bbox_to_anchor": None,
+        "Border": dict(
+            {
+                True: "On",
+                False: "Off"
+            }
+        )
+    }
+)
+
+legend_properties_mapping_dict = {list(legend_properties_UI_dict.keys())[index]: list(legend_properties_dict.keys())[index]
+                                for index in range(0, len(legend_properties_dict.keys()))}
