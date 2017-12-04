@@ -19,6 +19,24 @@ def create_color_dict():
     )
 
 """
+Every data series that is plotted has its own series properties dict, so no instance created here, but only function, to create one during
+plotting and configuration (temp objects for config.)
+"""
+def create_series_properties_dict():
+    return dict(
+        {
+            "x": [],
+            "y": [],
+            "z": [],
+            "artist": None,
+            "chart_type": "",
+            "color": "",
+            "plot_name": ""
+        }
+    )
+
+
+"""
 Dictionary that will be passed as **kwargs to the .grid() function of the subplot object with all the settable grid properties
 """
 grid_properties_dict = dict(
@@ -86,7 +104,7 @@ Dictionary mapping the key from the dictionary that it displayed in the GUI to t
 as **kwargs to the drawing function
 """
 gird_properties_mapping_dict = {list(grid_properties_UI_dict.keys())[index]: list(grid_properties_dict.keys())[index]
-                                      for index in range(0, len(grid_properties_dict.keys()))}
+                                for index in range(0, len(grid_properties_dict.keys()))}
 
 ticks_properties_dict = dict(
     {
@@ -126,18 +144,18 @@ ticks_properties_UI_dict = dict(
                 "inout": "Both inside and outside"
             }
         ),
-        "Ticks length": {x: str(x) for x in range(0,11)},
-        "Ticks width": {x: str(x) for x in range(0,11)},
+        "Ticks length": {x: str(x) for x in range(0, 11)},
+        "Ticks width": {x: str(x) for x in range(0, 11)},
         "Ticks color": create_color_dict(),
-        "Label-tick distance": {x: str(x) for x in range(1,11)},
-        "Label size": {x: str(x) for x in range(0,21)},
+        "Label-tick distance": {x: str(x) for x in range(1, 11)},
+        "Label size": {x: str(x) for x in range(0, 21)},
         "Label color": create_color_dict(),
-        "Label rotation": {x: str(x) for x in range(0,360,10)}
+        "Label rotation": {x: str(x) for x in range(0, 360, 10)}
     }
 )
 
 ticks_properties_mapping_dict = {list(ticks_properties_UI_dict.keys())[index]: list(ticks_properties_dict.keys())[index]
-                                      for index in range(0, len(ticks_properties_dict.keys()))}
+                                for index in range(0, len(ticks_properties_dict.keys()))}
 
 axes_properties_dict = dict(
     {
@@ -189,22 +207,11 @@ axes_properties_UI_dict = dict(
 )
 
 axes_properties_mapping_dict = {list(axes_properties_UI_dict.keys())[index]: list(axes_properties_dict.keys())[index]
-                                      for index in range(0, len(axes_properties_dict.keys()))}
-"""
-Every data series that is plotted has its own series properties dict, so no instance created here, but only function, to create one during
-plotting and configuration (temp objects for config.)
-"""
+                                for index in range(0, len(axes_properties_dict.keys()))}
 
-def create_series_properties_dict():
-    return dict(
-        {
-            "x": [],
-            "y": [],
-            "z": [],
-            "artist": None,
-            "chart_type": "",
-            "color": "",
-            "plot_name": ""
-        }
-    )
-
+legedn_properties_dict = dict(
+    {
+        "visible": True,
+        
+    }
+)

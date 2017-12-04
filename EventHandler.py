@@ -329,6 +329,7 @@ class EventHandler(object):
                 label_list.append(dict["plot_name"])
         if (artist_list):
             plot.legend(artist_list, label_list)
+            #plot.get_legend().draggable()
             return
         if (plot.get_legend()):
             plot.get_legend().set_visible(False)
