@@ -1,4 +1,5 @@
 import numpy as np
+from Constants import *
 
 def create_color_dict():
     return dict(
@@ -209,9 +210,32 @@ axes_properties_UI_dict = dict(
 axes_properties_mapping_dict = {list(axes_properties_UI_dict.keys())[index]: list(axes_properties_dict.keys())[index]
                                 for index in range(0, len(axes_properties_dict.keys()))}
 
-legedn_properties_dict = dict(
+legend_properties_dict = dict(
     {
-        "visible": True,
-        
+        #"visible": True,
+        #"draggable": False,
+        "loc": 0,
+        "numpoints": 1,
+        "markerscale": 1,
+        "markerfirst": True,
+        "scatterpoints": 1,
+        "scatteryoffsets": [0.375, 0.5, 0.3125],
+        #"prop": SMALL_FONT,
+        "fontsize": 10,
+        "borderpad": 1,
+        "labelspacing": 1,
+        "handletextpad": 1,
+        "borderaxespad": 1,
+        "columnspacing": 1,
+        "ncol": 1,
+        #"mode": None,
+        "fancybox": True,
+        "shadow": False,
+        "title": "Legend",
+        "framealpha": 0.8,
+        "edgecolor": "#b3b3b3",
+        "facecolor": "#ffffff",
+        #"bbox_to_anchor": None,
+        "frameon": True
     }
 )
