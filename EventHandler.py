@@ -376,4 +376,5 @@ class EventHandler(object):
                         break
             else:
                 key = frame_elements[index + 1].get()
+                GUI_dict[label_text] = key
             properties_dict[mapping_dict[label_text]] = key

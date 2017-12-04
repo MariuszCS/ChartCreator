@@ -191,14 +191,9 @@ class PopupCreator(object):
             label = ttk.Label(parent_frame, text=list(mapping_dict.keys())[row_nr] + ":", justify="left",
                               font=SMALL_FONT, width=20)
             label.grid(row=row_nr, column=0, padx=10, pady=12, sticky="w")
-            if (list(mapping_dict.keys())[row_nr] == "Title" or
-                list(mapping_dict.keys())[row_nr] == "X axis label" or
-                list(mapping_dict.keys())[row_nr] == "Y axis label" or
-                not UI_dict[list(mapping_dict.keys())[row_nr]]):
+            if (type(UI_dict[list(mapping_dict.keys())[row_nr]]) == str):
                 entry = ttk.Entry(parent_frame, width=26)
-                if (UI_dict[list(mapping_dict.keys())[row_nr]]):
-                    entry.delete(0, len(entry.get()))
-                    entry.insert(0, UI_dict[list(mapping_dict.keys())[row_nr]])
+                entry.insert(0, UI_dict[list(mapping_dict.keys())[row_nr]])
                 entry.grid(row=row_nr, column=1, padx=20, sticky="e")                           
             else:
                 combobox = ttk.Combobox(parent_frame, state="readonly", font=SMALL_FONT,
