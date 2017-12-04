@@ -219,7 +219,7 @@ legend_properties_dict = dict(
         "markerscale": 1,
         "markerfirst": True,
         "scatterpoints": 1,
-        "scatteryoffsets": [0.375, 0.5, 0.3125],
+        #"scatteryoffsets": [0.375, 0.5, 0.3125],
         #"prop": SMALL_FONT,
         "fontsize": 10,
         "borderpad": 1,
@@ -260,22 +260,22 @@ legend_properties_UI_dict = dict(
             }
         ),
         "numpoints": {x: str(x) for x in range(1, 4)},
-        "markerscale": {(x / 10): str(x / 10) for x in range(1, 11)},
+        "Marker scale": {(x / 10): str(x / 10) for x in range(1, 11)},
         "Marker position": dict(
             {
                 True: "Left",
                 False: "Right"
             }
         ),
-        "scatterpoints": {x: str(x) for x in range(1, 4)},
-        "scatteryoffsets": [0.375, 0.5, 0.3125],
+        "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
+        #"scatteryoffsets": [0.375, 0.5, 0.3125],
         #"prop": SMALL_FONT,
-        "fontsize": {x: str(x) for x in range(1, 14)},
+        "Font size": {x: str(x) for x in range(1, 14)},
         "borderpad": {x: str(x) for x in range(0, 6)},
-        "labelspacing": {x: str(x) for x in range(0, 6)},
+        "Label spacing": {x: str(x) for x in range(0, 6)},
         "handletextpad": {x: str(x) for x in range(0, 6)},
         "borderaxespad": {x: str(x) for x in range(0, 6)},
-        "columnspacing": {x: str(x) for x in range(0, 6)},
+        "Column spacing": {x: str(x) for x in range(0, 6)},
         "Number of columns": {x: str(x) for x in range(1, 6)},
         #"mode": None,
         "Box layout": dict(

@@ -181,9 +181,14 @@ class PopupCreator(object):
         self.ticks_frame.grid(sticky="nwse")
         self.setup_options_for_config_tab(self.ticks_frame, ticks_properties_dict, ticks_properties_UI_dict,
                                           ticks_properties_mapping_dict)
+        self.legend_frame = tk.Frame(option_notebook)
+        self.legend_frame.grid(sticky="nwse")
+        self.setup_options_for_config_tab(self.legend_frame, legend_properties_dict, legend_properties_UI_dict,
+                                          legend_properties_mapping_dict)
         option_notebook.add(self.axes_frame, text="Axes")
         option_notebook.add(self.grid_frame, text="Grid")
         option_notebook.add(self.ticks_frame, text="Ticks")
+        option_notebook.add(self.legend_frame, text="Legend")
         self.chart_configuration_popup.mainloop()
 
     def setup_options_for_config_tab(self, parent_frame, properties_dict, UI_dict, mapping_dict):
