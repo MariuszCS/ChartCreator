@@ -16,7 +16,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 
-
 class PopupCreator(object):
     def __init__(self):
         self.excel_sheet_popup = None
@@ -196,7 +195,11 @@ class PopupCreator(object):
                 list(mapping_dict.keys())[row_nr] == "X axis label" or
                 list(mapping_dict.keys())[row_nr] == "Y axis label" or
                 not UI_dict[list(mapping_dict.keys())[row_nr]]):
-                print("s")
+                entry = ttk.Entry(parent_frame, width=26)
+                if (UI_dict[list(mapping_dict.keys())[row_nr]]):
+                    entry.delete(0, len(entry.get()))
+                    entry.insert(0, UI_dict[list(mapping_dict.keys())[row_nr]])
+                entry.grid(row=row_nr, column=1, padx=20, sticky="e")                           
             else:
                 combobox = ttk.Combobox(parent_frame, state="readonly", font=SMALL_FONT,
                                         values=list(UI_dict[list(mapping_dict.keys())[row_nr]].values()))

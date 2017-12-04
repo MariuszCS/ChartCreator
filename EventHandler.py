@@ -352,15 +352,15 @@ class EventHandler(object):
         properties_dict["plot_name"] = ""
 
     def event_for_apply_config_button(self, plot, canvas):
+        self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), axes_properties_dict,
+                                              axes_properties_UI_dict, axes_properties_mapping_dict)
         self.update_values_of_properties_dict(self.popup_creator.grid_frame.winfo_children(), grid_properties_dict,
                                               grid_properties_UI_dict, gird_properties_mapping_dict)
         self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), ticks_properties_dict,
                                               ticks_properties_UI_dict, ticks_properties_mapping_dict)
+        mat_art.setp(plot, **axes_properties_dict)
         plot.grid(**grid_properties_dict)
         plot.tick_params(**ticks_properties_dict)
-        #a = dict({"adjustable":"box"})
-        #mat_art.setp(plot, **a)
-        mat_art.setp(plot, **axes_properties_dict)
         canvas.show()
 
     def event_for_submit_config_button(self, plot, canvas):
@@ -368,13 +368,12 @@ class EventHandler(object):
         self.event_for_close_popup_button(self.popup_creator.chart_configuration_popup)
 
     def update_values_of_properties_dict(self, frame_elements, properties_dict, GUI_dict, mapping_dict):
-        index = 0
-        for combobox, text in zip([cb for cb in frame_elements if
-                                    type(cb) == tk.ttk.Combobox],
-                                   [lb.cget("text")[:-1] for lb in frame_elements if
-                                    type(lb) == tk.ttk.Label]):
-            for key, value in GUI_dict[text].items():
-                if (value == combobox.get()):
-                    break
-            properties_dict[mapping_dict[text]] = key
-            index += 1
+        for index in range(0, len(frame_elements) - 1, 2):
+            label_text = frame_elements[index].cget("text")[:-1]
+            if (type(frame_elements[index + 1]) == tk.ttk.Combobox):
+                for key, value in GUI_dict[label_text].items():
+                    if (value == frame_elements[index + 1].get()):
+                        break
+            else:
+                key = frame_elements[index + 1].get()
+            properties_dict[mapping_dict[label_text]] = key

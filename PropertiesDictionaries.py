@@ -146,13 +146,13 @@ axes_properties_dict = dict(
         "frame_on": True,
         "title": "Chart",
         "facecolor": "#ffffff",
-        "path_effects": None,
-        "xbound": None,
+        #"path_effects": None,
+        #"xbound": None,
         "xlabel": "x",
-        "xlim": None,
-        "ybound": None,
+        #"xlim": None,
+        #"ybound": None,
         "ylabel": "y",
-        "ylim": None,
+        #"ylim": None,
     }
 )
 
@@ -178,13 +178,13 @@ axes_properties_UI_dict = dict(
         ),
         "Title": "Chart",
         "Background color": create_color_dict(),
-        "path_effects": None,
-        "Bound x axis": None,
+        #"path_effects": None,
+        #"Bound x axis (x1, x2)": None,
         "X axis label": "x",
-        "Limit x axis": None,
-        "Bound y axis": None,
+        #"Limit x axis (x1, x2)": None,
+        #"Bound y axis (y1, y2)": None,
         "Y axis label": "y",
-        "Limit y axis": None,
+        #"Limit y axis (y1, y2)": None,
     }
 )
 
