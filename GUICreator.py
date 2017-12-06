@@ -124,7 +124,8 @@ class ChartCreator(tk.Tk):
                                                                                               self.plot))
         delete_button.grid(row=2, column=0, sticky="n", pady=10)
         modify_button = ttk.Button(parent_frame, text="Modify", cursor="hand2",
-                                   command=lambda: self.event_handler.event_for_modify_button(self.data_series_combobox))
+                                   command=lambda: self.event_handler.event_for_modify_button(self.data_series_combobox, 
+                                                                                              self.canvas))
         modify_button.grid(row=2, column=1, sticky="n", pady=10)
         self.setup_option_frame(parent_frame)
 
@@ -174,7 +175,8 @@ class ChartCreator(tk.Tk):
         auto_scale_button.grid(row=0, column=3, padx=20)
         clear_button = ttk.Button(parent_frame, text="Clear", cursor="hand2",
                                   command=lambda: self.event_handler.event_for_clear_button(self.canvas,
-                                                                                            self.plot))
+                                                                                            self.plot,
+                                                                                            self.data_series_combobox))
         clear_button.grid(row=0, column=4, padx=20)
         copyright_label = tk.Label(parent_frame, text="Mariusz Chybicki \u00A9", font=SMALL_FONT)
         copyright_label.grid(row=1, column=0, columnspan=4, sticky="w")

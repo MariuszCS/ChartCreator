@@ -27,10 +27,16 @@ class EventHandler(object):
                                                               self.popup_creator.provide_name_popup))
 
     def rewrite_values_to_data_series_dict(self, temp_series_properties_dict):
-        self.data_series_dict[self.data_series_name] = create_series_properties_dict()
+        if (not self.data_series_name in self.data_series_dict):
+            self.data_series_dict[self.data_series_name] = create_series_properties_dict()
+        else:
+            self.data_series_dict[self.data_series_name]["x"] = []
+            self.data_series_dict[self.data_series_name]["y"] = []
+            self.data_series_dict[self.data_series_name]["z"] = []
         self.data_series_dict[self.data_series_name]["x"] = [float(element) for element in temp_series_properties_dict["x"]]
         self.data_series_dict[self.data_series_name]["y"] = [float(element) for element in temp_series_properties_dict["y"]]
         self.data_series_dict[self.data_series_name]["z"] = [float(element) for element in temp_series_properties_dict["z"]]
+
 
     def event_for_submit_name_button(self, temp_series_properties_dict, data_series_combobox):
         if (self.check_name()):
@@ -44,14 +50,14 @@ class EventHandler(object):
 
     def check_name(self):
         # checks if the name is not empty or if it already exists
-        self.data_series_name = self.popup_creator.name_entry.get()
-        if (not self.data_series_name):
+        provided_name = self.popup_creator.name_entry.get()
+        if (not provided_name):
             self.popup_creator.messagebox_popup("Name must not be empty.")
             return False
-        for data_series_name in self.data_series_dict:
-            if (self.data_series_name == data_series_name):
-                self.popup_creator.messagebox_popup("Name: \"{0}\" already exists!".format(self.data_series_name))
-                return False
+        if (provided_name in self.data_series_dict):
+            self.popup_creator.messagebox_popup("Name: \"{0}\" already exists!".format(provided_name))
+            return False
+        self.data_series_name = provided_name
         return True
 
     def event_for_close_popup_button(self, popup):
@@ -161,21 +167,21 @@ class EventHandler(object):
             self.event_for_close_popup_button(self.popup_creator.excel_sheet_popup)
             data_series_combobox.event_generate("<<ComboboxSelected>>")
         else:
-            temp_series_properties_dict = []
-            self.popup_creator.messagebox_popup("Please check if the entered field are well aligned.")
+            del temp_series_properties_dict
+            self.popup_creator.messagebox_popup("Please check if the entered fields are well aligned.")
             self.popup_creator.excel_sheet_popup.lift()
 
     def event_for_add_row_button(self):
         self.popup_creator.add_entry()
         self.popup_creator.update_scroll_region()
 
-    def event_for_modify_button(self, data_series_combobox):
+    def event_for_modify_button(self, data_series_combobox, canvas):
         self.data_series_name = data_series_combobox.get()
         if (self.data_series_name):
             self.popup_creator.popup_for_excel_sheet(
                 "Modify data series...",
                 lambda: self.event_for_close_popup_button(self.popup_creator.excel_sheet_popup),
-                lambda: self.event_for_submit_modify_button(data_series_combobox),
+                lambda: self.event_for_submit_modify_button(data_series_combobox, canvas),
                 lambda: self.event_for_add_row_button())
             self.fill_excel_sheet_popup(data_series_combobox)
             self.popup_creator.excel_sheet_popup.mainloop() # needs to be here so self.fill_excel_sheet_popup(data_series_combobox)
@@ -199,7 +205,7 @@ class EventHandler(object):
                 self.popup_creator.entry_list[int(value_index * 3) + 2].insert(0,
                                                                                 self.data_series_dict[self.data_series_name]["z"][value_index])
 
-    def event_for_submit_modify_button(self, data_series_combobox):
+    def event_for_submit_modify_button(self, data_series_combobox, canvas):
         if (self.data_series_name != self.popup_creator.name_entry.get()):
             old_data_series_name = self.data_series_name
             if (self.check_name()):
@@ -207,8 +213,15 @@ class EventHandler(object):
                 self.check_format_and_rewrite_to_dict(data_series_combobox)
             else:
                 self.popup_creator.excel_sheet_popup.lift()
+                return
         else:
             self.check_format_and_rewrite_to_dict(data_series_combobox)
+        if (self.data_series_dict[self.data_series_name]["artist"]):
+            mat_art.setp(self.data_series_dict[self.data_series_name]["artist"], 
+                        xdata=self.data_series_dict[self.data_series_name]["x"])
+            mat_art.setp(self.data_series_dict[self.data_series_name]["artist"],
+                        ydata=self.data_series_dict[self.data_series_name]["y"])
+        canvas.show()
 
     def event_for_remove_plot_button(self, canvas, data_series_combobox, plot):
         if (not data_series_combobox.get()):
@@ -295,12 +308,14 @@ class EventHandler(object):
         plot.autoscale()
         canvas.show()
 
-    def event_for_clear_button(self, canvas, plot):
+    def event_for_clear_button(self, canvas, plot, data_series_combobox):
         for dict in self.data_series_dict.values():
             if (dict["artist"]):
                 self.clear_series_properties(dict)
         self.update_legend(plot)
         canvas.show()
+        data_series_combobox.event_generate("<<ComboboxSelected>>")
+        self.event_for_auto_scale_button(plot, canvas)
 
     def event_for_radiobutton(self, chart_type, data_series_name, plot, canvas):
         # changes the drawn plot to the new type
