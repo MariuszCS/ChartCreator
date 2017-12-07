@@ -166,12 +166,8 @@ axes_properties_dict = dict(
         "title": "Chart",
         "facecolor": "#ffffff",
         #"path_effects": None,
-        #"xbound": None,
         "xlabel": "x",
-        #"xlim": None,
-        #"ybound": None,
         "ylabel": "y",
-        #"ylim": None,
     }
 )
 
@@ -198,12 +194,8 @@ axes_properties_UI_dict = dict(
         "Title": "Chart",
         "Background color": create_color_dict(),
         #"path_effects": None,
-        #"Bound x axis (x1, x2)": None,
         "X axis label": "x",
-        #"Limit x axis (x1, x2)": None,
-        #"Bound y axis (y1, y2)": None,
         "Y axis label": "y",
-        #"Limit y axis (y1, y2)": None,
     }
 )
 
@@ -215,7 +207,7 @@ legend_properties_dict = dict(
         #"visible": True,
         #"draggable": False,
         "loc": 0,
-        "numpoints": 1,
+        #"numpoints": 1,
         "markerscale": 1,
         "markerfirst": True,
         "scatterpoints": 1,
@@ -259,8 +251,8 @@ legend_properties_UI_dict = dict(
                 10: "Center",
             }
         ),
-        "numpoints": {x: str(x) for x in range(1, 4)},
-        "Marker scale": {(x / 10): str(x / 10) for x in range(1, 11)},
+        #"numpoints": {x: str(x) for x in range(0, 14)},
+        "Marker scale": {(x / 10): str(x / 10) for x in range(1, 31)},
         "Marker position": dict(
             {
                 True: "Left",
@@ -270,13 +262,13 @@ legend_properties_UI_dict = dict(
         "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
         #"scatteryoffsets": [0.375, 0.5, 0.3125],
         #"prop": SMALL_FONT,
-        "Font size": {x: str(x) for x in range(1, 14)},
-        "borderpad": {x: str(x) for x in range(0, 6)},
-        "Label spacing": {x: str(x) for x in range(0, 6)},
-        "handletextpad": {x: str(x) for x in range(0, 6)},
-        "borderaxespad": {x: str(x) for x in range(0, 6)},
-        "Column spacing": {x: str(x) for x in range(0, 6)},
-        "Number of columns": {x: str(x) for x in range(1, 6)},
+        "Font size": {x: str(x) for x in range(6, 14)},
+        "Border-inside spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Label spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Marker-text spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Border-axes spacing": {(x / 10): str(x / 10) for x in range(0, 31)},
+        "Column spacing": {(x / 10): str(x / 10) for x in range(0, 41, 2)},
+        "Number of columns": {x: str(x) for x in range(1, 5)},
         #"mode": None,
         "Box layout": dict(
             {
@@ -295,7 +287,7 @@ legend_properties_UI_dict = dict(
         "Border color": create_color_dict(),
         "Background color": create_color_dict(),
         #"bbox_to_anchor": None,
-        "Border": dict(
+        "Box": dict(
             {
                 True: "On",
                 False: "Off"

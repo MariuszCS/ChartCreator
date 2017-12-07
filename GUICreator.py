@@ -46,7 +46,6 @@ class ChartCreator(tk.Tk):
         menubar = tk.Menu(parent_frame)
         self.setup_file_menu(menubar)
         self.setup_configure_menu(menubar)
-        menubar.add_command(label="Plot Config.", command=lambda: self.event_handler.event_for_plot_config())
         tk.Tk.config(self, menu=menubar)
 
     def setup_file_menu(self, parent_menu):
@@ -63,13 +62,25 @@ class ChartCreator(tk.Tk):
 # axes legend font
     def setup_configure_menu(self, parent_menu):
         configure_menu = tk.Menu(parent_menu, tearoff=0)
-        configure_menu.add_command(label="Axes", command=lambda: self.event_handler.event_for_chart_configuration(self.plot, self.canvas))
+        configure_menu.add_command(label="Axes", command=
+                                   lambda: self.event_handler.event_for_chart_configuration(self.plot, 
+                                                                                            self.canvas,
+                                                                                            "Axes"))
         configure_menu.add_separator()
-        configure_menu.add_command(label="Chart")
+        configure_menu.add_command(label="Grid", command=
+                                   lambda: self.event_handler.event_for_chart_configuration(self.plot, 
+                                                                                            self.canvas,
+                                                                                            "Grid"))
         configure_menu.add_separator()
-        configure_menu.add_command(label="Legend")
+        configure_menu.add_command(label="Ticks", command=
+                                   lambda: self.event_handler.event_for_chart_configuration(self.plot, 
+                                                                                            self.canvas,
+                                                                                            "Ticks"))
         configure_menu.add_separator()
-        configure_menu.add_command(label="Label")
+        configure_menu.add_command(label="Legend", command=
+                                   lambda: self.event_handler.event_for_chart_configuration(self.plot, 
+                                                                                            self.canvas,
+                                                                                            "Legend"))
         parent_menu.add_cascade(label="Configure", menu=configure_menu)
 
     def setup_top_frame(self, parent_frame):

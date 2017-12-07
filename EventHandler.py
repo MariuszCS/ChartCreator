@@ -385,12 +385,13 @@ class EventHandler(object):
     def click_artist_callback(self, event):
         print(event.artist)
 
-    def event_for_chart_configuration(self, plot, canvas):
+    def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(
             lambda: self.event_for_close_popup_button(
                 self.popup_creator.chart_configuration_popup),
             lambda: self.event_for_submit_config_button(plot, canvas),
-            lambda: self.event_for_apply_config_button(plot, canvas)
+            lambda: self.event_for_apply_config_button(plot, canvas),
+            tab_title
         )
 
     # remember about ticks
@@ -408,9 +409,12 @@ class EventHandler(object):
                                               grid_properties_UI_dict, gird_properties_mapping_dict)
         self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), ticks_properties_dict,
                                               ticks_properties_UI_dict, ticks_properties_mapping_dict)
+        self.update_values_of_properties_dict(self.popup_creator.legend_frame.winfo_children(), legend_properties_dict,
+                                              legend_properties_UI_dict, legend_properties_mapping_dict)
         mat_art.setp(plot, **axes_properties_dict)
         plot.grid(**grid_properties_dict)
         plot.tick_params(**ticks_properties_dict)
+        self.update_legend(plot)
         canvas.show()
 
     def event_for_submit_config_button(self, plot, canvas):

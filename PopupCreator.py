@@ -23,7 +23,6 @@ class PopupCreator(object):
         self.plot_popup = None
         self.chart_configuration_popup = None
         self.name_entry = None
-        self.scrollbar = None
         self.canvas = None
         self.entry_frame = None
         self.entry_list = []
@@ -32,6 +31,7 @@ class PopupCreator(object):
         self.axes_frame = None
         self.grid_frame = None
         self.ticks_frame = None
+        self.legend_frame = None
 
     def popup_for_openfile(self):
         return filedialog.askopenfilename()
@@ -78,11 +78,11 @@ class PopupCreator(object):
         name_label.grid(row=0, column=0, sticky="w", padx=10, pady=10)
         self.name_entry = ttk.Entry(self.excel_sheet_popup, width=40)
         self.name_entry.grid(row=0, column=0, sticky="n", pady=10)
-        self.scrollbar = ttk.Scrollbar(self.excel_sheet_popup, cursor="hand2")
-        self.scrollbar.grid(row=1, column=1, sticky="ns")
-        self.canvas = tk.Canvas(self.excel_sheet_popup, yscrollcommand=self.scrollbar.set, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(self.excel_sheet_popup, cursor="hand2")
+        scrollbar.grid(row=1, column=1, sticky="ns")
+        self.canvas = tk.Canvas(self.excel_sheet_popup, yscrollcommand=scrollbar.set, highlightthickness=0)
         self.canvas.grid(row=1, column=0)
-        self.scrollbar.config(command=self.canvas.yview)
+        scrollbar.config(command=self.canvas.yview)
         self.entry_frame = tk.Frame(self.canvas, takefocus=0)
         self.canvas.create_window((0, 1), window=self.entry_frame, anchor='nw')
         x_label = tk.Label(self.entry_frame, text="x", font=SMALL_BOLD_FONT, borderwidth=2, relief="groove")
@@ -147,7 +147,7 @@ class PopupCreator(object):
         canvas._tkcanvas.pack()
         canvas.show()
 
-    def popup_for_chart_configuration(self, event_for_close_popup, event_for_submit_button, event_for_apply_button):
+    def popup_for_chart_configuration(self, event_for_close_popup, event_for_submit_button, event_for_apply_button, tab_title):
         self.chart_configuration_popup = tk.Toplevel()
         self.chart_configuration_popup.grab_set()
         self.chart_configuration_popup.wm_title("Configuration")
@@ -157,8 +157,7 @@ class PopupCreator(object):
         # validation_function = self.chart_configuration_popup.register(self.validate_entry_data)
         style = ttk.Style()
         style.configure('TabFont.TNotebook.Tab', font=MEDIUM_FONT)
-        option_notebook = ttk.Notebook(self.chart_configuration_popup, style="TabFont.TNotebook", width=380,
-                                            height=450)
+        option_notebook = ttk.Notebook(self.chart_configuration_popup, style="TabFont.TNotebook", width=380)
         option_notebook.grid(row=0, column=0, columnspan=2, sticky="nwse", padx=10, pady=10)
         submit_button = ttk.Button(self.chart_configuration_popup, text="Submit", command=event_for_submit_button,
                                    cursor="hand2")
@@ -181,14 +180,29 @@ class PopupCreator(object):
         self.ticks_frame.grid(sticky="nwse")
         self.setup_options_for_config_tab(self.ticks_frame, ticks_properties_dict, ticks_properties_UI_dict,
                                           ticks_properties_mapping_dict)
-        self.legend_frame = tk.Frame(option_notebook)
-        self.legend_frame.grid(sticky="nwse")
+        legend_tab_frame = tk.Frame(option_notebook, bg="black")
+        legend_tab_frame.columnconfigure(0, weight=22)
+        legend_tab_frame.columnconfigure(1, weight=1)
+        legend_tab_frame.rowconfigure(0, weight=10)
+        scrollbar = ttk.Scrollbar(legend_tab_frame, cursor="hand2")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        canvas = tk.Canvas(legend_tab_frame, yscrollcommand=scrollbar.set, highlightthickness=0)
+        canvas.grid(row=0, column=0, sticky="nwse")
+        scrollbar.config(command=canvas.yview)
+        self.legend_frame = tk.Frame(canvas, takefocus=0)
         self.setup_options_for_config_tab(self.legend_frame, legend_properties_dict, legend_properties_UI_dict,
                                           legend_properties_mapping_dict)
+        canvas.create_window((0, 1), window=self.legend_frame, anchor='nw', height=len(self.legend_frame.winfo_children()) * 45 / 2)
+        canvas.configure(scrollregion=(0,0,0,len(self.legend_frame.winfo_children()) * 45 / 2))
+
         option_notebook.add(self.axes_frame, text="Axes")
         option_notebook.add(self.grid_frame, text="Grid")
         option_notebook.add(self.ticks_frame, text="Ticks")
-        option_notebook.add(self.legend_frame, text="Legend")
+        option_notebook.add(legend_tab_frame, text="Legend")
+        for tab in option_notebook.tabs():
+            if (option_notebook.tab(tab, "text") == tab_title):
+                option_notebook.select(tab)
+                break
         self.chart_configuration_popup.mainloop()
 
     def setup_options_for_config_tab(self, parent_frame, properties_dict, UI_dict, mapping_dict):
@@ -205,7 +219,7 @@ class PopupCreator(object):
                                         values=list(UI_dict[list(mapping_dict.keys())[row_nr]].values()))
                 combobox.set(UI_dict[list(mapping_dict.keys())[row_nr]]
                              [properties_dict[list(mapping_dict.values())[row_nr]]])
-                combobox.grid(row=row_nr, column=1, padx=20, sticky="e")
-        if (parent_frame != self.axes_frame):
+                combobox.grid(row=row_nr, column=1, padx=19, sticky="e")
+        if (parent_frame != self.axes_frame and parent_frame != self.legend_frame):
             separator = ttk.Separator(parent_frame, orient="horizontal")
             separator.grid(row=1, column=0, columnspan=2, padx=10, sticky="wse")
