@@ -1,5 +1,6 @@
 import numpy as np
 from Constants import *
+from matplotlib import font_manager
 
 def create_color_dict():
     return dict(
@@ -165,7 +166,6 @@ axes_properties_dict = dict(
         "frame_on": True,
         "title": "Chart",
         "facecolor": "#ffffff",
-        #"path_effects": None,
         "xlabel": "x",
         "ylabel": "y",
     }
@@ -193,7 +193,6 @@ axes_properties_UI_dict = dict(
         ),
         "Title": "Chart",
         "Background color": create_color_dict(),
-        #"path_effects": None,
         "X axis label": "x",
         "Y axis label": "y",
     }
@@ -207,12 +206,10 @@ legend_properties_dict = dict(
         #"visible": True,
         #"draggable": False,
         "loc": 0,
-        #"numpoints": 1,
         "markerscale": 1,
         "markerfirst": True,
         "scatterpoints": 1,
-        #"scatteryoffsets": [0.375, 0.5, 0.3125],
-        #"prop": SMALL_FONT,
+        #"prop": {"style": 'normal', "size": 'x-small'},
         "fontsize": 10,
         "borderpad": 1,
         "labelspacing": 1,
@@ -220,14 +217,12 @@ legend_properties_dict = dict(
         "borderaxespad": 1,
         "columnspacing": 1,
         "ncol": 1,
-        #"mode": None,
         "fancybox": True,
         "shadow": False,
         "title": "Legend",
         "framealpha": 0.8,
         "edgecolor": "#b3b3b3",
         "facecolor": "#ffffff",
-        #"bbox_to_anchor": None,
         "frameon": True
     }
 )
@@ -251,7 +246,6 @@ legend_properties_UI_dict = dict(
                 10: "Center",
             }
         ),
-        #"numpoints": {x: str(x) for x in range(0, 14)},
         "Marker scale": {(x / 10): str(x / 10) for x in range(1, 31)},
         "Marker position": dict(
             {
@@ -260,8 +254,7 @@ legend_properties_UI_dict = dict(
             }
         ),
         "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
-        #"scatteryoffsets": [0.375, 0.5, 0.3125],
-        #"prop": SMALL_FONT,
+        #"prop": {SMALL_FONT: SMALL_FONT},
         "Font size": {x: str(x) for x in range(6, 14)},
         "Border-inside spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
         "Label spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
@@ -269,7 +262,6 @@ legend_properties_UI_dict = dict(
         "Border-axes spacing": {(x / 10): str(x / 10) for x in range(0, 31)},
         "Column spacing": {(x / 10): str(x / 10) for x in range(0, 41, 2)},
         "Number of columns": {x: str(x) for x in range(1, 5)},
-        #"mode": None,
         "Box layout": dict(
             {
                 True: "Fancy",
@@ -286,7 +278,6 @@ legend_properties_UI_dict = dict(
         "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Border color": create_color_dict(),
         "Background color": create_color_dict(),
-        #"bbox_to_anchor": None,
         "Box": dict(
             {
                 True: "On",
