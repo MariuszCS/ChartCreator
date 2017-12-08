@@ -377,6 +377,8 @@ class EventHandler(object):
                 label_list.append(dict["plot_name"])
         if (artist_list):
             plot.legend(artist_list, label_list, **legend_properties_dict)
+            # print(dir(plot.get_legend()))
+            # https://www.djangospin.com/50-plus-tips-tricks-for-python-developers/
             # plot.get_legend().draggable()
             return
         if (plot.get_legend()):
