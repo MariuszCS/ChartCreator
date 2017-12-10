@@ -24,6 +24,7 @@ class ChartCreator(tk.Tk):
         self.chosen_color_label = None
         self.chosen_color_preview_label = None
         self.name_entry = None
+        self.canvas = None
         self.plot = None
         main_frame = self.setup_main_frame()
         self.setup_menu(main_frame)
@@ -146,8 +147,8 @@ class ChartCreator(tk.Tk):
         self.setup_elements_for_option_frame(option_frame)
 
     def setup_plot_for_right_frame(self, parent_frame):
-        self.figure = Figure(dpi=100)
-        self.plot = self.figure.add_subplot(111)
+        figure = Figure(dpi=100)
+        self.plot = figure.add_subplot(111)
         self.plot.grid(**grid_properties_dict)
         self.plot.xaxis.set_major_locator(AutoLocator())
         self.plot.xaxis.set_minor_locator(AutoMinorLocator(4))
@@ -156,7 +157,7 @@ class ChartCreator(tk.Tk):
         self.plot.tick_params(**ticks_properties_dict)
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
-        self.canvas = FigureCanvasTkAgg(self.figure, parent_frame)
+        self.canvas = FigureCanvasTkAgg(figure, parent_frame)
         self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
         #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
         self.canvas.show()

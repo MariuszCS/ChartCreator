@@ -15,6 +15,7 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
+import matplotlib.artist as mat_art
 
 class PopupCreator(object):
     def __init__(self):
@@ -136,11 +137,12 @@ class PopupCreator(object):
         self.plot_popup.grab_set()
         self.plot_popup.wm_title("Plot")
         self.plot_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
-        background_for_plot = Figure(dpi=100)
-        self.plot = background_for_plot.add_subplot(111)
+        figure = Figure(dpi=100)
+        self.plot = figure.add_subplot(111)
+        mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.grid(**grid_properties_dict)
-        self.plot.set_axisbelow(b=True)
-        canvas = FigureCanvasTkAgg(background_for_plot, self.plot_popup)
+        self.plot.tick_params(**ticks_properties_dict)
+        canvas = FigureCanvasTkAgg(figure, self.plot_popup)
         canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
         toolbar = NavigationToolbar2TkAgg(canvas, self.plot_popup)
         toolbar.update()
