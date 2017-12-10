@@ -281,6 +281,7 @@ class EventHandler(object):
             return
         self.data_series_dict[self.data_series_name]["chart_type"] = chart_type.get()
         self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
+        self.data_series_dict[self.data_series_name]["color"] = self.color
         self.draw_plot(plot)
         canvas.show()
 
@@ -289,7 +290,7 @@ class EventHandler(object):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"], = plot.plot(self.data_series_dict[self.data_series_name]["x"],
                                                                                     self.data_series_dict[self.data_series_name]["y"],
-                                                                                    color=self.color,
+                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                     picker=True,
                                                                                     label=self.data_series_dict[self.data_series_name]["plot_name"])
             else:
@@ -301,9 +302,11 @@ class EventHandler(object):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.bar(self.data_series_dict[self.data_series_name]["x"],
                                                                                   self.data_series_dict[self.data_series_name]["y"],
-                                                                                  color=self.color,
+                                                                                  color=self.data_series_dict[self.data_series_name]["color"],
                                                                                   picker=True,
-                                                                                  label=self.data_series_dict[self.data_series_name]["plot_name"])
+                                                                                  label=self.data_series_dict[self.data_series_name]["plot_name"]
+                                                                                  )
+                # mat_art.setp(self.data_series_dict[self.data_series_name]["artist"], color=self.data_series_dict[self.data_series_name]["color"])
             else:
                 plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
@@ -314,7 +317,7 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.scatter(self.data_series_dict[self.data_series_name]["x"],
                                                                                       self.data_series_dict[
                                                                                           self.data_series_name]["y"],
-                                                                                      color=self.color,
+                                                                                      color=self.data_series_dict[self.data_series_name]["color"],
                                                                                       picker=True,
                                                                                       label=self.data_series_dict[self.data_series_name]["plot_name"])
             else:
@@ -322,7 +325,6 @@ class EventHandler(object):
                              color=self.data_series_dict[self.data_series_name]["color"],
                              label=self.data_series_dict[self.data_series_name]["plot_name"])
                 return
-        self.data_series_dict[self.data_series_name]["color"] = self.color
         self.update_legend(plot)
 
     def event_for_open_in_a_new_window_button(self):
@@ -371,15 +373,17 @@ class EventHandler(object):
     def update_legend(self, plot):
         artist_list = []
         label_list = []
-        for dict in self.data_series_dict.values():
-            if (dict["artist"]):
-                artist_list.append(dict["artist"])
-                label_list.append(dict["plot_name"])
+        for dictionary in self.data_series_dict.values():
+            if (dictionary["artist"]):
+                artist_list.append(dictionary["artist"])
+                label_list.append(dictionary["plot_name"])
         if (artist_list):
-            plot.legend(artist_list, label_list, **legend_properties_dict)
-            # print(dir(plot.get_legend()))
-            # https://www.djangospin.com/50-plus-tips-tricks-for-python-developers/
-            # plot.get_legend().draggable()
+            plot.legend(artist_list, label_list, **dict(list(legend_properties_dict.items())[2:]))
+            try:
+                plot.get_legend().set(**legend_properties_dict)
+            except AttributeError:
+                pass
+            plot.get_legend().draggable(state=legend_properties_dict["draggable"])
             return
         if (plot.get_legend()):
             plot.get_legend().set_visible(False)

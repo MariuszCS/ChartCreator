@@ -1,4 +1,5 @@
 from GUICreator import *
 
-cc = ChartCreator()
-cc.mainloop()
+if (__name__ == "__main__"):
+    cc = ChartCreator()
+    cc.mainloop()

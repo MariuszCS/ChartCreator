@@ -203,13 +203,16 @@ axes_properties_mapping_dict = {list(axes_properties_UI_dict.keys())[index]: lis
 
 legend_properties_dict = dict(
     {
-        #"visible": True,
-        #"draggable": False,
+        "visible": True,
+        "draggable": False,
         "loc": 0,
-        "markerscale": 1,
-        "markerfirst": True,
-        "scatterpoints": 1,
-        #"prop": {"style": 'normal', "size": 'x-small'},
+        "frameon": True,
+        "fancybox": True,
+        "shadow": False,
+        "framealpha": 0.8,
+        "edgecolor": "#b3b3b3",
+        "facecolor": "#ffffff",
+        "title": "Legend",
         "fontsize": 10,
         "borderpad": 1,
         "labelspacing": 1,
@@ -217,20 +220,27 @@ legend_properties_dict = dict(
         "borderaxespad": 1,
         "columnspacing": 1,
         "ncol": 1,
-        "fancybox": True,
-        "shadow": False,
-        "title": "Legend",
-        "framealpha": 0.8,
-        "edgecolor": "#b3b3b3",
-        "facecolor": "#ffffff",
-        "frameon": True
+        "markerscale": 1,
+        "markerfirst": True,
+        "scatterpoints": 1,
+        #"prop": {"style": 'normal', "size": 'x-small'},     
     }
 )
 
 legend_properties_UI_dict = dict(
     {
-        #"visible": True,
-        #"draggable": False,
+        "Visibility": dict(
+            {
+                True: "Show",
+                False: "Hide"
+            }
+        ),
+        "Draggable": dict(
+            {
+                True: "On",
+                False: "Off"
+            }
+        ),
         "Location": dict(
             {
                 0: "Best",
@@ -246,22 +256,12 @@ legend_properties_UI_dict = dict(
                 10: "Center",
             }
         ),
-        "Marker scale": {(x / 10): str(x / 10) for x in range(1, 31)},
-        "Marker position": dict(
+        "Box": dict(
             {
-                True: "Left",
-                False: "Right"
+                True: "On",
+                False: "Off"
             }
         ),
-        "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
-        #"prop": {SMALL_FONT: SMALL_FONT},
-        "Font size": {x: str(x) for x in range(6, 14)},
-        "Border-inside spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
-        "Label spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
-        "Marker-text spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
-        "Border-axes spacing": {(x / 10): str(x / 10) for x in range(0, 31)},
-        "Column spacing": {(x / 10): str(x / 10) for x in range(0, 41, 2)},
-        "Number of columns": {x: str(x) for x in range(1, 5)},
         "Box layout": dict(
             {
                 True: "Fancy",
@@ -274,16 +274,26 @@ legend_properties_UI_dict = dict(
                 False: "Off"
             }
         ),
-        "Title": "Legend",
         "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Border color": create_color_dict(),
         "Background color": create_color_dict(),
-        "Box": dict(
+        "Title": "Legend",
+        "Font size": {x: str(x) for x in range(6, 14)},
+        "Border-inside spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Label spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Marker-text spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
+        "Border-axes spacing": {(x / 10): str(x / 10) for x in range(0, 31)},
+        "Column spacing": {(x / 10): str(x / 10) for x in range(0, 41, 2)},
+        "Number of columns": {x: str(x) for x in range(1, 5)},
+        "Marker scale": {(x / 10): str(x / 10) for x in range(1, 31)},
+        "Marker position": dict(
             {
-                True: "On",
-                False: "Off"
+                True: "Left",
+                False: "Right"
             }
-        )
+        ),
+        "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
+        #"prop": {SMALL_FONT: SMALL_FONT},
     }
 )
 

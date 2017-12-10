@@ -192,9 +192,9 @@ class PopupCreator(object):
         self.legend_frame = tk.Frame(canvas, takefocus=0)
         self.setup_options_for_config_tab(self.legend_frame, legend_properties_dict, legend_properties_UI_dict,
                                           legend_properties_mapping_dict)
-        canvas.create_window((0, 1), window=self.legend_frame, anchor='nw', height=len(self.legend_frame.winfo_children()) * 45 / 2)
+        canvas.create_window((0, 1), window=self.legend_frame, anchor='nw', 
+                            height=len(self.legend_frame.winfo_children()) * 45 / 2)
         canvas.configure(scrollregion=(0,0,0,len(self.legend_frame.winfo_children()) * 45 / 2))
-
         option_notebook.add(self.axes_frame, text="Axes")
         option_notebook.add(self.grid_frame, text="Grid")
         option_notebook.add(self.ticks_frame, text="Ticks")
