@@ -1,4 +1,4 @@
-from EventHandler import *
+import EventHandler
 from Constants import *
 from PropertiesDictionaries import *
 
@@ -14,18 +14,21 @@ from matplotlib import pyplot as plt
 import matplotlib.artist as mat_art
 
 class ChartCreator(tk.Tk):
+
+    chart_type = tk.StringVar
+
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.wm_title("Plot Creator")
         self.minsize(1000, 650)
-        self.event_handler = EventHandler()
-        self.chart_type = tk.StringVar()
+        self.event_handler = EventHandler.EventHandler()
         self.data_series_combobox = None
         self.chosen_color_label = None
         self.chosen_color_preview_label = None
         self.name_entry = None
         self.canvas = None
         self.plot = None
+        ChartCreator.chart_type = tk.StringVar()
         main_frame = self.setup_main_frame()
         self.setup_menu(main_frame)
         self.setup_top_frame(main_frame)
@@ -102,8 +105,6 @@ class ChartCreator(tk.Tk):
         left_frame.rowconfigure(1, weight=1)
         left_frame.rowconfigure(2, weight=1)
         left_frame.rowconfigure(3, weight=20)
-        left_frame.columnconfigure(0, weight=1)
-        left_frame.columnconfigure(1, weight=1)
         left_frame.grid(row=1, column=0, sticky="nwse", padx=3, pady=3)
         self.setup_elements_for_left_frame(left_frame)
 
@@ -127,7 +128,6 @@ class ChartCreator(tk.Tk):
                                        lambda event: self.event_handler.data_series_combobox_callback(self.data_series_combobox.get(),
                                                                                                       self.chosen_color_label,
                                                                                                       self.chosen_color_preview_label,
-                                                                                                      self.chart_type,
                                                                                                       self.name_entry))
         self.data_series_combobox.grid(row=1, column=0, columnspan=2, sticky="n")
         delete_button = ttk.Button(parent_frame, text="Delete", cursor="hand2",
@@ -137,7 +137,8 @@ class ChartCreator(tk.Tk):
         delete_button.grid(row=2, column=0, sticky="n", pady=10)
         modify_button = ttk.Button(parent_frame, text="Modify", cursor="hand2",
                                    command=lambda: self.event_handler.event_for_modify_button(self.data_series_combobox, 
-                                                                                              self.canvas))
+                                                                                              self.canvas,
+                                                                                              self.plot))
         modify_button.grid(row=2, column=1, sticky="n", pady=10)
         self.setup_option_frame(parent_frame)
 
@@ -173,10 +174,8 @@ class ChartCreator(tk.Tk):
                                                                                                                self.plot))
         remove_chosen_plot_button.grid(row=0, column=0, padx=30)
         plot_button = ttk.Button(parent_frame, text="Plot", cursor="hand2",
-                                 command=lambda: self.event_handler.event_for_plot_button(self.data_series_combobox.get(),
-                                                                                          self.plot,
+                                 command=lambda: self.event_handler.event_for_plot_button(self.plot,
                                                                                           self.canvas,
-                                                                                          self.chart_type,
                                                                                           self.name_entry.get()))
         plot_button.grid(row=0, column=1, padx=90)
         open_in_a_new_window_button = ttk.Button(parent_frame, text="Open in a new window", cursor="hand2",
@@ -199,49 +198,43 @@ class ChartCreator(tk.Tk):
         self.name_entry = ttk.Entry(parent_frame, width=40)
         self.name_entry.grid(row=1, column=0, columnspan=3, padx=15)
         self.name_entry.bind("<Return>",
-                             lambda event: self.event_handler.name_entry_callback(self.data_series_combobox.get(),
-                                                                                  self.name_entry.get(),
+                             lambda event: self.event_handler.name_entry_callback(self.name_entry.get(),
                                                                                   self.canvas,
                                                                                   self.plot))
         self.name_entry.bind("<FocusOut>",
-                             lambda event: self.event_handler.name_entry_callback(self.data_series_combobox.get(),
-                                                                                  self.name_entry.get(),
+                             lambda event: self.event_handler.name_entry_callback(self.name_entry.get(),
                                                                                   self.canvas,
                                                                                   self.plot))
         type_label = tk.Label(parent_frame, text="Plot type:", font=MEDIUM_BOLD_FONT)
         type_label.grid(row=2, column=0, columnspan=3, pady=10)
-        line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=self.chart_type, value="line",
+        line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=ChartCreator.chart_type, value="line",
                                                 cursor="hand2",
-                                                command=lambda: self.event_handler.event_for_radiobutton(self.chart_type,
-                                                                                                         self.data_series_combobox.get(),
-                                                                                                         self.plot,
+                                                command=lambda: self.event_handler.event_for_radiobutton(self.plot,
                                                                                                          self.canvas))
         line_type_radiobutton.grid(row=3, column=0)
-        bar_type_radiobutton = ttk.Radiobutton(parent_frame, text="Bars", variable=self.chart_type, value="bar",
+        bar_type_radiobutton = ttk.Radiobutton(parent_frame, text="Bars", variable=ChartCreator.chart_type, value="bar",
                                                cursor="hand2",
-                                               command=lambda: self.event_handler.event_for_radiobutton(self.chart_type,
-                                                                                                        self.data_series_combobox.get(),
-                                                                                                        self.plot,
+                                               command=lambda: self.event_handler.event_for_radiobutton(self.plot,
                                                                                                         self.canvas))
         bar_type_radiobutton.grid(row=3, column=1)
-        point_type_radiobutton = ttk.Radiobutton(parent_frame, text="Points", variable=self.chart_type, value="point",
+        point_type_radiobutton = ttk.Radiobutton(parent_frame, text="Points", variable=ChartCreator.chart_type, value="point",
                                                  cursor="hand2",
-                                                 command=lambda: self.event_handler.event_for_radiobutton(self.chart_type,
-                                                                                                          self.data_series_combobox.get(),
-                                                                                                          self.plot,
+                                                 command=lambda: self.event_handler.event_for_radiobutton(self.plot,
                                                                                                           self.canvas))
         point_type_radiobutton.grid(row=3, column=2)
+        more_plot_types_button = ttk.Button(parent_frame, text="More...", cursor="hand2",
+                                            command=lambda: self.event_handler.event_for_more_plot_types_button(self.plot,
+                                                                                                                self.canvas))
+        more_plot_types_button.grid(row=4, column=2, pady=10)
         color_label = tk.Label(parent_frame, text="Plot color:", font=MEDIUM_BOLD_FONT)
-        color_label.grid(row=4, column=0, columnspan=3, pady=10)
+        color_label.grid(row=5, column=0, columnspan=3)
         color_chooser_button = ttk.Button(parent_frame, text="Color chooser", cursor="hand2",
                                           command=lambda: self.event_handler.event_for_color_chooser_button(self.chosen_color_label,
                                                                                                             self.chosen_color_preview_label,
-                                                                                                            self.data_series_combobox.get(),
                                                                                                             self.canvas,
                                                                                                             self.plot))
-        color_chooser_button.grid(row=5, column=1)
-        self.chosen_color_label = ttk.Label(parent_frame, text="Chosen color (hex): ")
-        self.chosen_color_label.grid(row=6, column=0, columnspan=2, padx=15 ,pady=10, sticky="w")
-        self.chosen_color_preview_label = ttk.Label(parent_frame)
-        self.chosen_color_preview_label.config(width=4)
-        self.chosen_color_preview_label.grid(row=6, column=2, padx=15 ,pady=10, sticky="nw")
+        color_chooser_button.grid(row=6, column=1, pady=10, sticky="e")
+        self.chosen_color_label = ttk.Label(parent_frame, text="Chosen color (hex): ", width=25)
+        self.chosen_color_label.grid(row=7, column=0, columnspan=2, padx=15 , pady=10, sticky="w")
+        self.chosen_color_preview_label = ttk.Label(parent_frame, width=4)
+        self.chosen_color_preview_label.grid(row=7, column=2, padx=15 , pady=10, sticky="nw")

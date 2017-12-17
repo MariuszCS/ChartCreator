@@ -1,6 +1,7 @@
 from Parser import *
 from PopupCreator import *
 from PropertiesDictionaries import *
+import GUICreator
 
 import matplotlib.artist as mat_art
 from matplotlib.lines import Line2D
@@ -30,8 +31,7 @@ class EventHandler(object):
 
     def rewrite_values_to_data_series_dict(self, temp_series_properties_dict):
         if (not self.data_series_name in self.data_series_dict):
-            self.data_series_dict[self.data_series_name] = create_series_properties_dict(
-            )
+            self.data_series_dict[self.data_series_name] = create_series_properties_dict()
         else:
             self.data_series_dict[self.data_series_name]["x"] = []
             self.data_series_dict[self.data_series_name]["y"] = []
@@ -82,27 +82,27 @@ class EventHandler(object):
         data_series_combobox.config(
             values=[data_series_name for data_series_name in self.data_series_dict.keys()])
 
-    def event_for_color_chooser_button(self, chosen_color_label, chosen_color_preview_label, data_series_name, canvas, plot):
+    def event_for_color_chooser_button(self, chosen_color_label, chosen_color_preview_label, canvas, plot):
         new_color = colorchooser.askcolor(initialcolor="#000000")[1]
         if (new_color and new_color != self.color):
             # if the color has been chosen and is different than previous one
             self.color = new_color
             self.update_color_labels(
                 chosen_color_label, chosen_color_preview_label, self.color)
-            if (self.data_series_dict and self.data_series_dict[data_series_name]["artist"]):
+            if (self.data_series_dict and self.data_series_dict[self.data_series_name]["artist"]):
                 # if the data series is plotted, change its color
                 mat_art.setp(
-                    self.data_series_dict[data_series_name]["artist"], color=self.color)
-                self.data_series_dict[data_series_name]["color"] = self.color
+                    self.data_series_dict[self.data_series_name]["artist"], color=self.color)
+                self.data_series_dict[self.data_series_name]["color"] = self.color
                 self.update_legend(plot)
                 canvas.show()
 
-    def data_series_combobox_callback(self, data_series_name, chosen_color_label, chosen_color_preview_label, chart_type,
-                                      name_entry):
+    def data_series_combobox_callback(self, data_series_name, chosen_color_label, chosen_color_preview_label, name_entry):
+        self.data_series_name = data_series_name
         if (self.data_series_dict.keys()):
-            if (self.data_series_dict[data_series_name]["artist"]):
+            if (self.data_series_dict[self.data_series_name]["artist"]):
                 # update color in hex and preview in the color label to the color of the plot of this data series
-                self.color = self.data_series_dict[data_series_name]["color"]
+                self.color = self.data_series_dict[self.data_series_name]["color"]
                 self.update_color_labels(
                     chosen_color_label, chosen_color_preview_label, self.color)
             else:
@@ -112,17 +112,16 @@ class EventHandler(object):
                     chosen_color_label, chosen_color_preview_label, self.color)
             # set radiobutton to the chart_type of the data series (if plotted data series is line, line radiobutton will be set,
             # if the data series is not plotted, all radio buttons will be cleared etc.)
-            chart_type.set(
-                self.data_series_dict[data_series_name]["chart_type"])
+            GUICreator.ChartCreator.chart_type.set(value=self.data_series_dict[self.data_series_name]["chart_type"])
             # remove anything that is present in name_entry, but only in case if it is different than the plot_name of current data series,
             # and set it to the plot_name of current data series
-            if (name_entry.get() != self.data_series_dict[data_series_name]["plot_name"]):
+            if (name_entry.get() != self.data_series_dict[self.data_series_name]["plot_name"]):
                 name_entry.delete(0, len(name_entry.get()))
                 name_entry.insert(
-                    0, self.data_series_dict[data_series_name]["plot_name"])
+                    0, self.data_series_dict[self.data_series_name]["plot_name"])
         else:
             name_entry.delete(0, len(name_entry.get()))
-            chart_type.set("")
+            GUICreator.ChartCreator.chart_type.set("")
             self.update_color_labels(
                 chosen_color_label, chosen_color_preview_label, "")
 
@@ -132,14 +131,13 @@ class EventHandler(object):
         chosen_color_preview_label.config(background=color)
 
     def event_for_delete_button(self, data_series_combobox, canvas, plot):
-        data_series_name = data_series_combobox.get()
-        if (data_series_name):
-            if (self.data_series_dict[data_series_name]["artist"]):
-                self.data_series_dict[data_series_name]["artist"].remove()
-                self.data_series_dict[data_series_name]["artist"] = None
+        if (self.data_series_name):
+            if (self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"].remove()
+                self.data_series_dict[self.data_series_name]["artist"] = None
                 self.update_legend(plot)
                 canvas.show()
-            del self.data_series_dict[data_series_name]
+            del self.data_series_dict[self.data_series_name]
             if (data_series_combobox.current()):
                 data_series_combobox.current(
                     data_series_combobox.current() - 1)
@@ -158,17 +156,17 @@ class EventHandler(object):
             "Insert data series...",
             lambda: self.event_for_close_popup_button(
                 self.popup_creator.excel_sheet_popup),
-            lambda: self.event_for_submit_insert_button(data_series_combobox),
+            lambda: self.event_for_submit_insert_button(data_series_combobox, "Insert data series..."),
             lambda: self.event_for_add_row_button())
         self.popup_creator.excel_sheet_popup.mainloop()
 
-    def event_for_submit_insert_button(self, data_series_combobox):
+    def event_for_submit_insert_button(self, data_series_combobox, window_title):
         if (self.check_name()):
-            self.check_format_and_rewrite_to_dict(data_series_combobox)
+            self.check_format_and_rewrite_to_dict(data_series_combobox, window_title)
         else:
             self.popup_creator.excel_sheet_popup.lift()
 
-    def check_format_and_rewrite_to_dict(self, data_series_combobox):
+    def check_format_and_rewrite_to_dict(self, data_series_combobox, window_title):
         temp_series_properties_dict = create_series_properties_dict()
         for entry_number in range(0, len(self.popup_creator.entry_list), 3):
             x_entry_content = self.popup_creator.entry_list[entry_number].get()
@@ -184,11 +182,12 @@ class EventHandler(object):
             self.rewrite_values_to_data_series_dict(
                 temp_series_properties_dict)
             self.event_for_update_data_series_combobox(data_series_combobox)
-            data_series_combobox.current(
-                len(data_series_combobox["values"]) - 1)
             self.event_for_close_popup_button(
                 self.popup_creator.excel_sheet_popup)
-            data_series_combobox.event_generate("<<ComboboxSelected>>")
+            if (window_title == "Insert data series..."):
+                data_series_combobox.current(
+                    len(data_series_combobox["values"]) - 1)
+                data_series_combobox.event_generate("<<ComboboxSelected>>")
         else:
             del temp_series_properties_dict
             self.popup_creator.messagebox_popup(
@@ -199,15 +198,14 @@ class EventHandler(object):
         self.popup_creator.add_entry()
         self.popup_creator.update_scroll_region()
 
-    def event_for_modify_button(self, data_series_combobox, canvas):
-        self.data_series_name = data_series_combobox.get()
+    def event_for_modify_button(self, data_series_combobox, canvas, plot):
         if (self.data_series_name):
             self.popup_creator.popup_for_excel_sheet(
                 "Modify data series...",
                 lambda: self.event_for_close_popup_button(
                     self.popup_creator.excel_sheet_popup),
                 lambda: self.event_for_submit_modify_button(
-                    data_series_combobox, canvas),
+                    data_series_combobox, "Modify data series...", canvas, plot),
                 lambda: self.event_for_add_row_button())
             self.fill_excel_sheet_popup(data_series_combobox)
             # needs to be here so self.fill_excel_sheet_popup(data_series_combobox)
@@ -233,41 +231,39 @@ class EventHandler(object):
                 self.popup_creator.entry_list[int(value_index * 3) + 2].insert(0,
                                                                                self.data_series_dict[self.data_series_name]["z"][value_index])
 
-    def event_for_submit_modify_button(self, data_series_combobox, canvas):
+    def event_for_submit_modify_button(self, data_series_combobox, window_title, canvas, plot):
         if (self.data_series_name != self.popup_creator.name_entry.get()):
             old_data_series_name = self.data_series_name
             if (self.check_name()):
                 self.data_series_dict[self.data_series_name] = self.data_series_dict.pop(
                     old_data_series_name)
-                self.check_format_and_rewrite_to_dict(data_series_combobox)
+                self.check_format_and_rewrite_to_dict(data_series_combobox, window_title)
             else:
                 self.popup_creator.excel_sheet_popup.lift()
                 return
         else:
-            self.check_format_and_rewrite_to_dict(data_series_combobox)
+            self.check_format_and_rewrite_to_dict(data_series_combobox, window_title)
         if (self.data_series_dict[self.data_series_name]["artist"]):
-            mat_art.setp(self.data_series_dict[self.data_series_name]["artist"],
-                         xdata=self.data_series_dict[self.data_series_name]["x"])
-            mat_art.setp(self.data_series_dict[self.data_series_name]["artist"],
-                         ydata=self.data_series_dict[self.data_series_name]["y"])
-        canvas.show()
+            self.data_series_dict[self.data_series_name]["artist"].remove()
+            self.data_series_dict[self.data_series_name]["artist"] = None
+            self.draw_plot(plot)
+            canvas.show()
 
     def event_for_remove_plot_button(self, canvas, data_series_combobox, plot):
-        if (not data_series_combobox.get()):
+        if (not self.data_series_name):
             self.popup_creator.messagebox_popup("Choose data series.")
             return
-        if (not self.data_series_dict[data_series_combobox.get()]["artist"]):
+        if (not self.data_series_dict[self.data_series_name]["artist"]):
             self.popup_creator.messagebox_popup(
-                "Data series \"{0}\" not plotted, so cannot be removed".format(data_series_combobox.get()))
+                "Data series \"{0}\" not plotted, so cannot be removed".format(self.data_series_name))
             return
         self.clear_series_properties(
-            self.data_series_dict[data_series_combobox.get()])
+            self.data_series_dict[self.data_series_name])
         self.update_legend(plot)
         canvas.show()
         data_series_combobox.event_generate("<<ComboboxSelected>>")
 
-    def event_for_plot_button(self, data_series_name, plot, canvas, chart_type, plot_name):
-        self.data_series_name = data_series_name
+    def event_for_plot_button(self, plot, canvas, plot_name):
         if (not self.data_series_name):
             self.popup_creator.messagebox_popup("Choose data series.")
             return
@@ -275,11 +271,11 @@ class EventHandler(object):
             self.popup_creator.messagebox_popup(
                 "Data series \"{0}\" already plotted".format(self.data_series_name))
             return
-        if (not chart_type.get()):
+        if (not GUICreator.ChartCreator.chart_type.get()):
             self.popup_creator.messagebox_popup(
                 "Choose plot type.".format(self.data_series_name))
             return
-        self.data_series_dict[self.data_series_name]["chart_type"] = chart_type.get()
+        self.data_series_dict[self.data_series_name]["chart_type"] = GUICreator.ChartCreator.chart_type.get()
         self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
         self.data_series_dict[self.data_series_name]["color"] = self.color
         self.draw_plot(plot)
@@ -291,12 +287,10 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"], = plot.plot(self.data_series_dict[self.data_series_name]["x"],
                                                                                     self.data_series_dict[self.data_series_name]["y"],
                                                                                     color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                    picker=True,
-                                                                                    label=self.data_series_dict[self.data_series_name]["plot_name"])
+                                                                                    picker=True)
             else:
                 plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                          color=self.data_series_dict[self.data_series_name]["color"],
-                          label=self.data_series_dict[self.data_series_name]["plot_name"])
+                          color=self.data_series_dict[self.data_series_name]["color"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "bar"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -304,13 +298,13 @@ class EventHandler(object):
                                                                                   self.data_series_dict[self.data_series_name]["y"],
                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
                                                                                   picker=True,
-                                                                                  label=self.data_series_dict[self.data_series_name]["plot_name"]
-                                                                                  )
-                # mat_art.setp(self.data_series_dict[self.data_series_name]["artist"], color=self.data_series_dict[self.data_series_name]["color"])
+                                                                                  width=5)
+                # consider plot.stem
+                # print(dir(self.data_series_dict[self.data_series_name]["artist"].get_children()[0]))
             else:
                 plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
-                         label=self.data_series_dict[self.data_series_name]["plot_name"])
+                         width=5)
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "point"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -318,12 +312,22 @@ class EventHandler(object):
                                                                                       self.data_series_dict[
                                                                                           self.data_series_name]["y"],
                                                                                       color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                      picker=True,
-                                                                                      label=self.data_series_dict[self.data_series_name]["plot_name"])
+                                                                                      picker=True)
             else:
                 plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                             color=self.data_series_dict[self.data_series_name]["color"],
-                             label=self.data_series_dict[self.data_series_name]["plot_name"])
+                             color=self.data_series_dict[self.data_series_name]["color"])
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "barh"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"] = plot.barh(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   self.data_series_dict[self.data_series_name]["y"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True,
+                                                                                   height=5)
+            else:
+                plot.barh(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                         color=self.data_series_dict[self.data_series_name]["color"],
+                         height=5)
                 return
         self.update_legend(plot)
 
@@ -351,22 +355,14 @@ class EventHandler(object):
         data_series_combobox.event_generate("<<ComboboxSelected>>")
         self.event_for_auto_scale_button(plot, canvas)
 
-    def event_for_radiobutton(self, chart_type, data_series_name, plot, canvas):
+    def event_for_radiobutton(self, plot, canvas):
         # changes the drawn plot to the new type
-        if (data_series_name and self.data_series_dict[data_series_name]["artist"]):
-            if (chart_type != self.data_series_dict[data_series_name]["chart_type"]):
-                self.data_series_dict[data_series_name]["chart_type"] = chart_type.get(
-                )
-                self.data_series_dict[data_series_name]["artist"].remove()
-                self.data_series_dict[data_series_name]["artist"] = None
-                self.data_series_name = data_series_name
-                self.draw_plot(plot)
-                canvas.show()
+        self.handle_chart_type_change(plot, canvas)
 
-    def name_entry_callback(self, data_series_name, plot_name, canvas, plot):
-        if (data_series_name and self.data_series_dict[data_series_name]["artist"] and
-                self.data_series_dict[data_series_name]["plot_name"] != plot_name):
-            self.data_series_dict[data_series_name]["plot_name"] = plot_name
+    def name_entry_callback(self, plot_name, canvas, plot):
+        if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"] and
+                self.data_series_dict[self.data_series_name]["plot_name"] != plot_name):
+            self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
             self.update_legend(plot)
             canvas.show()
 
@@ -439,3 +435,22 @@ class EventHandler(object):
                 key = frame_elements[index + 1].get()
                 GUI_dict[label_text] = key
             properties_dict[mapping_dict[label_text]] = key
+
+    def event_for_more_plot_types_button(self, plot, canvas):
+        self.popup_creator.popup_for_plot_types(lambda: self.event_for_close_popup_button(self.popup_creator.plot_types_popup),
+                                                lambda: self.event_for_submit_plot_type_button(plot, canvas))
+
+    def event_for_submit_plot_type_button(self, plot, canvas):
+        GUICreator.ChartCreator.chart_type.set(self.popup_creator.plot_types_listbox.get(
+                                               self.popup_creator.plot_types_listbox.curselection()[0])[1:])
+        self.handle_chart_type_change(plot, canvas)
+        self.event_for_close_popup_button(self.popup_creator.plot_types_popup)
+
+    def handle_chart_type_change(self, plot, canvas):
+        if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"]):
+            if (GUICreator.ChartCreator.chart_type.get() != self.data_series_dict[self.data_series_name]["chart_type"]):
+                self.data_series_dict[self.data_series_name]["chart_type"] = GUICreator.ChartCreator.chart_type.get()
+                self.data_series_dict[self.data_series_name]["artist"].remove()
+                self.data_series_dict[self.data_series_name]["artist"] = None
+                self.draw_plot(plot)
+                canvas.show()

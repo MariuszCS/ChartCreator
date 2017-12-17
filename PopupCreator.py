@@ -23,6 +23,7 @@ class PopupCreator(object):
         self.provide_name_popup = None
         self.plot_popup = None
         self.chart_configuration_popup = None
+        self.plot_types_popup = None
         self.name_entry = None
         self.canvas = None
         self.entry_frame = None
@@ -33,6 +34,7 @@ class PopupCreator(object):
         self.grid_frame = None
         self.ticks_frame = None
         self.legend_frame = None
+        self.plot_types_listbox = None
 
     def popup_for_openfile(self):
         return filedialog.askopenfilename()
@@ -225,3 +227,38 @@ class PopupCreator(object):
         if (parent_frame != self.axes_frame and parent_frame != self.legend_frame):
             separator = ttk.Separator(parent_frame, orient="horizontal")
             separator.grid(row=1, column=0, columnspan=2, padx=10, sticky="wse")
+
+    def popup_for_plot_types(self, event_for_close_popup, event_for_submit_button):
+        self.plot_types_popup = tk.Toplevel()
+        self.plot_types_popup.grab_set()
+        self.plot_types_popup.wm_title("Plot types")
+        self.plot_types_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
+        self.plot_types_popup.wm_minsize(250, 320)
+        self.plot_types_popup.wm_maxsize(250, 320)
+        plot_types = ["barh", "csd", "errorbar", "hist", "loglog", "semilogx", "semilogy",
+                     "magnitude_sepctrum", "phase_spectrum", "pie", "psd", "stackplot", "stem",
+                     "step"]
+        choose_plot_type_label = ttk.Label(self.plot_types_popup, text="Choose plot type:", font=SMALL_FONT)
+        choose_plot_type_label.grid(row=0, column=0, columnspan=2, padx=15, pady=10, sticky="w")
+        self.plot_types_listbox = tk.Listbox(self.plot_types_popup, activestyle="none", font=SMALL_FONT, 
+                                        height=14, width=30, highlightthickness=0)
+        for plot_type in plot_types:
+            self.plot_types_listbox.insert("end", " " + plot_type)
+        self.plot_types_listbox.grid(row=1, column=0, columnspan=2, padx=15, sticky="nwse")
+        submit_button = ttk.Button(self.plot_types_popup, text="Submit", command=event_for_submit_button,
+                                   cursor="hand2")
+        submit_button.grid(row=2, column=0, sticky="w", padx=15, pady=10)
+        cancel_button = ttk.Button(self.plot_types_popup, text="Cancel", command=event_for_close_popup,
+                                   cursor="hand2")
+        cancel_button.grid(row=2, column=1, sticky="e", padx=15, pady=10)
+        # barh, broken_barh? just for fun later, cohere?no ide how works, csd OK how, errorbar OK,
+        # hexbin? no idea how works, hist ok, loglog OK, semilogx OK, semilogy OK,
+        # magnitude_sepctrum OK how, phase_spectrum OK how, pie OK, plot_date? to consider,
+        # psd? OK how, quiver? consider, stackplot? OK, stem, step? OK,
+        # violinplot? dont think so, 
+        # 'convert_xunits', 'convert_yunits', 'format_coord', 'format_cursor_data', 'format_xdata', 'format_ydata', 'minorticks_off', 
+        # 'minorticks_on'
+
+
+
+        self.plot_types_popup.mainloop()
