@@ -233,15 +233,14 @@ class PopupCreator(object):
         self.plot_types_popup.grab_set()
         self.plot_types_popup.wm_title("Plot types")
         self.plot_types_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
-        self.plot_types_popup.wm_minsize(250, 320)
-        self.plot_types_popup.wm_maxsize(250, 320)
-        plot_types = ["barh", "csd", "errorbar", "hist", "loglog", "semilogx", "semilogy",
-                     "magnitude_sepctrum", "phase_spectrum", "pie", "psd", "stackplot", "stem",
-                     "step"]
+        self.plot_types_popup.wm_minsize(250, 260)
+        self.plot_types_popup.wm_maxsize(250, 260)
+        plot_types = ["barh", "errorbar", "hist", "loglog", "semilogx", "semilogy",
+                     "pie", "stackplot", "stem", "step"]
         choose_plot_type_label = ttk.Label(self.plot_types_popup, text="Choose plot type:", font=SMALL_FONT)
         choose_plot_type_label.grid(row=0, column=0, columnspan=2, padx=15, pady=10, sticky="w")
         self.plot_types_listbox = tk.Listbox(self.plot_types_popup, activestyle="none", font=SMALL_FONT, 
-                                        height=14, width=30, highlightthickness=0)
+                                        height=10, width=30, highlightthickness=0)
         for plot_type in plot_types:
             self.plot_types_listbox.insert("end", " " + plot_type)
         self.plot_types_listbox.grid(row=1, column=0, columnspan=2, padx=15, sticky="nwse")

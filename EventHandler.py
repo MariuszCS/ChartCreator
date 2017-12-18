@@ -4,8 +4,7 @@ from PropertiesDictionaries import *
 import GUICreator
 
 import matplotlib.artist as mat_art
-from matplotlib.lines import Line2D
-
+import matplotlib.patches
 
 class EventHandler(object):
     def __init__(self):
@@ -133,8 +132,7 @@ class EventHandler(object):
     def event_for_delete_button(self, data_series_combobox, canvas, plot):
         if (self.data_series_name):
             if (self.data_series_dict[self.data_series_name]["artist"]):
-                self.data_series_dict[self.data_series_name]["artist"].remove()
-                self.data_series_dict[self.data_series_name]["artist"] = None
+                self.remove_artist(self.data_series_dict[self.data_series_name])
                 self.update_legend(plot)
                 canvas.show()
             del self.data_series_dict[self.data_series_name]
@@ -244,8 +242,7 @@ class EventHandler(object):
         else:
             self.check_format_and_rewrite_to_dict(data_series_combobox, window_title)
         if (self.data_series_dict[self.data_series_name]["artist"]):
-            self.data_series_dict[self.data_series_name]["artist"].remove()
-            self.data_series_dict[self.data_series_name]["artist"] = None
+            self.remove_artist(self.data_series_dict[self.data_series_name])
             self.draw_plot(plot)
             canvas.show()
 
@@ -312,10 +309,12 @@ class EventHandler(object):
                                                                                       self.data_series_dict[
                                                                                           self.data_series_name]["y"],
                                                                                       color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                      picker=True)
+                                                                                      picker=True,
+                                                                                      s=1)
             else:
                 plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                             color=self.data_series_dict[self.data_series_name]["color"])
+                             color=self.data_series_dict[self.data_series_name]["color"],
+                             s=1)
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "barh"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -328,6 +327,68 @@ class EventHandler(object):
                 plot.barh(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
                          height=5)
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "errorbar"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"] = plot.errorbar(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   self.data_series_dict[self.data_series_name]["y"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True,
+                                                                                   yerr=1,
+                                                                                   xerr=1,
+                                                                                   fmt="none")
+            else:
+                plot.errorbar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                        color=self.data_series_dict[self.data_series_name]["color"],
+                        yerr=1,
+                        xerr=1,
+                        fmt="none")
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "hist"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                _, _, self.data_series_dict[self.data_series_name]["artist"] = plot.hist(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True,
+                                                                                   edgecolor="red")
+                # cast from <a list of Patch objects> to <Container object of artists>, for the purpose of configuration and legend hendle
+                self.data_series_dict[self.data_series_name]["artist"] = matplotlib.container.BarContainer(self.data_series_dict[self.data_series_name]["artist"])
+            else:
+                plot.hist(self.data_series_dict[self.data_series_name]["x"],
+                        color=self.data_series_dict[self.data_series_name]["color"],
+                        edgecolor="red")
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "stackplot"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   self.data_series_dict[self.data_series_name]["y"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True)
+            else:
+                plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
+                        self.data_series_dict[self.data_series_name]["y"],
+                        color=self.data_series_dict[self.data_series_name]["color"])
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "stem"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"] = plot.stem(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   self.data_series_dict[self.data_series_name]["y"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True)
+            else:
+                plot.stem(self.data_series_dict[self.data_series_name]["x"],
+                        self.data_series_dict[self.data_series_name]["y"],
+                        color=self.data_series_dict[self.data_series_name]["color"])
+                return
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "step"):
+            if (not self.data_series_dict[self.data_series_name]["artist"]):
+                self.data_series_dict[self.data_series_name]["artist"] = plot.step(self.data_series_dict[self.data_series_name]["x"],
+                                                                                   self.data_series_dict[self.data_series_name]["y"],
+                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
+                                                                                   picker=True)[0]
+            else:
+                plot.step(self.data_series_dict[self.data_series_name]["x"],
+                        self.data_series_dict[self.data_series_name]["y"],
+                        color=self.data_series_dict[self.data_series_name]["color"])
                 return
         self.update_legend(plot)
 
@@ -371,7 +432,11 @@ class EventHandler(object):
         label_list = []
         for dictionary in self.data_series_dict.values():
             if (dictionary["artist"]):
-                artist_list.append(dictionary["artist"])
+                if (type(dictionary["artist"]) == list and 
+                    type(dictionary["artist"][0]) == matplotlib.collections.PolyCollection):
+                    artist_list.append(matplotlib.patches.Patch(color=dictionary["color"]))
+                else:
+                    artist_list.append(dictionary["artist"])
                 label_list.append(dictionary["plot_name"])
         if (artist_list):
             plot.legend(artist_list, label_list, **dict(list(legend_properties_dict.items())[2:]))
@@ -398,11 +463,19 @@ class EventHandler(object):
 
     # remember about ticks
     def clear_series_properties(self, properties_dict):
-        properties_dict["artist"].remove()
-        properties_dict["artist"] = None
+        self.remove_artist(properties_dict)
         properties_dict["chart_type"] = ""
         properties_dict["color"] = ""
         properties_dict["plot_name"] = ""
+
+    def remove_artist(self, properties_dict):
+        # in case of list of artist we need to remove them one by one from the plot
+        if (type(self.data_series_dict[self.data_series_name]["artist"]) == list):
+            for artist in reversed(self.data_series_dict[self.data_series_name]["artist"]):
+                artist.remove()
+        else:
+            properties_dict["artist"].remove()
+        properties_dict["artist"] = None
 
     def event_for_apply_config_button(self, plot, canvas):
         self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), axes_properties_dict,
@@ -441,16 +514,16 @@ class EventHandler(object):
                                                 lambda: self.event_for_submit_plot_type_button(plot, canvas))
 
     def event_for_submit_plot_type_button(self, plot, canvas):
-        GUICreator.ChartCreator.chart_type.set(self.popup_creator.plot_types_listbox.get(
-                                               self.popup_creator.plot_types_listbox.curselection()[0])[1:])
-        self.handle_chart_type_change(plot, canvas)
+        if (self.popup_creator.plot_types_listbox.curselection()):
+            GUICreator.ChartCreator.chart_type.set(self.popup_creator.plot_types_listbox.get(
+                                                self.popup_creator.plot_types_listbox.curselection()[0])[1:])
+            self.handle_chart_type_change(plot, canvas)
         self.event_for_close_popup_button(self.popup_creator.plot_types_popup)
 
     def handle_chart_type_change(self, plot, canvas):
         if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"]):
             if (GUICreator.ChartCreator.chart_type.get() != self.data_series_dict[self.data_series_name]["chart_type"]):
                 self.data_series_dict[self.data_series_name]["chart_type"] = GUICreator.ChartCreator.chart_type.get()
-                self.data_series_dict[self.data_series_name]["artist"].remove()
-                self.data_series_dict[self.data_series_name]["artist"] = None
+                self.remove_artist(self.data_series_dict[self.data_series_name])
                 self.draw_plot(plot)
                 canvas.show()
