@@ -5,6 +5,7 @@ import GUICreator
 
 import matplotlib.artist as mat_art
 import matplotlib.patches
+from matplotlib.ticker import AutoLocator, AutoMinorLocator, NullLocator
 
 class EventHandler(object):
     def __init__(self):
@@ -296,8 +297,6 @@ class EventHandler(object):
                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
                                                                                   picker=True,
                                                                                   width=5)
-                # consider plot.stem
-                # print(dir(self.data_series_dict[self.data_series_name]["artist"].get_children()[0]))
             else:
                 plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
@@ -316,7 +315,7 @@ class EventHandler(object):
                              color=self.data_series_dict[self.data_series_name]["color"],
                              s=1)
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "barh"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Horizontal bar"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.barh(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
@@ -328,7 +327,7 @@ class EventHandler(object):
                          color=self.data_series_dict[self.data_series_name]["color"],
                          height=5)
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "errorbar"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Error bar"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.errorbar(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
@@ -344,7 +343,7 @@ class EventHandler(object):
                         xerr=1,
                         fmt="none")
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "hist"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Histogram"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 _, _, self.data_series_dict[self.data_series_name]["artist"] = plot.hist(self.data_series_dict[self.data_series_name]["x"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
@@ -357,7 +356,7 @@ class EventHandler(object):
                         color=self.data_series_dict[self.data_series_name]["color"],
                         edgecolor="red")
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "stackplot"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Stack plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
@@ -368,7 +367,7 @@ class EventHandler(object):
                         self.data_series_dict[self.data_series_name]["y"],
                         color=self.data_series_dict[self.data_series_name]["color"])
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "stem"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Stem plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stem(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
@@ -379,7 +378,7 @@ class EventHandler(object):
                         self.data_series_dict[self.data_series_name]["y"],
                         color=self.data_series_dict[self.data_series_name]["color"])
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "step"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Step plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.step(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
@@ -488,9 +487,44 @@ class EventHandler(object):
                                               legend_properties_UI_dict, legend_properties_mapping_dict)
         mat_art.setp(plot, **axes_properties_dict)
         plot.grid(**grid_properties_dict)
-        plot.tick_params(**ticks_properties_dict)
+        # there is no visible attribute for ticks, alternative are 2 attributes bottom, left. 
+        # There is no point to put them into the GUI so it needs to
+        # be changed into visibility in the GUI, and GUI dict needs to have as many attributes as prop dict
+        # so there is visible att in the prop dict which needs to be omitted while passing to configuration function
+        plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:]))
+        self.handle_ticks_visibility(plot)
         self.update_legend(plot)
         canvas.show()
+
+    def handle_ticks_visibility(self, plot):
+        plot.tick_params(axis=ticks_properties_dict["axis"], which=ticks_properties_dict["which"],
+                        bottom=ticks_properties_dict["visible"], left=ticks_properties_dict["visible"])
+        if (ticks_properties_dict["axis"] == "x"):
+            self.change_ticks_locator(plot.xaxis)
+        elif (ticks_properties_dict["axis"] == "y"):
+            self.change_ticks_locator(plot.yaxis)
+        else:
+            self.change_ticks_locator(plot.xaxis)
+            self.change_ticks_locator(plot.yaxis)
+
+    def change_ticks_locator(self, axis):
+        if (ticks_properties_dict["which"] == "minor"):
+            if (ticks_properties_dict["visible"]):
+                axis.set_minor_locator(AutoMinorLocator(4))
+            else:
+                axis.set_minor_locator(NullLocator())
+        elif (ticks_properties_dict["which"] == "major"):
+            if (ticks_properties_dict["visible"]):
+                axis.set_major_locator(AutoLocator())
+            else:
+                axis.set_major_locator(NullLocator())
+        else:
+            if (ticks_properties_dict["visible"]):
+                axis.set_minor_locator(AutoMinorLocator(4))
+                axis.set_major_locator(AutoLocator())
+            else:
+                axis.set_minor_locator(NullLocator())
+                axis.set_major_locator(NullLocator())
 
     def event_for_submit_config_button(self, plot, canvas):
         self.event_for_apply_config_button(plot, canvas)

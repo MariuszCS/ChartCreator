@@ -64,19 +64,21 @@ grid_properties_UI_dict = dict(
                 "x": "Only x",
                 "y": "Only y",
                 "both": "Both x and y"
-            }),
-
+            }
+        ),
         "Apply to lines for ": dict(
             {
                 "minor": "Minor ticks",
                 "major": "Major ticks",
                 "both": "Both major and minor ticks"
-            }),
+            }
+        ),
         "Visibility": dict(
             {
                 True: "Show",
                 False: "Hide"
-            }),
+            }
+        ),
         "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Color": create_color_dict(),
         "Style": dict(
@@ -85,20 +87,23 @@ grid_properties_UI_dict = dict(
                 "dashed": "Dashed (--)",
                 "dashdot": "Dashdot (-.)",
                 "dotted": "Dotted (..)"
-            }),
+            }
+        ),
         "Width": {(x / 10): str((x / 10)) for x in range(1, 31)},
         "Cap style": dict(
             {
                 "butt": "Butt",
                 "round": "Round",
                 "projecting": "Projecting"
-            }),
+            }
+        ),
         "Join style": dict(
             {
                 "miter": "Miter",
                 "round": "Round",
                 "bevel": "Bevel"
-            })
+            }
+        )
     }
 )
 """
@@ -112,6 +117,7 @@ ticks_properties_dict = dict(
     {
         "axis": "both",
         "which": "major",
+        "visible": True,
         "direction": "out",
         "length": 4,
         "width": 1,
@@ -139,6 +145,12 @@ ticks_properties_UI_dict = dict(
                 "both": "Both major and minor"
             }
         ),
+        "Visibility": dict(
+            {
+                True: "Show",
+                False: "Hide"
+            }
+        ),
         "Ticks position": dict(
             {
                 "in": "Inside the axes",
@@ -146,11 +158,11 @@ ticks_properties_UI_dict = dict(
                 "inout": "Both inside and outside"
             }
         ),
-        "Ticks length": {x: str(x) for x in range(0, 11)},
-        "Ticks width": {x: str(x) for x in range(0, 11)},
+        "Ticks length": {x: str(x) for x in range(1, 11)},
+        "Ticks width": {x: str(x) for x in range(1, 11)},
         "Ticks color": create_color_dict(),
         "Label-tick distance": {x: str(x) for x in range(1, 11)},
-        "Label size": {x: str(x) for x in range(0, 21)},
+        "Label size": {x: str(x) for x in range(4, 21)},
         "Label color": create_color_dict(),
         "Label rotation": {x: str(x) for x in range(0, 360, 10)}
     }

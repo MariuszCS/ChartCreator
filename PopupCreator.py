@@ -156,9 +156,8 @@ class PopupCreator(object):
         self.chart_configuration_popup.grab_set()
         self.chart_configuration_popup.wm_title("Configuration")
         self.chart_configuration_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
-        self.chart_configuration_popup.wm_minsize(400, 540)
-        self.chart_configuration_popup.wm_maxsize(400, 540)
-        # validation_function = self.chart_configuration_popup.register(self.validate_entry_data)
+        self.chart_configuration_popup.wm_minsize(400, 560)
+        self.chart_configuration_popup.wm_maxsize(400, 560)
         style = ttk.Style()
         style.configure('TabFont.TNotebook.Tab', font=MEDIUM_FONT)
         option_notebook = ttk.Notebook(self.chart_configuration_popup, style="TabFont.TNotebook", width=380)
@@ -235,8 +234,7 @@ class PopupCreator(object):
         self.plot_types_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
         self.plot_types_popup.wm_minsize(250, 260)
         self.plot_types_popup.wm_maxsize(250, 260)
-        plot_types = ["barh", "errorbar", "hist", "loglog", "semilogx", "semilogy",
-                     "pie", "stackplot", "stem", "step"]
+        plot_types = ["Horizontal bar", "Error bar", "Histogram", "Stack plot", "Stem plot", "Step plot"]
         choose_plot_type_label = ttk.Label(self.plot_types_popup, text="Choose plot type:", font=SMALL_FONT)
         choose_plot_type_label.grid(row=0, column=0, columnspan=2, padx=15, pady=10, sticky="w")
         self.plot_types_listbox = tk.Listbox(self.plot_types_popup, activestyle="none", font=SMALL_FONT, 
@@ -250,6 +248,7 @@ class PopupCreator(object):
         cancel_button = ttk.Button(self.plot_types_popup, text="Cancel", command=event_for_close_popup,
                                    cursor="hand2")
         cancel_button.grid(row=2, column=1, sticky="e", padx=15, pady=10)
+        #### think about pie chart
         # barh, broken_barh? just for fun later, cohere?no ide how works, csd OK how, errorbar OK,
         # hexbin? no idea how works, hist ok, loglog OK, semilogx OK, semilogy OK,
         # magnitude_sepctrum OK how, phase_spectrum OK how, pie OK, plot_date? to consider,

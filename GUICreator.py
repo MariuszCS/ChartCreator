@@ -155,7 +155,7 @@ class ChartCreator(tk.Tk):
         self.plot.xaxis.set_minor_locator(AutoMinorLocator(4))
         self.plot.yaxis.set_major_locator(AutoLocator())
         self.plot.yaxis.set_minor_locator(AutoMinorLocator(4))
-        self.plot.tick_params(**ticks_properties_dict)
+        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:]))
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
