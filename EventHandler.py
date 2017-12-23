@@ -5,7 +5,7 @@ import GUICreator
 
 import matplotlib.artist as mat_art
 import matplotlib.patches
-from matplotlib.ticker import AutoLocator, AutoMinorLocator, NullLocator
+from matplotlib import ticker
 
 class EventHandler(object):
     def __init__(self):
@@ -97,7 +97,8 @@ class EventHandler(object):
                 self.update_legend(plot)
                 canvas.show()
 
-    def data_series_combobox_callback(self, data_series_name, chosen_color_label, chosen_color_preview_label, name_entry):
+    def data_series_combobox_callback(self, data_series_name, chosen_color_label, chosen_color_preview_label, 
+                                     name_entry, chosen_type_label):
         self.data_series_name = data_series_name
         if (self.data_series_dict.keys()):
             if (self.data_series_dict[self.data_series_name]["artist"]):
@@ -113,6 +114,7 @@ class EventHandler(object):
             # set radiobutton to the chart_type of the data series (if plotted data series is line, line radiobutton will be set,
             # if the data series is not plotted, all radio buttons will be cleared etc.)
             GUICreator.ChartCreator.chart_type.set(value=self.data_series_dict[self.data_series_name]["chart_type"])
+            chosen_type_label.config(text="Chosen type: " + GUICreator.ChartCreator.chart_type.get())
             # remove anything that is present in name_entry, but only in case if it is different than the plot_name of current data series,
             # and set it to the plot_name of current data series
             if (name_entry.get() != self.data_series_dict[self.data_series_name]["plot_name"]):
@@ -280,7 +282,7 @@ class EventHandler(object):
         canvas.show()
 
     def draw_plot(self, plot):
-        if (self.data_series_dict[self.data_series_name]["chart_type"] == "line"):
+        if (self.data_series_dict[self.data_series_name]["chart_type"] == "Line"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"], = plot.plot(self.data_series_dict[self.data_series_name]["x"],
                                                                                     self.data_series_dict[self.data_series_name]["y"],
@@ -290,7 +292,7 @@ class EventHandler(object):
                 plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                           color=self.data_series_dict[self.data_series_name]["color"])
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "bar"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Bars"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.bar(self.data_series_dict[self.data_series_name]["x"],
                                                                                   self.data_series_dict[self.data_series_name]["y"],
@@ -302,7 +304,7 @@ class EventHandler(object):
                          color=self.data_series_dict[self.data_series_name]["color"],
                          width=5)
                 return
-        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "point"):
+        elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Points"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.scatter(self.data_series_dict[self.data_series_name]["x"],
                                                                                       self.data_series_dict[
@@ -415,9 +417,9 @@ class EventHandler(object):
         data_series_combobox.event_generate("<<ComboboxSelected>>")
         self.event_for_auto_scale_button(plot, canvas)
 
-    def event_for_radiobutton(self, plot, canvas):
+    def event_for_radiobutton(self, plot, canvas, chosen_type_label):
         # changes the drawn plot to the new type
-        self.handle_chart_type_change(plot, canvas)
+        self.handle_chart_type_change(plot, canvas, chosen_type_label)
 
     def name_entry_callback(self, plot_name, canvas, plot):
         if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"] and
@@ -449,7 +451,7 @@ class EventHandler(object):
             plot.get_legend().set_visible(False)
 
     def click_artist_callback(self, event):
-        print(event.artist)
+        print(dir(event.artist))
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(
@@ -491,7 +493,8 @@ class EventHandler(object):
         # There is no point to put them into the GUI so it needs to
         # be changed into visibility in the GUI, and GUI dict needs to have as many attributes as prop dict
         # so there is visible att in the prop dict which needs to be omitted while passing to configuration function
-        plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:]))
+        plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
+                        **dict(list(ticks_properties_dict.items())[8:]))
         self.handle_ticks_visibility(plot)
         self.update_legend(plot)
         canvas.show()
@@ -501,30 +504,53 @@ class EventHandler(object):
                         bottom=ticks_properties_dict["visible"], left=ticks_properties_dict["visible"])
         if (ticks_properties_dict["axis"] == "x"):
             self.change_ticks_locator(plot.xaxis)
+            self.change_ticks_formatter(plot.xaxis)
         elif (ticks_properties_dict["axis"] == "y"):
             self.change_ticks_locator(plot.yaxis)
+            self.change_ticks_formatter(plot.yaxis)
         else:
             self.change_ticks_locator(plot.xaxis)
             self.change_ticks_locator(plot.yaxis)
+            self.change_ticks_formatter(plot.xaxis)
+            self.change_ticks_formatter(plot.yaxis)
 
     def change_ticks_locator(self, axis):
         if (ticks_properties_dict["which"] == "minor"):
             if (ticks_properties_dict["visible"]):
-                axis.set_minor_locator(AutoMinorLocator(4))
+                axis.set_minor_locator(ticker.AutoMinorLocator(4))
             else:
-                axis.set_minor_locator(NullLocator())
+                axis.set_minor_locator(ticker.NullLocator())
         elif (ticks_properties_dict["which"] == "major"):
             if (ticks_properties_dict["visible"]):
-                axis.set_major_locator(AutoLocator())
+                axis.set_major_locator(ticker.AutoLocator())
             else:
-                axis.set_major_locator(NullLocator())
+                axis.set_major_locator(ticker.NullLocator())
         else:
             if (ticks_properties_dict["visible"]):
-                axis.set_minor_locator(AutoMinorLocator(4))
-                axis.set_major_locator(AutoLocator())
+                axis.set_minor_locator(ticker.AutoMinorLocator(4))
+                axis.set_major_locator(ticker.AutoLocator())
             else:
-                axis.set_minor_locator(NullLocator())
-                axis.set_major_locator(NullLocator())
+                axis.set_minor_locator(ticker.NullLocator())
+                axis.set_major_locator(ticker.NullLocator())
+
+    def change_ticks_formatter(self, axis):
+        if (ticks_properties_dict["which"] == "minor"):
+            if (ticks_properties_dict["label"]):
+                axis.set_minor_formatter(ticker.ScalarFormatter())
+            else:
+                axis.set_minor_formatter(ticker.NullFormatter())
+        elif (ticks_properties_dict["which"] == "major"):
+            if (ticks_properties_dict["label"]):
+                axis.set_major_formatter(ticker.ScalarFormatter())
+            else:
+                axis.set_major_formatter(ticker.NullFormatter())
+        else:
+            if (ticks_properties_dict["label"]):
+                axis.set_minor_formatter(ticker.ScalarFormatter())
+                axis.set_major_formatter(ticker.ScalarFormatter())
+            else:
+                axis.set_minor_formatter(ticker.NullFormatter())
+                axis.set_major_formatter(ticker.NullFormatter())
 
     def event_for_submit_config_button(self, plot, canvas):
         self.event_for_apply_config_button(plot, canvas)
@@ -543,21 +569,23 @@ class EventHandler(object):
                 GUI_dict[label_text] = key
             properties_dict[mapping_dict[label_text]] = key
 
-    def event_for_more_plot_types_button(self, plot, canvas):
+    def event_for_more_plot_types_button(self, plot, canvas, chosen_type_label):
         self.popup_creator.popup_for_plot_types(lambda: self.event_for_close_popup_button(self.popup_creator.plot_types_popup),
-                                                lambda: self.event_for_submit_plot_type_button(plot, canvas))
+                                                lambda: self.event_for_submit_plot_type_button(plot, canvas, chosen_type_label))
 
-    def event_for_submit_plot_type_button(self, plot, canvas):
+    def event_for_submit_plot_type_button(self, plot, canvas, chosen_type_label):
         if (self.popup_creator.plot_types_listbox.curselection()):
             GUICreator.ChartCreator.chart_type.set(self.popup_creator.plot_types_listbox.get(
                                                 self.popup_creator.plot_types_listbox.curselection()[0])[1:])
-            self.handle_chart_type_change(plot, canvas)
+            self.handle_chart_type_change(plot, canvas, chosen_type_label)
         self.event_for_close_popup_button(self.popup_creator.plot_types_popup)
 
-    def handle_chart_type_change(self, plot, canvas):
+    def handle_chart_type_change(self, plot, canvas, chosen_type_label):
+        chosen_type_label.config(text="Chosen type: " + GUICreator.ChartCreator.chart_type.get())
         if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"]):
             if (GUICreator.ChartCreator.chart_type.get() != self.data_series_dict[self.data_series_name]["chart_type"]):
                 self.data_series_dict[self.data_series_name]["chart_type"] = GUICreator.ChartCreator.chart_type.get()
                 self.remove_artist(self.data_series_dict[self.data_series_name])
                 self.draw_plot(plot)
                 canvas.show()
+                

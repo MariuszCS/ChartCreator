@@ -122,6 +122,7 @@ ticks_properties_dict = dict(
         "length": 4,
         "width": 1,
         "color": "#000000",
+        "label": False,
         "pad": 2,
         "labelsize": 10,
         "labelcolor": "#000000",
@@ -161,6 +162,12 @@ ticks_properties_UI_dict = dict(
         "Ticks length": {x: str(x) for x in range(1, 11)},
         "Ticks width": {x: str(x) for x in range(1, 11)},
         "Ticks color": create_color_dict(),
+        "Label": dict(
+            {
+                True: "Show",
+                False: "Hide"
+            }
+        ),
         "Label-tick distance": {x: str(x) for x in range(1, 11)},
         "Label size": {x: str(x) for x in range(4, 21)},
         "Label color": create_color_dict(),

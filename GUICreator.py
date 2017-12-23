@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import AutoLocator, AutoMinorLocator
 from matplotlib import pyplot as plt
 import matplotlib.artist as mat_art
+#from mpl_toolkits.mplot3d import Axes3D
 
 class ChartCreator(tk.Tk):
 
@@ -24,6 +25,7 @@ class ChartCreator(tk.Tk):
         self.event_handler = EventHandler.EventHandler()
         self.data_series_combobox = None
         self.chosen_color_label = None
+        self.chosen_type_label = None
         self.chosen_color_preview_label = None
         self.name_entry = None
         self.canvas = None
@@ -96,6 +98,8 @@ class ChartCreator(tk.Tk):
     def setup_right_frame(self, parent_frame):
         right_frame = tk.LabelFrame(parent_frame, labelanchor="nw", text="Plot")
         right_frame.grid(row=1, column=1, sticky="nwse", padx=3, pady=3)
+        right_frame.rowconfigure(0, weight=1)
+        right_frame.columnconfigure(0, weight=1)
         self.setup_plot_for_right_frame(right_frame)
 
     def setup_left_frame(self, parent_frame):
@@ -128,7 +132,8 @@ class ChartCreator(tk.Tk):
                                        lambda event: self.event_handler.data_series_combobox_callback(self.data_series_combobox.get(),
                                                                                                       self.chosen_color_label,
                                                                                                       self.chosen_color_preview_label,
-                                                                                                      self.name_entry))
+                                                                                                      self.name_entry,
+                                                                                                      self.chosen_type_label))
         self.data_series_combobox.grid(row=1, column=0, columnspan=2, sticky="n")
         delete_button = ttk.Button(parent_frame, text="Delete", cursor="hand2",
                                    command=lambda: self.event_handler.event_for_delete_button(self.data_series_combobox,
@@ -155,17 +160,22 @@ class ChartCreator(tk.Tk):
         self.plot.xaxis.set_minor_locator(AutoMinorLocator(4))
         self.plot.yaxis.set_major_locator(AutoLocator())
         self.plot.yaxis.set_minor_locator(AutoMinorLocator(4))
-        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:]))
+        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
+                             **dict(list(ticks_properties_dict.items())[8:]))
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
         self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
         #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
         self.canvas.show()
-        self.canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
-        toolbar = NavigationToolbar2TkAgg(self.canvas, parent_frame)
+        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, sticky="nwse")
+        toolbar_frame = tk.Frame(parent_frame)
+        toolbar_frame.grid(row=1, column=0, sticky="w")
+        toolbar = NavigationToolbar2TkAgg(self.canvas, toolbar_frame)
         toolbar.update()
-        self.canvas._tkcanvas.pack()
+        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: ", width=38, justify="left")
+        chosen_plot_label.grid(row=1, column=1, sticky="w")
+        self.canvas._tkcanvas.grid()
 
     def setup_elements_for_bottom_frame(self, parent_frame):
         remove_chosen_plot_button = ttk.Button(parent_frame, text="Remove plot", cursor="hand2",
@@ -207,24 +217,30 @@ class ChartCreator(tk.Tk):
                                                                                   self.plot))
         type_label = tk.Label(parent_frame, text="Plot type:", font=MEDIUM_BOLD_FONT)
         type_label.grid(row=2, column=0, columnspan=3, pady=10)
-        line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=ChartCreator.chart_type, value="line",
+        line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=ChartCreator.chart_type, value="Line",
                                                 cursor="hand2",
                                                 command=lambda: self.event_handler.event_for_radiobutton(self.plot,
-                                                                                                         self.canvas))
+                                                                                                         self.canvas,
+                                                                                                         self.chosen_type_label))
         line_type_radiobutton.grid(row=3, column=0)
-        bar_type_radiobutton = ttk.Radiobutton(parent_frame, text="Bars", variable=ChartCreator.chart_type, value="bar",
+        bar_type_radiobutton = ttk.Radiobutton(parent_frame, text="Bars", variable=ChartCreator.chart_type, value="Bars",
                                                cursor="hand2",
                                                command=lambda: self.event_handler.event_for_radiobutton(self.plot,
-                                                                                                        self.canvas))
+                                                                                                        self.canvas,
+                                                                                                        self.chosen_type_label))
         bar_type_radiobutton.grid(row=3, column=1)
-        point_type_radiobutton = ttk.Radiobutton(parent_frame, text="Points", variable=ChartCreator.chart_type, value="point",
+        point_type_radiobutton = ttk.Radiobutton(parent_frame, text="Points", variable=ChartCreator.chart_type, value="Points",
                                                  cursor="hand2",
                                                  command=lambda: self.event_handler.event_for_radiobutton(self.plot,
-                                                                                                          self.canvas))
+                                                                                                          self.canvas,
+                                                                                                          self.chosen_type_label))
         point_type_radiobutton.grid(row=3, column=2)
+        self.chosen_type_label = tk.Label(parent_frame, text="Chosen type: " + ChartCreator.chart_type.get())
+        self.chosen_type_label.grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="w")
         more_plot_types_button = ttk.Button(parent_frame, text="More...", cursor="hand2",
                                             command=lambda: self.event_handler.event_for_more_plot_types_button(self.plot,
-                                                                                                                self.canvas))
+                                                                                                                self.canvas,
+                                                                                                                self.chosen_type_label))
         more_plot_types_button.grid(row=4, column=2, pady=10)
         color_label = tk.Label(parent_frame, text="Plot color:", font=MEDIUM_BOLD_FONT)
         color_label.grid(row=5, column=0, columnspan=3)
@@ -235,6 +251,6 @@ class ChartCreator(tk.Tk):
                                                                                                             self.plot))
         color_chooser_button.grid(row=6, column=1, pady=10, sticky="e")
         self.chosen_color_label = ttk.Label(parent_frame, text="Chosen color (hex): ", width=25)
-        self.chosen_color_label.grid(row=7, column=0, columnspan=2, padx=15 , pady=10, sticky="w")
+        self.chosen_color_label.grid(row=7, column=0, columnspan=2, padx=15, pady=10, sticky="w")
         self.chosen_color_preview_label = ttk.Label(parent_frame, width=4)
-        self.chosen_color_preview_label.grid(row=7, column=2, padx=15 , pady=10, sticky="nw")
+        self.chosen_color_preview_label.grid(row=7, column=2, padx=10, pady=10, sticky="nw")
