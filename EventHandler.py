@@ -16,6 +16,7 @@ class EventHandler(object):
         self.data_series_dict = {}
         self.proper_name = True
         self.color = "#000000"
+        self.chosen_plot = ""
 
     def event_for_load_button(self, data_series_combobox):
         path_to_file = self.popup_creator.popup_for_openfile()
@@ -279,7 +280,17 @@ class EventHandler(object):
         self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
         self.data_series_dict[self.data_series_name]["color"] = self.color
         self.draw_plot(plot)
-        canvas.show()
+        # If someone passes wrong name in the legend for example: ${_y_t}$, this is double subscript written in a wrong way,
+        # so the built in exception will be raised
+        try:
+            canvas.show()
+        except ValueError:
+            self.data_series_dict[self.data_series_name]["plot_name"] = ""
+            self.update_legend(plot)
+            canvas.show()
+            self.popup_creator.messagebox_popup("Wrong mathtext syntax. Please check the matplotlib docs for more information "
+                                                "about mathtext used in matplotlib.")
+        
 
     def draw_plot(self, plot):
         if (self.data_series_dict[self.data_series_name]["chart_type"] == "Line"):
@@ -415,6 +426,7 @@ class EventHandler(object):
         self.update_legend(plot)
         canvas.show()
         data_series_combobox.event_generate("<<ComboboxSelected>>")
+        self.chosen_plot = ""
         self.event_for_auto_scale_button(plot, canvas)
 
     def event_for_radiobutton(self, plot, canvas, chosen_type_label):
@@ -426,7 +438,18 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["plot_name"] != plot_name):
             self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
             self.update_legend(plot)
-            canvas.show()
+            # If someone passes wrong name in the legend for example: ${_y_t}$, this is double subscript written in a wrong way,
+            # so the built in exception will be raised
+            print("*******************************************************")
+            try:
+                canvas.show()
+            except ValueError:
+                self.data_series_dict[self.data_series_name]["plot_name"] = ""
+                self.update_legend(plot)
+                canvas.show()
+                self.popup_creator.messagebox_popup("Wrong mathtext syntax. Please check the matplotlib docs for more information "
+                                                    "about mathtext used in matplotlib.")
+            
 
     def update_legend(self, plot):
         artist_list = []

@@ -173,7 +173,7 @@ class ChartCreator(tk.Tk):
         toolbar_frame.grid(row=1, column=0, sticky="w")
         toolbar = NavigationToolbar2TkAgg(self.canvas, toolbar_frame)
         toolbar.update()
-        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: ", width=38, justify="left")
+        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: " + self.event_handler.chosen_plot, width=38, justify="left")
         chosen_plot_label.grid(row=1, column=1, sticky="w")
         self.canvas._tkcanvas.grid()
 
