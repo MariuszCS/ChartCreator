@@ -258,6 +258,8 @@ class EventHandler(object):
             self.popup_creator.messagebox_popup(
                 "Data series \"{0}\" not plotted, so cannot be removed".format(self.data_series_name))
             return
+        if (self.chosen_plot == self.data_series_dict[self.data_series_name]["plot_name"]):
+            self.chosen_plot = ""
         self.clear_series_properties(
             self.data_series_dict[self.data_series_name])
         self.update_legend(plot)
@@ -472,8 +474,12 @@ class EventHandler(object):
         if (plot.get_legend()):
             plot.get_legend().set_visible(False)
 
-    def click_artist_callback(self, event):
-        print(dir(event.artist))
+    def click_artist_callback(self, event, chosen_plot_label):
+        for dictionary in self.data_series_dict.values():
+            if ((dictionary["artist"] == event.artist or event.artist in dictionary["artist"].get_children())
+                and dictionary["plot_name"] != self.chosen_plot):
+                self.chosen_plot = dictionary["plot_name"]
+                chosen_plot_label.config(text="Chosen plot: " + self.chosen_plot)
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(

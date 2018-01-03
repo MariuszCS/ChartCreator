@@ -164,8 +164,10 @@ class ChartCreator(tk.Tk):
                              **dict(list(ticks_properties_dict.items())[8:]))
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
+        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: " + self.event_handler.chosen_plot, width=28, justify="left")
+        chosen_plot_label.grid(row=1, column=1, sticky="w")
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
-        self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
+        self.canvas.mpl_connect("pick_event", lambda event: self.event_handler.click_artist_callback(event, chosen_plot_label)) # callback for clicking on the chosen plot event
         #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, sticky="nwse")
@@ -173,8 +175,6 @@ class ChartCreator(tk.Tk):
         toolbar_frame.grid(row=1, column=0, sticky="w")
         toolbar = NavigationToolbar2TkAgg(self.canvas, toolbar_frame)
         toolbar.update()
-        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: " + self.event_handler.chosen_plot, width=38, justify="left")
-        chosen_plot_label.grid(row=1, column=1, sticky="w")
         self.canvas._tkcanvas.grid()
 
     def setup_elements_for_bottom_frame(self, parent_frame):
