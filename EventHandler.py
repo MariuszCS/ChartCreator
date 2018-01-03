@@ -436,21 +436,20 @@ class EventHandler(object):
     def name_entry_callback(self, plot_name, canvas, plot):
         if (self.data_series_name and self.data_series_dict[self.data_series_name]["artist"] and
                 self.data_series_dict[self.data_series_name]["plot_name"] != plot_name):
+            old_plot_name = self.data_series_dict[self.data_series_name]["plot_name"]
             self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
             self.update_legend(plot)
             # If someone passes wrong name in the legend for example: ${_y_t}$, this is double subscript written in a wrong way,
             # so the built in exception will be raised
-            print("*******************************************************")
             try:
                 canvas.show()
             except ValueError:
-                self.data_series_dict[self.data_series_name]["plot_name"] = ""
+                self.data_series_dict[self.data_series_name]["plot_name"] = old_plot_name
                 self.update_legend(plot)
                 canvas.show()
                 self.popup_creator.messagebox_popup("Wrong mathtext syntax. Please check the matplotlib docs for more information "
                                                     "about mathtext used in matplotlib.")
             
-
     def update_legend(self, plot):
         artist_list = []
         label_list = []

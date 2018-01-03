@@ -211,10 +211,6 @@ class ChartCreator(tk.Tk):
                              lambda event: self.event_handler.name_entry_callback(self.name_entry.get(),
                                                                                   self.canvas,
                                                                                   self.plot))
-        self.name_entry.bind("<FocusOut>",
-                             lambda event: self.event_handler.name_entry_callback(self.name_entry.get(),
-                                                                                  self.canvas,
-                                                                                  self.plot))
         type_label = tk.Label(parent_frame, text="Plot type:", font=MEDIUM_BOLD_FONT)
         type_label.grid(row=2, column=0, columnspan=3, pady=10)
         line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=ChartCreator.chart_type, value="Line",
