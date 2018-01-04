@@ -17,6 +17,7 @@ class EventHandler(object):
         self.proper_name = True
         self.color = "#000000"
         self.chosen_plot = ""
+        self.plot_is_chosen = False
 
     def event_for_load_button(self, data_series_combobox):
         path_to_file = self.popup_creator.popup_for_openfile()
@@ -139,6 +140,10 @@ class EventHandler(object):
                 self.remove_artist(self.data_series_dict[self.data_series_name])
                 self.update_legend(plot)
                 canvas.show()
+                if (self.data_series_name == self.chosen_plot):
+                    self.chosen_plot = ""
+                    self.plot_is_chosen = False
+                    self.update_chosen_plot_label(self.chosen_plot)
             del self.data_series_dict[self.data_series_name]
             if (data_series_combobox.current()):
                 data_series_combobox.current(
@@ -258,8 +263,10 @@ class EventHandler(object):
             self.popup_creator.messagebox_popup(
                 "Data series \"{0}\" not plotted, so cannot be removed".format(self.data_series_name))
             return
-        if (self.chosen_plot == self.data_series_dict[self.data_series_name]["plot_name"]):
+        if (self.chosen_plot == self.data_series_name):
             self.chosen_plot = ""
+            self.plot_is_chosen = False
+            self.update_chosen_plot_label(self.chosen_plot)
         self.clear_series_properties(
             self.data_series_dict[self.data_series_name])
         self.update_legend(plot)
@@ -431,6 +438,8 @@ class EventHandler(object):
         canvas.show()
         data_series_combobox.event_generate("<<ComboboxSelected>>")
         self.chosen_plot = ""
+        self.plot_is_chosen = False
+        self.update_chosen_plot_label(self.chosen_plot)
         self.event_for_auto_scale_button(plot, canvas)
 
     def event_for_radiobutton(self, plot, canvas, chosen_type_label):
@@ -480,6 +489,7 @@ class EventHandler(object):
             plot.get_legend().set_visible(False)
 
     def click_artist_callback(self, event):
+        self.plot_is_chosen = True
         for data_series_name, properties_dict in self.data_series_dict.items():
             if ((properties_dict["artist"] == event.artist or event.artist in properties_dict["artist"].get_children())
                 and data_series_name != self.chosen_plot):
@@ -489,8 +499,10 @@ class EventHandler(object):
     def update_chosen_plot_label(self, plot_name):
         if (plot_name):
             GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: " + plot_name)
-        else:
+        elif (self.plot_is_chosen):
             GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: (No name given)")
+        else:
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot:")
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(
