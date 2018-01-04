@@ -24,6 +24,7 @@ class PopupCreator(object):
         self.plot_popup = None
         self.chart_configuration_popup = None
         self.plot_types_popup = None
+        self.plot_configuration_popup = None
         self.name_entry = None
         self.canvas = None
         self.entry_frame = None
@@ -143,7 +144,8 @@ class PopupCreator(object):
         self.plot = figure.add_subplot(111)
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.grid(**grid_properties_dict)
-        self.plot.tick_params(**ticks_properties_dict)
+        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
+                             **dict(list(ticks_properties_dict.items())[8:]))
         canvas = FigureCanvasTkAgg(figure, self.plot_popup)
         canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
         toolbar = NavigationToolbar2TkAgg(canvas, self.plot_popup)
@@ -260,3 +262,25 @@ class PopupCreator(object):
 
 
         self.plot_types_popup.mainloop()
+
+
+    def popup_for_plot_configuration(self, event_for_close_popup):
+        self.plot_configuration_popup = tk.Toplevel()
+        self.plot_configuration_popup.grab_set()
+        self.plot_configuration_popup.wm_title("Plot configuration")
+        self.plot_configuration_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
+        self.plot_configuration_popup.wm_minsize(400, 600)
+        self.plot_configuration_popup.wm_maxsize(400, 600)
+
+
+
+        submit_button = ttk.Button(self.plot_configuration_popup, text="Submit",
+                                   cursor="hand2")
+        submit_button.grid(row=1, column=0, sticky="w", padx=10)
+        apply_button = ttk.Button(self.plot_configuration_popup, text="Apply",
+                                   cursor="hand2")
+        apply_button.grid(row=1, column=1, sticky="w", padx=10)
+        cancel_button = ttk.Button(self.plot_configuration_popup, text="Cancel", command=event_for_close_popup,
+                                   cursor="hand2")
+        cancel_button.grid(row=1, column=2, sticky="e", padx=10)
+        self.plot_configuration_popup.mainloop()

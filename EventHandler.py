@@ -407,6 +407,7 @@ class EventHandler(object):
         self.update_legend(plot)
 
     def event_for_open_in_a_new_window_button(self):
+        data_series_name = self.data_series_name
         self.popup_creator.popup_for_plot(
             lambda: self.event_for_close_popup_button(self.popup_creator.plot_popup))
         for dict_name in self.data_series_dict.keys():
@@ -414,6 +415,7 @@ class EventHandler(object):
                 self.data_series_name = dict_name
                 self.draw_plot(self.popup_creator.plot)
                 self.update_legend(self.popup_creator.plot)
+        self.data_series_name = data_series_name
         self.popup_creator.plot_popup.mainloop()
 
     def event_for_auto_scale_button(self, plot, canvas):
@@ -451,6 +453,9 @@ class EventHandler(object):
                 canvas.show()
                 self.popup_creator.messagebox_popup("Wrong mathtext syntax. Please check the matplotlib docs for more information "
                                                     "about mathtext used in matplotlib.")
+                return
+            if (self.data_series_name == self.chosen_plot):
+                self.update_chosen_plot_label(self.data_series_dict[self.data_series_name]["plot_name"])
             
     def update_legend(self, plot):
         artist_list = []
@@ -474,12 +479,18 @@ class EventHandler(object):
         if (plot.get_legend()):
             plot.get_legend().set_visible(False)
 
-    def click_artist_callback(self, event, chosen_plot_label):
-        for dictionary in self.data_series_dict.values():
-            if ((dictionary["artist"] == event.artist or event.artist in dictionary["artist"].get_children())
-                and dictionary["plot_name"] != self.chosen_plot):
-                self.chosen_plot = dictionary["plot_name"]
-                chosen_plot_label.config(text="Chosen plot: " + self.chosen_plot)
+    def click_artist_callback(self, event):
+        for data_series_name, properties_dict in self.data_series_dict.items():
+            if ((properties_dict["artist"] == event.artist or event.artist in properties_dict["artist"].get_children())
+                and data_series_name != self.chosen_plot):
+                self.chosen_plot = data_series_name
+                self.update_chosen_plot_label(properties_dict["plot_name"])
+                
+    def update_chosen_plot_label(self, plot_name):
+        if (plot_name):
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: " + plot_name)
+        else:
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: (No name given)")
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(
@@ -616,4 +627,11 @@ class EventHandler(object):
                 self.remove_artist(self.data_series_dict[self.data_series_name])
                 self.draw_plot(plot)
                 canvas.show()
+
+    def event_for_modify_plot_button(self):
+        if (not self.chosen_plot):
+            self.popup_creator.messagebox_popup("No plot for modify chosen. "
+                                                "First click on a specific plot to pick it and then click on the \"Modify chosen\" button.")
+            return
+        self.popup_creator.popup_for_plot_configuration(lambda: self.event_for_close_popup_button(self.popup_creator.plot_configuration_popup))
                 

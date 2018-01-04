@@ -17,6 +17,7 @@ import matplotlib.artist as mat_art
 class ChartCreator(tk.Tk):
 
     chart_type = tk.StringVar
+    chosen_plot_label = ttk.Label
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -31,6 +32,7 @@ class ChartCreator(tk.Tk):
         self.canvas = None
         self.plot = None
         ChartCreator.chart_type = tk.StringVar()
+        ChartCreator.chosen_plot_label = None
         main_frame = self.setup_main_frame()
         self.setup_menu(main_frame)
         self.setup_top_frame(main_frame)
@@ -164,10 +166,10 @@ class ChartCreator(tk.Tk):
                              **dict(list(ticks_properties_dict.items())[8:]))
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
-        chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: " + self.event_handler.chosen_plot, width=28, justify="left")
-        chosen_plot_label.grid(row=1, column=1, sticky="w")
+        ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: ", width=28, justify="left")
+        ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="w")
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
-        self.canvas.mpl_connect("pick_event", lambda event: self.event_handler.click_artist_callback(event, chosen_plot_label)) # callback for clicking on the chosen plot event
+        self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
         #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, sticky="nwse")
@@ -199,6 +201,9 @@ class ChartCreator(tk.Tk):
                                                                                             self.plot,
                                                                                             self.data_series_combobox))
         clear_button.grid(row=0, column=4, padx=20)
+        modify_plot_button = ttk.Button(parent_frame, text="Modify plot", cursor="hand2",
+                                        command=lambda: self.event_handler.event_for_modify_plot_button())
+        modify_plot_button.grid(row=0, column=5, padx=20)
         copyright_label = tk.Label(parent_frame, text="Mariusz Chybicki \u00A9", font=SMALL_FONT)
         copyright_label.grid(row=1, column=0, columnspan=4, sticky="w")
 
@@ -231,7 +236,7 @@ class ChartCreator(tk.Tk):
                                                                                                           self.canvas,
                                                                                                           self.chosen_type_label))
         point_type_radiobutton.grid(row=3, column=2)
-        self.chosen_type_label = tk.Label(parent_frame, text="Chosen type: " + ChartCreator.chart_type.get())
+        self.chosen_type_label = tk.Label(parent_frame, text="Chosen type: ")
         self.chosen_type_label.grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="w")
         more_plot_types_button = ttk.Button(parent_frame, text="More...", cursor="hand2",
                                             command=lambda: self.event_handler.event_for_more_plot_types_button(self.plot,
