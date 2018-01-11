@@ -21,7 +21,7 @@ class ChartCreator(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.wm_title("Plot Creator")
+        self.wm_title("Chart Creator")
         self.minsize(1000, 650)
         self.event_handler = EventHandler.EventHandler()
         self.data_series_combobox = None
@@ -67,7 +67,7 @@ class ChartCreator(tk.Tk):
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=quit)
         parent_menu.add_cascade(label="File", menu=file_menu)
-# axes legend font
+
     def setup_configure_menu(self, parent_menu):
         configure_menu = tk.Menu(parent_menu, tearoff=0)
         configure_menu.add_command(label="Axes", command=
@@ -94,7 +94,7 @@ class ChartCreator(tk.Tk):
     def setup_top_frame(self, parent_frame):
         top_frame = tk.Frame(parent_frame)
         top_frame.grid(row=0, column=0, columnspan=2, sticky="nwse", padx=3, pady=3)
-        title_label = tk.Label(top_frame, text="~~Plot Creator~~", font=BIG_FONT)
+        title_label = tk.Label(top_frame, text="~~Chart Creator~~", font=BIG_FONT)
         title_label.pack(expand=True)
 
     def setup_right_frame(self, parent_frame):
@@ -123,11 +123,11 @@ class ChartCreator(tk.Tk):
     def setup_elements_for_left_frame(self, parent_frame):
         insert_button = ttk.Button(parent_frame, text="Insert values", cursor="hand2",
                                    command=lambda: self.event_handler.event_for_insert_button(self.data_series_combobox))
-        insert_button.grid(row=0, column=0, sticky="n", pady=10)
+        insert_button.grid(row=0, column=0, sticky="nw", pady=10, padx=28)
         load_button = ttk.Button(parent_frame, text="Load file", cursor="hand2",
                                  command=lambda: self.event_handler.event_for_load_button(self.data_series_combobox))
-        load_button.grid(row=0, column=1, sticky="n", pady=10)
-        self.data_series_combobox = ttk.Combobox(parent_frame, width=38, state="readonly",
+        load_button.grid(row=0, column=1, sticky="ne", pady=10, padx=28)
+        self.data_series_combobox = ttk.Combobox(parent_frame, width=43, state="readonly",
                                                  postcommand=lambda: self.event_handler.event_for_update_data_series_combobox(
                                                      self.data_series_combobox))
         self.data_series_combobox.bind("<<ComboboxSelected>>",
@@ -141,12 +141,12 @@ class ChartCreator(tk.Tk):
                                    command=lambda: self.event_handler.event_for_delete_button(self.data_series_combobox,
                                                                                               self.canvas,
                                                                                               self.plot))
-        delete_button.grid(row=2, column=0, sticky="n", pady=10)
+        delete_button.grid(row=2, column=0, sticky="nw", pady=10, padx=28)
         modify_button = ttk.Button(parent_frame, text="Modify", cursor="hand2",
                                    command=lambda: self.event_handler.event_for_modify_button(self.data_series_combobox, 
                                                                                               self.canvas,
                                                                                               self.plot))
-        modify_button.grid(row=2, column=1, sticky="n", pady=10)
+        modify_button.grid(row=2, column=1, sticky="ne", pady=10, padx=28)
         self.setup_option_frame(parent_frame)
 
     def setup_option_frame(self, parent_frame):
@@ -189,7 +189,7 @@ class ChartCreator(tk.Tk):
                                  command=lambda: self.event_handler.event_for_plot_button(self.plot,
                                                                                           self.canvas,
                                                                                           self.name_entry.get()))
-        plot_button.grid(row=0, column=1, padx=90)
+        plot_button.grid(row=0, column=1, padx=100)
         open_in_a_new_window_button = ttk.Button(parent_frame, text="Open in a new window", cursor="hand2",
                                                  command=lambda: self.event_handler.event_for_open_in_a_new_window_button())
         open_in_a_new_window_button.grid(row=0, column=2, padx=20)

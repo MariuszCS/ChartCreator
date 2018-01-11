@@ -124,6 +124,7 @@ class PopupCreator(object):
             entry = ttk.Entry(self.entry_frame, width=20, validatecommand=(self.excel_sheet_validation_function, "%P"),
                               validate="key")
             self.entry_list.append(entry)
+            entry.bind("<FocusOut>", self.check_for_the_single_minus)
             entry.grid(row=row_number, column=column)
 
     def validate_entry_data(self, content):
@@ -134,6 +135,10 @@ class PopupCreator(object):
         if (re.match(".+[-]|[-]?\..*", content)):
             return False
         return True
+
+    def check_for_the_single_minus(self, event):
+        if (event.widget.get() == "-"):
+            event.widget.delete(0, 1)
 
     def popup_for_plot(self, event_for_close_popup):
         self.plot_popup = tk.Toplevel()

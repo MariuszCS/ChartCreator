@@ -17,7 +17,6 @@ class Parser(object):
     def parse_file(self, path_to_file):
         proper_file_format = True
         first_run = True
-        temp_value_line = []
         if (not self.check_file_extension(path_to_file)):
             self.popup_creator.messagebox_popup("Wrong file format. Only .csv and .txt files can be loaded.")
             return False
@@ -26,6 +25,9 @@ class Parser(object):
         list_of_value_lines = file.split("\n")
         if (not list_of_value_lines[-1]):
             list_of_value_lines.pop()
+        if (list_of_value_lines and list_of_value_lines[0] == ""):
+            self.popup_creator.messagebox_popup("File must not be empty.")
+            return False
         temp_series_properties_dict = create_series_properties_dict()
         value_line = ""
         for value_line in list_of_value_lines:
@@ -78,7 +80,7 @@ class Parser(object):
         self.popup_creator.messagebox_popup("Wrong file structure.\n"
                                             "Provide file that contains max of 3 numbers in one row (x,y,z) "
                                             "each in a separate column, number of columns in each row must be the same.\n"
-                                            "x, y, z are floats/ints and use \",\" or \".\" for decimal part.\n"
+                                            "x, y, z are floats/ints and use \",\" for decimal part.\n"
                                             "In case of .txt file, columns should be separated with \";\"\n"
                                             "Line to check: {0}".format(value_line))
         return False

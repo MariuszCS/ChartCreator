@@ -156,7 +156,7 @@ class EventHandler(object):
             self.event_for_update_data_series_combobox(data_series_combobox)
             data_series_combobox.event_generate("<<ComboboxSelected>>")
         else:
-            self.popup_creator.messagebox_popup("Choose data series.")
+            self.popup_creator.messagebox_popup("No data series selected.")
 
     def event_for_insert_button(self, data_series_combobox):
         self.popup_creator.popup_for_excel_sheet(
@@ -219,7 +219,7 @@ class EventHandler(object):
             self.popup_creator.excel_sheet_popup.mainloop()
             # will be executed before the popup will show
         else:
-            self.popup_creator.messagebox_popup("Choose data series.")
+            self.popup_creator.messagebox_popup("No data series selected.")
             return
 
     def fill_excel_sheet_popup(self, data_series_combobox):
@@ -490,6 +490,7 @@ class EventHandler(object):
 
     def click_artist_callback(self, event):
         self.plot_is_chosen = True
+        print(dir(event.artist))
         for data_series_name, properties_dict in self.data_series_dict.items():
             if ((properties_dict["artist"] == event.artist or event.artist in properties_dict["artist"].get_children())
                 and data_series_name != self.chosen_plot):
