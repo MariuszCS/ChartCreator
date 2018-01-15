@@ -257,11 +257,11 @@ class EventHandler(object):
 
     def event_for_remove_plot_button(self, canvas, data_series_combobox, plot):
         if (not self.data_series_name):
-            self.popup_creator.messagebox_popup("Choose data series.")
+            self.popup_creator.messagebox_popup("No data series selected.")
             return
         if (not self.data_series_dict[self.data_series_name]["artist"]):
             self.popup_creator.messagebox_popup(
-                "Data series \"{0}\" not plotted, so cannot be removed".format(self.data_series_name))
+                "Data series \"{0}\" not plotted, so cannot be removed.".format(self.data_series_name))
             return
         if (self.chosen_plot == self.data_series_name):
             self.chosen_plot = ""
@@ -275,15 +275,15 @@ class EventHandler(object):
 
     def event_for_plot_button(self, plot, canvas, plot_name):
         if (not self.data_series_name):
-            self.popup_creator.messagebox_popup("Choose data series.")
+            self.popup_creator.messagebox_popup("No data series selected.")
             return
         if (self.data_series_dict[self.data_series_name]["artist"]):
             self.popup_creator.messagebox_popup(
-                "Data series \"{0}\" already plotted".format(self.data_series_name))
+                "Data series \"{0}\" already plotted.".format(self.data_series_name))
             return
         if (not GUICreator.ChartCreator.chart_type.get()):
             self.popup_creator.messagebox_popup(
-                "Choose plot type.".format(self.data_series_name))
+                "No plot type selected.")
             return
         self.data_series_dict[self.data_series_name]["chart_type"] = GUICreator.ChartCreator.chart_type.get()
         self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
@@ -328,10 +328,11 @@ class EventHandler(object):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.scatter(self.data_series_dict[self.data_series_name]["x"],
                                                                                       self.data_series_dict[
-                                                                                          self.data_series_name]["y"],
+                                                                                      self.data_series_name]["y"],
                                                                                       color=self.data_series_dict[self.data_series_name]["color"],
                                                                                       picker=True,
-                                                                                      s=1)
+                                                                                      s=6,
+                                                                                      zorder=100)
             else:
                 plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                              color=self.data_series_dict[self.data_series_name]["color"],
@@ -355,9 +356,9 @@ class EventHandler(object):
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True,
-                                                                                   yerr=1,
-                                                                                   xerr=1,
-                                                                                   fmt="none")
+                                                                                   yerr=0.2,
+                                                                                   xerr=0.2,
+                                                                                   fmt="none")                                   
             else:
                 plot.errorbar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                         color=self.data_series_dict[self.data_series_name]["color"],
@@ -383,7 +384,7 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                   picker=True)
+                                                                                   picker=True).pop()
             else:
                 plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                         self.data_series_dict[self.data_series_name]["y"],
@@ -471,11 +472,7 @@ class EventHandler(object):
         label_list = []
         for dictionary in self.data_series_dict.values():
             if (dictionary["artist"]):
-                if (type(dictionary["artist"]) == list and 
-                    type(dictionary["artist"][0]) == matplotlib.collections.PolyCollection):
-                    artist_list.append(matplotlib.patches.Patch(color=dictionary["color"]))
-                else:
-                    artist_list.append(dictionary["artist"])
+                artist_list.append(dictionary["artist"])
                 label_list.append(dictionary["plot_name"])
         if (artist_list):
             plot.legend(artist_list, label_list, **dict(list(legend_properties_dict.items())[2:]))
@@ -490,7 +487,7 @@ class EventHandler(object):
 
     def click_artist_callback(self, event):
         self.plot_is_chosen = True
-        print(dir(event.artist))
+        #print(dir(event.artist))
         for data_series_name, properties_dict in self.data_series_dict.items():
             if ((properties_dict["artist"] == event.artist or event.artist in properties_dict["artist"].get_children())
                 and data_series_name != self.chosen_plot):
@@ -499,11 +496,14 @@ class EventHandler(object):
                 
     def update_chosen_plot_label(self, plot_name):
         if (plot_name):
-            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: " + plot_name)
+            if (len(plot_name) > 12):
+                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name[:12] + "...", font=("Consolas", 9))
+            else:
+                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name, font=("Consolas", 9))
         elif (self.plot_is_chosen):
-            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot: (No name given)")
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: (Unnamed)", font=("Consolas", 9))
         else:
-            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen plot:")
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen:", font=("Consolas", 9))
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(
@@ -524,7 +524,7 @@ class EventHandler(object):
     def remove_artist(self, properties_dict):
         # in case of list of artist we need to remove them one by one from the plot
         if (type(self.data_series_dict[self.data_series_name]["artist"]) == list):
-            for artist in reversed(self.data_series_dict[self.data_series_name]["artist"]):
+            for artist in reversed(self.data_series_dict[self.data_series_name]["artist"][2]):
                 artist.remove()
         else:
             properties_dict["artist"].remove()

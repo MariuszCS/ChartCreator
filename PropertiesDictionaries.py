@@ -50,8 +50,6 @@ grid_properties_dict = dict(
         "color": "#b3b3b3",
         "linestyle": "solid",
         "linewidth": 1,
-        "dash_capstyle": "butt",
-        "dash_joinstyle": "miter"
     }
 )
 """
@@ -79,7 +77,7 @@ grid_properties_UI_dict = dict(
                 False: "Hide"
             }
         ),
-        "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Color": create_color_dict(),
         "Style": dict(
             {
@@ -90,20 +88,6 @@ grid_properties_UI_dict = dict(
             }
         ),
         "Width": {(x / 10): str((x / 10)) for x in range(1, 31)},
-        "Cap style": dict(
-            {
-                "butt": "Butt",
-                "round": "Round",
-                "projecting": "Projecting"
-            }
-        ),
-        "Join style": dict(
-            {
-                "miter": "Miter",
-                "round": "Round",
-                "bevel": "Bevel"
-            }
-        )
     }
 )
 """
@@ -122,7 +106,7 @@ ticks_properties_dict = dict(
         "length": 4,
         "width": 1,
         "color": "#000000",
-        "label": False,
+        "label": True,
         "pad": 2,
         "labelsize": 10,
         "labelcolor": "#000000",
@@ -146,7 +130,7 @@ ticks_properties_UI_dict = dict(
                 "both": "Both major and minor"
             }
         ),
-        "Visibility": dict(
+        "Ticks": dict(
             {
                 True: "Show",
                 False: "Hide"
@@ -180,7 +164,6 @@ ticks_properties_mapping_dict = {list(ticks_properties_UI_dict.keys())[index]: l
 
 axes_properties_dict = dict(
     {
-        "visible": True,
         "axisbelow": True,
         "frame_on": True,
         "title": "Chart",
@@ -192,12 +175,6 @@ axes_properties_dict = dict(
 
 axes_properties_UI_dict = dict(
     {
-        "Visibility": dict(
-            {
-                True: "Show",
-                False: "Hide"
-            }
-        ),
         "Axis position": dict(
             {
                 True: "Below",
@@ -293,7 +270,7 @@ legend_properties_UI_dict = dict(
                 False: "Off"
             }
         ),
-        "Transparency": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Border color": create_color_dict(),
         "Background color": create_color_dict(),
         "Title": "Legend",

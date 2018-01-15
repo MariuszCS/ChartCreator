@@ -33,13 +33,6 @@ class ChartCreator(tk.Tk):
         self.plot = None
         ChartCreator.chart_type = tk.StringVar()
         ChartCreator.chosen_plot_label = None
-        main_frame = self.setup_main_frame()
-        self.setup_menu(main_frame)
-        self.setup_top_frame(main_frame)
-        self.setup_right_frame(main_frame)
-        self.setup_left_frame(main_frame)
-        self.setup_bottom_frame(main_frame)
-        main_frame.tkraise()
 
     def setup_main_frame(self):
         main_frame = tk.Frame(self)
@@ -166,8 +159,8 @@ class ChartCreator(tk.Tk):
                              **dict(list(ticks_properties_dict.items())[8:]))
         mat_art.setp(self.plot, **axes_properties_dict)
         self.plot.autoscale()
-        ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen plot: ", width=28, justify="left")
-        ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="w")
+        ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen: ", width=24, justify="left", font=("Consolas", 9))
+        ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="ew")
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
         self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
         #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
@@ -255,3 +248,7 @@ class ChartCreator(tk.Tk):
         self.chosen_color_label.grid(row=7, column=0, columnspan=2, padx=15, pady=10, sticky="w")
         self.chosen_color_preview_label = ttk.Label(parent_frame, width=4)
         self.chosen_color_preview_label.grid(row=7, column=2, padx=10, pady=10, sticky="nw")
+
+    def run(self, frame):
+        frame.tkraise()
+        self.mainloop()

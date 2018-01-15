@@ -177,7 +177,7 @@ class PopupCreator(object):
         apply_button.grid(row=1, column=0, sticky="e", padx=10)
         cancel_button = ttk.Button(self.chart_configuration_popup, text="Cancel", command=event_for_close_popup,
                                    cursor="hand2")
-        cancel_button.grid(row=1, column=1, sticky="s", padx=10)
+        cancel_button.grid(row=1, column=1, sticky="e", padx=12)
         self.axes_frame = tk.Frame(option_notebook)
         self.axes_frame.grid(sticky="nwse")
         self.setup_options_for_config_tab(self.axes_frame, axes_properties_dict, axes_properties_UI_dict,
