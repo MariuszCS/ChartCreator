@@ -218,8 +218,7 @@ legend_properties_dict = dict(
         "ncol": 1,
         "markerscale": 1,
         "markerfirst": True,
-        "scatterpoints": 1,
-        #"prop": {"style": 'normal', "size": 'x-small'},     
+        "scatterpoints": 1
     }
 )
 
@@ -288,8 +287,7 @@ legend_properties_UI_dict = dict(
                 False: "Right"
             }
         ),
-        "Nr. of scatter points": {x: str(x) for x in range(1, 4)},
-        #"prop": {SMALL_FONT: SMALL_FONT},
+        "No. of scatter points": {x: str(x) for x in range(1, 4)},
     }
 )
 

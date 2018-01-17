@@ -12,7 +12,6 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import AutoLocator, AutoMinorLocator
 from matplotlib import pyplot as plt
 import matplotlib.artist as mat_art
-#from mpl_toolkits.mplot3d import Axes3D
 
 class ChartCreator(tk.Tk):
 
