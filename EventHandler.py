@@ -300,7 +300,6 @@ class EventHandler(object):
             self.popup_creator.messagebox_popup("Wrong mathtext syntax. Please check the matplotlib docs for more information "
                                                 "about mathtext used in matplotlib.")
         
-
     def draw_plot(self, plot):
         if (self.data_series_dict[self.data_series_name]["chart_type"] == "Line"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -308,6 +307,7 @@ class EventHandler(object):
                                                                                     self.data_series_dict[self.data_series_name]["y"],
                                                                                     color=self.data_series_dict[self.data_series_name]["color"],
                                                                                     picker=True)
+                self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_line_properties_dict()
             else:
                 plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                           color=self.data_series_dict[self.data_series_name]["color"])
@@ -318,7 +318,8 @@ class EventHandler(object):
                                                                                   self.data_series_dict[self.data_series_name]["y"],
                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
                                                                                   picker=True,
-                                                                                  width=5)
+                                                                                  width=2)
+                self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_bar_properties_dict()
             else:
                 plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
@@ -333,6 +334,7 @@ class EventHandler(object):
                                                                                       picker=True,
                                                                                       s=6,
                                                                                       zorder=100)
+                self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_point_properties_dict()                                                                         
             else:
                 plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                              color=self.data_series_dict[self.data_series_name]["color"],
@@ -487,7 +489,7 @@ class EventHandler(object):
 
     def click_artist_callback(self, event):
         self.plot_is_chosen = True
-        #print(dir(event.artist))
+        print(type(event.artist))
         for data_series_name, properties_dict in self.data_series_dict.items():
             if ((properties_dict["artist"] == event.artist or event.artist in properties_dict["artist"].get_children())
                 and data_series_name != self.chosen_plot):
@@ -641,10 +643,28 @@ class EventHandler(object):
                 self.draw_plot(plot)
                 canvas.show()
 
-    def event_for_modify_plot_button(self):
+    def event_for_apply_plot_config_button(self, plot, canvas):
+        UI_dict, mapping_dict = choose_proper_dicts(self.data_series_dict[self.chosen_plot]["artist"])
+        self.update_values_of_properties_dict(self.popup_creator.plot_options_frame.winfo_children(),
+                                            self.data_series_dict[self.chosen_plot]["artist_properties_dict"],
+                                            UI_dict, mapping_dict)
+        mat_art.setp(self.data_series_dict[self.chosen_plot]["artist"], 
+                    **self.data_series_dict[self.chosen_plot]["artist_properties_dict"])
+        self.update_legend(plot)
+        canvas.show()
+
+    def event_for_submit_plot_config_button(self, plot, canvas):
+        self.event_for_apply_plot_config_button(plot, canvas)
+        self.event_for_close_popup_button(
+            self.popup_creator.plot_configuration_popup)
+
+    def event_for_modify_plot_button(self, plot, canvas):
         if (not self.chosen_plot):
             self.popup_creator.messagebox_popup("No plot for modify chosen. "
                                                 "First click on a specific plot to pick it and then click on the \"Modify chosen\" button.")
             return
-        self.popup_creator.popup_for_plot_configuration(lambda: self.event_for_close_popup_button(self.popup_creator.plot_configuration_popup))
-                
+        self.popup_creator.popup_for_plot_configuration(lambda: self.event_for_close_popup_button(self.popup_creator.plot_configuration_popup),
+                                                        lambda: self.event_for_apply_plot_config_button(plot, canvas),
+                                                        lambda: self.event_for_submit_plot_config_button(plot, canvas),
+                                                        self.data_series_dict[self.chosen_plot]["artist_properties_dict"],
+                                                        self.data_series_dict[self.chosen_plot]["artist"])

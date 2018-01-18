@@ -194,7 +194,8 @@ class ChartCreator(tk.Tk):
                                                                                             self.data_series_combobox))
         clear_button.grid(row=0, column=4, padx=20)
         modify_plot_button = ttk.Button(parent_frame, text="Modify plot", cursor="hand2",
-                                        command=lambda: self.event_handler.event_for_modify_plot_button())
+                                        command=lambda: self.event_handler.event_for_modify_plot_button(self.plot,
+                                                                                                        self.canvas))
         modify_plot_button.grid(row=0, column=5, padx=20)
         copyright_label = tk.Label(parent_frame, text="Mariusz Chybicki \u00A9", font=SMALL_FONT)
         copyright_label.grid(row=1, column=0, columnspan=4, sticky="w")

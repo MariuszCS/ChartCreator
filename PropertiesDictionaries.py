@@ -1,9 +1,16 @@
 import numpy as np
 from Constants import *
-from matplotlib import font_manager
+import matplotlib
 
-def create_color_dict():
-    return dict(
+def choose_proper_dicts(artist):
+    if (type(artist) == matplotlib.lines.Line2D):   
+        return line_properties_UI_dict, line_properties_mapping_dict
+    elif (type(artist) == matplotlib.container.BarContainer):
+        return bar_properties_UI_dict, bar_properties_mapping_dict
+    elif (type(artist) == matplotlib.collections.PathCollection):
+        return point_properties_UI_dict, point_properties_mapping_dict
+
+color_dict = dict(
         {
             "#ffffff": "White",
             "#b3b3b3": "Grey",
@@ -33,7 +40,8 @@ def create_series_properties_dict():
             "artist": None,
             "chart_type": "",
             "color": "",
-            "plot_name": ""
+            "plot_name": "",
+            "artist_properties_dict": None
         }
     )
 
@@ -77,8 +85,8 @@ grid_properties_UI_dict = dict(
                 False: "Hide"
             }
         ),
-        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
-        "Color": create_color_dict(),
+        "Opacity": {round(x, 1): str(round(x, 1)) for x in np.linspace(0.1, 1, 10)},
+        "Color": color_dict,
         "Style": dict(
             {
                 "solid": "Solid (-)",
@@ -145,7 +153,7 @@ ticks_properties_UI_dict = dict(
         ),
         "Ticks length": {x: str(x) for x in range(1, 11)},
         "Ticks width": {x: str(x) for x in range(1, 11)},
-        "Ticks color": create_color_dict(),
+        "Ticks color": color_dict,
         "Label": dict(
             {
                 True: "Show",
@@ -154,7 +162,7 @@ ticks_properties_UI_dict = dict(
         ),
         "Label-tick distance": {x: str(x) for x in range(1, 11)},
         "Label size": {x: str(x) for x in range(4, 21)},
-        "Label color": create_color_dict(),
+        "Label color": color_dict,
         "Label rotation": {x: str(x) for x in range(0, 360, 10)}
     }
 )
@@ -188,7 +196,7 @@ axes_properties_UI_dict = dict(
             }
         ),
         "Title": "Chart",
-        "Background color": create_color_dict(),
+        "Background color": color_dict,
         "X axis label": "x",
         "Y axis label": "y",
     }
@@ -270,8 +278,8 @@ legend_properties_UI_dict = dict(
             }
         ),
         "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
-        "Border color": create_color_dict(),
-        "Background color": create_color_dict(),
+        "Border color": color_dict,
+        "Background color": color_dict,
         "Title": "Legend",
         "Font size": {x: str(x) for x in range(6, 14)},
         "Border-inside spacing": {(x / 10): str(x / 10) for x in range(0, 21)},
@@ -293,3 +301,204 @@ legend_properties_UI_dict = dict(
 
 legend_properties_mapping_dict = {list(legend_properties_UI_dict.keys())[index]: list(legend_properties_dict.keys())[index]
                                 for index in range(0, len(legend_properties_dict.keys()))}
+
+def create_line_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "linewidth": 1,
+            "color": "#000000",
+            "linestyle": "solid",
+            "marker": "None",
+            "markersize": 1,
+            "markeredgecolor": "#000000",
+            "markerfacecolor": "#000000",
+            "markeredgewidth": 1,
+            "solid_capstyle": "projecting",
+            "dash_capstyle": "projecting",
+            "zorder": 1
+        }
+    )
+
+line_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Line width": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Line color": color_dict,
+        "Line style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Marker type": dict(
+            {
+                "None": "None",
+                ".": "Point",
+                "v": "Triangle down",
+                "^": "Triangle up",
+                "<": "Triangle left",
+                ">": "Triangle right",
+                "1": "Tri down",
+                "2": "Tri up",
+                "3": "Tri left",
+                "4": "Tri right",
+                "8": "Octagon",
+                "s": "Square",
+                "p": "Pentagon",
+                "P": "Plus (filled)",
+                "*": "Star",
+                "h": "Hexagon1",
+                "+": "Plus",
+                "x": "X",
+                "X": "X (filled)",
+                "D": "Diamond",
+                "d": "Thin diamond"
+            }
+        ),
+        "Marker size": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Marker edge color": color_dict,
+        "Marker body color": color_dict,
+        "Marker edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Solid line end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Dash line end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+line_properties_dict = create_line_properties_dict()
+
+line_properties_mapping_dict = {list(line_properties_UI_dict.keys())[index]: list(line_properties_dict.keys())[index]
+                                for index in range(0, len(line_properties_dict.keys()))}
+
+def create_bar_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "width": 2,
+            "fill": True,
+            "facecolor": "#000000",
+            "linestyle": "solid",
+            "linewidth": 1,
+            "edgecolor": "#000000",
+            "hatch": ".",
+            "capstyle": "projecting",
+            "zorder": 1
+        }
+    )
+
+bar_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Bar width": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Fill": dict(
+            {
+                True: "Filled",
+                False: "Empty"
+            }
+        ),
+        "Bar body color": color_dict,
+        "Edge style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Bar edge/hatch color": color_dict,
+        "Hatch type": dict(
+            {
+                "/": "diagonal hatching",
+                "\\": "back diagonal",
+                "|": "vertical",
+                "-": "horizontal",
+                "+": "crossed",
+                "x": "crossed diagonal",
+                "o": "small circle",
+                "O": "large circle",
+                ".": "dots",
+                "*": "stars"
+            }
+        ),
+        "Dashed edge end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+bar_properties_dict = create_bar_properties_dict()
+
+bar_properties_mapping_dict = {list(bar_properties_UI_dict.keys())[index]: list(bar_properties_dict.keys())[index]
+                                for index in range(0, len(bar_properties_dict.keys()))}
+
+def create_point_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "marker": ".",
+            #"s": 1,
+            "edgecolor": "#000000",
+            "facecolor": "#000000",
+            "linewidths": 1,
+            "zorder": 1
+        }
+    )
+
+point_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Marker type": dict(
+            {
+                "None": "None",
+                ".": "Point",
+                "v": "Triangle down",
+                "^": "Triangle up",
+                "<": "Triangle left",
+                ">": "Triangle right",
+                "1": "Tri down",
+                "2": "Tri up",
+                "3": "Tri left",
+                "4": "Tri right",
+                "8": "Octagon",
+                "s": "Square",
+                "p": "Pentagon",
+                "P": "Plus (filled)",
+                "*": "Star",
+                "h": "Hexagon1",
+                "+": "Plus",
+                "x": "X",
+                "X": "X (filled)",
+                "D": "Diamond",
+                "d": "Thin diamond"
+            }
+        ),
+        #"Marker size": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Marker edge color": color_dict,
+        "Marker body color": color_dict,
+        "Marker edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+point_properties_dict = create_point_properties_dict()
+
+point_properties_mapping_dict = {list(point_properties_UI_dict.keys())[index]: list(point_properties_dict.keys())[index]
+                                for index in range(0, len(point_properties_dict.keys()))}

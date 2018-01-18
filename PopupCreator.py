@@ -14,7 +14,6 @@ import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
-from matplotlib import pyplot as plt
 import matplotlib.artist as mat_art
 
 class PopupCreator(object):
@@ -35,6 +34,7 @@ class PopupCreator(object):
         self.grid_frame = None
         self.ticks_frame = None
         self.legend_frame = None
+        self.plot_options_frame = None
         self.plot_types_listbox = None
 
     def popup_for_openfile(self):
@@ -190,7 +190,7 @@ class PopupCreator(object):
         self.ticks_frame.grid(sticky="nwse")
         self.setup_options_for_config_tab(self.ticks_frame, ticks_properties_dict, ticks_properties_UI_dict,
                                           ticks_properties_mapping_dict)
-        legend_tab_frame = tk.Frame(option_notebook, bg="black")
+        legend_tab_frame = tk.Frame(option_notebook)
         legend_tab_frame.columnconfigure(0, weight=22)
         legend_tab_frame.columnconfigure(1, weight=1)
         legend_tab_frame.rowconfigure(0, weight=10)
@@ -228,9 +228,10 @@ class PopupCreator(object):
                 combobox = ttk.Combobox(parent_frame, state="readonly", font=SMALL_FONT,
                                         values=list(UI_dict[list(mapping_dict.keys())[row_nr]].values()))
                 combobox.set(UI_dict[list(mapping_dict.keys())[row_nr]]
-                             [properties_dict[list(mapping_dict.values())[row_nr]]])
+                            [properties_dict[list(mapping_dict.values())[row_nr]]])
                 combobox.grid(row=row_nr, column=1, padx=19, sticky="e")
-        if (parent_frame != self.axes_frame and parent_frame != self.legend_frame):
+        if (parent_frame != self.axes_frame and parent_frame != self.legend_frame and 
+            parent_frame != self.plot_options_frame):
             separator = ttk.Separator(parent_frame, orient="horizontal")
             separator.grid(row=1, column=0, columnspan=2, padx=10, sticky="wse")
 
@@ -255,37 +256,30 @@ class PopupCreator(object):
         cancel_button = ttk.Button(self.plot_types_popup, text="Cancel", command=event_for_close_popup,
                                    cursor="hand2")
         cancel_button.grid(row=2, column=1, sticky="e", padx=15, pady=10)
-        #### think about pie chart
-        # barh, broken_barh? just for fun later, cohere?no ide how works, csd OK how, errorbar OK,
-        # hexbin? no idea how works, hist ok, loglog OK, semilogx OK, semilogy OK,
-        # magnitude_sepctrum OK how, phase_spectrum OK how, pie OK, plot_date? to consider,
-        # psd? OK how, quiver? consider, stackplot? OK, stem, step? OK,
-        # violinplot? dont think so, 
-        # 'convert_xunits', 'convert_yunits', 'format_coord', 'format_cursor_data', 'format_xdata', 'format_ydata', 'minorticks_off', 
-        # 'minorticks_on'
-
-
-
         self.plot_types_popup.mainloop()
 
 
-    def popup_for_plot_configuration(self, event_for_close_popup):
+    def popup_for_plot_configuration(self, event_for_close_popup, event_for_apply_button, event_for_submit_button,
+                                     chosen_plot_config_dict, chosen_plot_artist):
         self.plot_configuration_popup = tk.Toplevel()
         self.plot_configuration_popup.grab_set()
         self.plot_configuration_popup.wm_title("Plot configuration")
         self.plot_configuration_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
         self.plot_configuration_popup.wm_minsize(400, 600)
         self.plot_configuration_popup.wm_maxsize(400, 600)
-
-
-
-        submit_button = ttk.Button(self.plot_configuration_popup, text="Submit",
+        self.plot_options_frame = tk.Frame(self.plot_configuration_popup, height=540, width=350)
+        self.plot_options_frame.grid(row=0, column=0, columnspan=3, sticky="nwse", pady=10, padx=10)
+        self.plot_options_frame.grid_propagate(0)
+        UI_dict, mapping_dict = choose_proper_dicts(chosen_plot_artist)
+        self.setup_options_for_config_tab(self.plot_options_frame, chosen_plot_config_dict, UI_dict,
+                                          mapping_dict)
+        submit_button = ttk.Button(self.plot_configuration_popup, text="Submit", command=event_for_submit_button,
                                    cursor="hand2")
-        submit_button.grid(row=1, column=0, sticky="w", padx=10)
-        apply_button = ttk.Button(self.plot_configuration_popup, text="Apply",
+        submit_button.grid(row=1, column=0, sticky="sw", padx=18)
+        apply_button = ttk.Button(self.plot_configuration_popup, text="Apply", command=event_for_apply_button,
                                    cursor="hand2")
-        apply_button.grid(row=1, column=1, sticky="w", padx=10)
+        apply_button.grid(row=1, column=1, sticky="sw")
         cancel_button = ttk.Button(self.plot_configuration_popup, text="Cancel", command=event_for_close_popup,
                                    cursor="hand2")
-        cancel_button.grid(row=1, column=2, sticky="e", padx=10)
+        cancel_button.grid(row=1, column=2, sticky="se", padx=15)
         self.plot_configuration_popup.mainloop()
