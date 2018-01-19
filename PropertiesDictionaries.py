@@ -2,13 +2,25 @@ import numpy as np
 from Constants import *
 import matplotlib
 
-def choose_proper_dicts(artist):
-    if (type(artist) == matplotlib.lines.Line2D):   
+def choose_proper_dicts(chart_type):
+    if (chart_type == "Line" or chart_type == "Stem plot"):   
         return line_properties_UI_dict, line_properties_mapping_dict
-    elif (type(artist) == matplotlib.container.BarContainer):
-        return bar_properties_UI_dict, bar_properties_mapping_dict
-    elif (type(artist) == matplotlib.collections.PathCollection):
+    elif (chart_type == "Points"):
         return point_properties_UI_dict, point_properties_mapping_dict
+    elif (chart_type == "Bars"):
+        return bar_properties_UI_dict, bar_properties_mapping_dict
+    elif (chart_type == "Horizontal bar"):
+        return horizontal_bar_properties_UI_dict, horizontal_bar_properties_mapping_dict
+    elif (chart_type == "Error bar"):
+        return error_bar_properties_UI_dict, error_bar_properties_mapping_dict
+    elif (chart_type == "Histogram"):
+        return histogram_properties_UI_dict, histogram_properties_mapping_dict
+    elif (chart_type == "Stack plot"):
+        return stack_properties_UI_dict, stack_properties_mapping_dict
+    elif (chart_type == "Step plot"):
+        return step_properties_UI_dict, step_properties_mapping_dict
+
+
 
 color_dict = dict(
         {
@@ -310,7 +322,7 @@ def create_line_properties_dict():
             "color": "#000000",
             "linestyle": "solid",
             "marker": "None",
-            "markersize": 1,
+            "markersize": 4,
             "markeredgecolor": "#000000",
             "markerfacecolor": "#000000",
             "markeredgewidth": 1,
@@ -454,10 +466,10 @@ def create_point_properties_dict():
         {
             "alpha": 1,
             "marker": ".",
-            #"s": 1,
-            "edgecolor": "#000000",
-            "facecolor": "#000000",
-            "linewidths": 1,
+            "markersize": 6,
+            "markeredgecolor": "#000000",
+            "markerfacecolor": "#000000",
+            "markeredgewidth": 1,
             "zorder": 1
         }
     )
@@ -490,7 +502,7 @@ point_properties_UI_dict = dict(
                 "d": "Thin diamond"
             }
         ),
-        #"Marker size": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Marker size": {(x / 10): str((x / 10)) for x in range(2, 202, 2)},
         "Marker edge color": color_dict,
         "Marker body color": color_dict,
         "Marker edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
@@ -502,3 +514,287 @@ point_properties_dict = create_point_properties_dict()
 
 point_properties_mapping_dict = {list(point_properties_UI_dict.keys())[index]: list(point_properties_dict.keys())[index]
                                 for index in range(0, len(point_properties_dict.keys()))}
+
+def create_horizontal_bar_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "height": 2,
+            "fill": True,
+            "facecolor": "#000000",
+            "linestyle": "solid",
+            "linewidth": 1,
+            "edgecolor": "#000000",
+            "hatch": ".",
+            "capstyle": "projecting",
+            "zorder": 1
+        }
+    )
+
+horizontal_bar_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Bar height": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Fill": dict(
+            {
+                True: "Filled",
+                False: "Empty"
+            }
+        ),
+        "Bar body color": color_dict,
+        "Edge style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Bar edge/hatch color": color_dict,
+        "Hatch type": dict(
+            {
+                "/": "diagonal hatching",
+                "\\": "back diagonal",
+                "|": "vertical",
+                "-": "horizontal",
+                "+": "crossed",
+                "x": "crossed diagonal",
+                "o": "small circle",
+                "O": "large circle",
+                ".": "dots",
+                "*": "stars"
+            }
+        ),
+        "Dashed edge end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+horizontal_bar_properties_dict = create_horizontal_bar_properties_dict()
+
+horizontal_bar_properties_mapping_dict = {list(horizontal_bar_properties_UI_dict.keys())[index]: list(horizontal_bar_properties_dict.keys())[index]
+                                            for index in range(0, len(horizontal_bar_properties_dict.keys()))}
+
+def create_error_bar_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "xerr": 0.2,
+            "yerr": 0.2,
+            "elinewidth": 1,
+            "ecolor": "#000000",
+            "capsize": 0,
+            "zorder": 1
+        }
+    )
+
+error_bar_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "X width": {(x / 10): str((x / 10)) for x in range(1, 21)},
+        "Y height": {(x / 10): str((x / 10)) for x in range(1, 21)},
+        "Line width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Line color": color_dict,
+        "Cap size": {(x / 10): str((x / 10)) for x in range(0, 82, 2)},
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+error_bar_properties_dict = create_error_bar_properties_dict()
+
+error_bar_properties_mapping_dict = {list(error_bar_properties_UI_dict.keys())[index]: list(error_bar_properties_dict.keys())[index]
+                                for index in range(0, len(error_bar_properties_dict.keys()))}
+
+def create_histogram_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "fill": True,
+            "facecolor": "#000000",
+            "linestyle": "solid",
+            "linewidth": 1,
+            "edgecolor": "#000000",
+            "hatch": ".",
+            "capstyle": "projecting",
+            "zorder": 1
+        }
+    )
+
+histogram_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Fill": dict(
+            {
+                True: "Filled",
+                False: "Empty"
+            }
+        ),
+        "Bar body color": color_dict,
+        "Edge style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Bar edge/hatch color": color_dict,
+        "Hatch type": dict(
+            {
+                "/": "diagonal hatching",
+                "\\": "back diagonal",
+                "|": "vertical",
+                "-": "horizontal",
+                "+": "crossed",
+                "x": "crossed diagonal",
+                "o": "small circle",
+                "O": "large circle",
+                ".": "dots",
+                "*": "stars"
+            }
+        ),
+        "Dashed edge end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+histogram_properties_dict = create_histogram_properties_dict()
+
+histogram_properties_mapping_dict = {list(histogram_properties_UI_dict.keys())[index]: list(histogram_properties_dict.keys())[index]
+                                for index in range(0, len(histogram_properties_dict.keys()))}
+
+def create_stack_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "facecolor": "#000000",
+            "linestyle": "solid",
+            "linewidth": 1,
+            "edgecolor": "#000000",
+            "zorder": 1
+        }
+    )
+
+stack_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Body color": color_dict,
+        "Edge style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Edge color": color_dict,
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+stack_properties_dict = create_stack_properties_dict()
+
+stack_properties_mapping_dict = {list(stack_properties_UI_dict.keys())[index]: list(stack_properties_dict.keys())[index]
+                                for index in range(0, len(stack_properties_dict.keys()))}
+
+def create_step_properties_dict():
+    return dict(
+        {
+            "alpha": 1,
+            "where": "pre",
+            "linewidth": 1,
+            "color": "#000000",
+            "linestyle": "solid",
+            "marker": "None",
+            "markersize": 4,
+            "markeredgecolor": "#000000",
+            "markerfacecolor": "#000000",
+            "markeredgewidth": 1,
+            "solid_capstyle": "projecting",
+            "dash_capstyle": "projecting",
+            "zorder": 1
+        }
+    )
+
+step_properties_UI_dict = dict(
+    {
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
+        "Steps placed": dict(
+            {
+                "pre": "Before point",
+                "mid": "Middle way",
+                "post": "After point",
+            }
+        ),
+        "Line width": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Line color": color_dict,
+        "Line style": dict(
+            {
+                "solid": "Solid (-)",
+                "dashed": "Dashed (--)",
+                "dashdot": "Dashdot (-.)",
+                "dotted": "Dotted (..)"
+            }
+        ),
+        "Marker type": dict(
+            {
+                "None": "None",
+                ".": "Point",
+                "v": "Triangle down",
+                "^": "Triangle up",
+                "<": "Triangle left",
+                ">": "Triangle right",
+                "1": "Tri down",
+                "2": "Tri up",
+                "3": "Tri left",
+                "4": "Tri right",
+                "8": "Octagon",
+                "s": "Square",
+                "p": "Pentagon",
+                "P": "Plus (filled)",
+                "*": "Star",
+                "h": "Hexagon1",
+                "+": "Plus",
+                "x": "X",
+                "X": "X (filled)",
+                "D": "Diamond",
+                "d": "Thin diamond"
+            }
+        ),
+        "Marker size": {(x / 10): str((x / 10)) for x in range(2, 112, 2)},
+        "Marker edge color": color_dict,
+        "Marker body color": color_dict,
+        "Marker edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Solid line end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Dash line end type": dict(
+            {
+                "projecting": "Flat",
+                "round": "Round",
+            }
+        ),
+        "Z order": {x : str(x) for x in range(1, 31)}
+    }
+)
+
+step_properties_dict = create_step_properties_dict()
+
+step_properties_mapping_dict = {list(step_properties_UI_dict.keys())[index]: list(step_properties_dict.keys())[index]
+                                for index in range(0, len(step_properties_dict.keys()))}

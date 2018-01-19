@@ -260,17 +260,17 @@ class PopupCreator(object):
 
 
     def popup_for_plot_configuration(self, event_for_close_popup, event_for_apply_button, event_for_submit_button,
-                                     chosen_plot_config_dict, chosen_plot_artist):
+                                     chosen_plot_config_dict, chosen_chart_type):
         self.plot_configuration_popup = tk.Toplevel()
         self.plot_configuration_popup.grab_set()
         self.plot_configuration_popup.wm_title("Plot configuration")
         self.plot_configuration_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
-        self.plot_configuration_popup.wm_minsize(400, 600)
-        self.plot_configuration_popup.wm_maxsize(400, 600)
-        self.plot_options_frame = tk.Frame(self.plot_configuration_popup, height=540, width=350)
+        self.plot_configuration_popup.wm_minsize(400, 630)
+        self.plot_configuration_popup.wm_maxsize(400, 630)
+        self.plot_options_frame = tk.Frame(self.plot_configuration_popup, height=570, width=350)
         self.plot_options_frame.grid(row=0, column=0, columnspan=3, sticky="nwse", pady=10, padx=10)
         self.plot_options_frame.grid_propagate(0)
-        UI_dict, mapping_dict = choose_proper_dicts(chosen_plot_artist)
+        UI_dict, mapping_dict = choose_proper_dicts(chosen_chart_type)
         self.setup_options_for_config_tab(self.plot_options_frame, chosen_plot_config_dict, UI_dict,
                                           mapping_dict)
         submit_button = ttk.Button(self.plot_configuration_popup, text="Submit", command=event_for_submit_button,
