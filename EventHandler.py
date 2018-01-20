@@ -5,6 +5,7 @@ import GUICreator
 import Constants
 
 import os
+import tkinter as tk
 
 import matplotlib.artist as mat_art
 import matplotlib.patches
@@ -695,7 +696,7 @@ class EventHandler(object):
                 canvas.show()
 
     def event_for_apply_plot_config_button(self, plot, canvas, file_opened):
-        UI_dict, mapping_dict = choose_proper_dicts(self.data_series_dict[self.chosen_plot]["chart_type"])
+        UI_dict, mapping_dict = PropertiesDictionaries.choose_proper_dicts(self.data_series_dict[self.chosen_plot]["chart_type"])
         if (not file_opened):
             self.update_values_of_properties_dict(self.popup_creator.plot_options_frame.winfo_children(),
                                                 self.data_series_dict[self.chosen_plot]["artist_properties_dict"],
