@@ -2,6 +2,7 @@ import Parser
 import PopupCreator
 import PropertiesDictionaries
 import GUICreator
+import Constants
 
 import os
 
