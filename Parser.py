@@ -15,6 +15,12 @@ class Parser(object):
             return True
         return False
 
+    def check_application_file_extension(self, path_to_file):
+        extension = os.path.split(path_to_file)[1].split(".")[1]
+        if (extension == "cc"):
+            return True
+        return False
+
     def parse_file(self, path_to_file):
         if (not self.check_file_extension(path_to_file)):
             self.popup_creator.messagebox_popup("Wrong file format. Only .csv and .txt files can be loaded.")

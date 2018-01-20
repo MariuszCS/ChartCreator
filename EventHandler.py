@@ -754,12 +754,14 @@ class EventHandler(object):
 
     def event_for_save_file(self):
         path_to_file = self.popup_creator.popup_for_save_file()
-        if (path_to_file):
+        if (path_to_file and self.parser.check_application_file_extension(path_to_file)):
             self.parser.write_dicts_to_file(path_to_file, self.data_series_dict)
+        else:
+            self.popup_creator.messagebox_popup("Files can be saved with .cc extension only.")
                 
     def event_for_open_file(self, plot, canvas, data_series_combobox):
         path_to_file = self.popup_creator.popup_for_openfile()
-        if (path_to_file):
+        if (path_to_file and self.parser.check_application_file_extension(path_to_file)):
             self.parser.read_dicts_from_file(path_to_file, self.data_series_dict)
             for data_series_name in self.data_series_dict.keys():
                 if (self.data_series_dict[data_series_name]["chart_type"] and not self.data_series_dict[data_series_name]["artist"]):
@@ -775,3 +777,5 @@ class EventHandler(object):
             self.data_series_name = data_series_combobox["values"][len(data_series_combobox["values"]) - 1]
             data_series_combobox.event_generate("<<ComboboxSelected>>")
             self.event_for_apply_config_button(plot, canvas, True)
+        else:
+            self.popup_creator.messagebox_popup("Wrong file format. Only .cc files can be opened.")

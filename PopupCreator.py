@@ -283,4 +283,4 @@ class PopupCreator(object):
         self.plot_configuration_popup.mainloop()
 
     def popup_for_save_file(self):
-        return filedialog.asksaveasfilename()
+        return filedialog.asksaveasfilename(defaultextension=".cc")
