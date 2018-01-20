@@ -56,7 +56,9 @@ class ChartCreator(tk.Tk):
                                 lambda: self.event_handler.event_for_new_file(self))
         file_menu.add_separator()
         file_menu.add_command(label="Open", command=
-                                lambda: self.event_handler.event_for_open_file())
+                                lambda: self.event_handler.event_for_open_file(self.plot,
+                                                                               self.canvas,
+                                                                               self.data_series_combobox))
         file_menu.add_separator()
         file_menu.add_command(label="Save")
         file_menu.add_command(label="Save as", command=

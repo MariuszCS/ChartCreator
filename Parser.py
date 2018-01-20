@@ -114,6 +114,8 @@ class Parser(object):
             for line in reader:
                 if (len(line) == 1):
                     data_series_name = line[0]
+                    while data_series_name in list(data_series_dict.keys()):
+                        data_series_name += "1"
                     data_series_dict[data_series_name] = PropertiesDictionaries.create_series_properties_dict()
                 elif (len(line) == 2):
                     if (line[1] == "None"):
