@@ -1,4 +1,5 @@
 import GUICreator
+import PropertiesDictionaries
 
 if (__name__ == "__main__"):
     while True:
@@ -15,3 +16,5 @@ if (__name__ == "__main__"):
         else:
             del chart_creator
             del main_frame
+            
+            

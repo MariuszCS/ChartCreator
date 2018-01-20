@@ -1,6 +1,6 @@
 from Parser import *
 from PopupCreator import *
-from PropertiesDictionaries import *
+import PropertiesDictionaries
 import GUICreator
 
 import matplotlib.artist as mat_art
@@ -33,7 +33,7 @@ class EventHandler(object):
 
     def rewrite_values_to_data_series_dict(self, temp_series_properties_dict):
         if (not self.data_series_name in self.data_series_dict):
-            self.data_series_dict[self.data_series_name] = create_series_properties_dict()
+            self.data_series_dict[self.data_series_name] = PropertiesDictionaries.create_series_properties_dict()
         else:
             self.data_series_dict[self.data_series_name]["x"] = []
             self.data_series_dict[self.data_series_name]["y"] = []
@@ -181,7 +181,7 @@ class EventHandler(object):
             self.popup_creator.excel_sheet_popup.lift()
 
     def check_format_and_rewrite_to_dict(self, data_series_combobox, window_title):
-        temp_series_properties_dict = create_series_properties_dict()
+        temp_series_properties_dict = PropertiesDictionariescreate_series_properties_dict()
         for entry_number in range(0, len(self.popup_creator.entry_list), 3):
             x_entry_content = self.popup_creator.entry_list[entry_number].get()
             y_entry_content = self.popup_creator.entry_list[entry_number + 1].get()
@@ -316,7 +316,7 @@ class EventHandler(object):
                                                                                     color=self.data_series_dict[self.data_series_name]["color"],
                                                                                     picker=True)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_line_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_line_properties_dict()
             else:
                 plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                           color=self.data_series_dict[self.data_series_name]["color"])
@@ -329,7 +329,7 @@ class EventHandler(object):
                                                                                   picker=True,
                                                                                   width=2)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_bar_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_bar_properties_dict()
             else:
                 plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
@@ -346,7 +346,7 @@ class EventHandler(object):
                                                                                     markersize=6,
                                                                                     linewidth=0)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_point_properties_dict()                                                                         
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_point_properties_dict()                                                                         
             else:
                 plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                              color=self.data_series_dict[self.data_series_name]["color"],
@@ -360,7 +360,7 @@ class EventHandler(object):
                                                                                    picker=True,
                                                                                    height=2)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_horizontal_bar_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_horizontal_bar_properties_dict()
             else:
                 plot.barh(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                          color=self.data_series_dict[self.data_series_name]["color"],
@@ -378,7 +378,7 @@ class EventHandler(object):
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][2][0],picker = True)
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][2][1],picker = True)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_error_bar_properties_dict()                                                                                            
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_error_bar_properties_dict()                                                                                            
             else:
                 plot.errorbar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                         color=self.data_series_dict[self.data_series_name]["color"],
@@ -392,7 +392,7 @@ class EventHandler(object):
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True)        
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):                                                          
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_histogram_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_histogram_properties_dict()
             else:
                 plot.hist(self.data_series_dict[self.data_series_name]["x"],
                         color=self.data_series_dict[self.data_series_name]["color"],
@@ -405,7 +405,7 @@ class EventHandler(object):
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_stack_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_stack_properties_dict()
             else:
                 plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                         self.data_series_dict[self.data_series_name]["y"],
@@ -419,7 +419,7 @@ class EventHandler(object):
                                                                                    picker=True,
                                                                                    basefmt="none")
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_line_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_line_properties_dict()
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"]["marker"] = "."
                     mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][0],
                             **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[0:1]),
@@ -448,7 +448,7 @@ class EventHandler(object):
                                                                                    picker=True,
                                                                                    linewidth=1).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
-                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = create_step_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_step_properties_dict()
             else:
                 plot.step(self.data_series_dict[self.data_series_name]["x"],
                         self.data_series_dict[self.data_series_name]["y"],
@@ -753,13 +753,12 @@ class EventHandler(object):
         GUICreator.ChartCreator.chart_type.set("")
         GUICreator.ChartCreator.chosen_plot_label = None
         chart_creator.new_file = True
+        PropertiesDictionaries.axes_properties_dict = PropertiesDictionaries.create_axes_properties_dict()
+        PropertiesDictionaries.grid_properties_dict = PropertiesDictionaries.create_grid_properties_dict()
+        PropertiesDictionaries.ticks_properties_dict = PropertiesDictionaries.create_ticks_properties_dict()
+        PropertiesDictionaries.legend_properties_dict = PropertiesDictionaries.create_legend_properties_dict()
         chart_creator.quit()
         chart_creator.destroy()
-        del PropertiesDictionaries.axes_properties_dict
-        PropertiesDictionaries.axes_properties_dict = create_axes_properties_dict()
-        PropertiesDictionaries.grid_properties_dict = create_grid_properties_dict()
-        PropertiesDictionaries.ticks_properties_dict = create_ticks_properties_dict()
-        PropertiesDictionaries.legend_properties_dict = create_legend_properties_dict()
 
     def event_for_save_file(self):
         path_to_file = self.popup_creator.popup_for_save_file()

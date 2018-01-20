@@ -1,6 +1,6 @@
 import EventHandler
 from Constants import *
-from PropertiesDictionaries import *
+import PropertiesDictionaries
 
 import tkinter as tk
 from tkinter import ttk
@@ -156,14 +156,15 @@ class ChartCreator(tk.Tk):
     def setup_plot_for_right_frame(self, parent_frame):
         figure = Figure(dpi=100)
         self.plot = figure.add_subplot(111)
-        self.plot.grid(**grid_properties_dict)
+        self.plot.grid(**PropertiesDictionaries.grid_properties_dict)
         self.plot.xaxis.set_major_locator(AutoLocator())
         self.plot.xaxis.set_minor_locator(AutoMinorLocator(4))
         self.plot.yaxis.set_major_locator(AutoLocator())
         self.plot.yaxis.set_minor_locator(AutoMinorLocator(4))
-        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
-                             **dict(list(ticks_properties_dict.items())[8:]))
-        mat_art.setp(self.plot, **axes_properties_dict)
+        self.plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]), 
+                             **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
+                             **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
+        mat_art.setp(self.plot, **PropertiesDictionaries.axes_properties_dict)
         self.plot.autoscale()
         ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen: ", width=24, justify="left", font=("Consolas", 9))
         ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="ew")
