@@ -534,10 +534,10 @@ class EventHandler(object):
                                                                 alpha=dictionary["artist_properties_dict"]["alpha"]))
                 elif (dictionary["chart_type"] == "Stack plot"):
                     artist_list.append(matplotlib.patches.Patch(edgecolor=dictionary["artist_properties_dict"]["edgecolor"], 
-                                                            facecolor=dictionary["artist_properties_dict"]["facecolor"],
-                                                            linestyle=dictionary["artist_properties_dict"]["linestyle"],
-                                                            linewidth=dictionary["artist_properties_dict"]["linewidth"],
-                                                            alpha=dictionary["artist_properties_dict"]["alpha"]))
+                                                                facecolor=dictionary["artist_properties_dict"]["facecolor"],
+                                                                linestyle=dictionary["artist_properties_dict"]["linestyle"],
+                                                                linewidth=dictionary["artist_properties_dict"]["linewidth"],
+                                                                alpha=dictionary["artist_properties_dict"]["alpha"]))
                 else:
                     artist_list.append(dictionary["artist"])
                 label_list.append(dictionary["plot_name"])
@@ -769,15 +769,16 @@ class EventHandler(object):
                                                         self.data_series_dict[self.chosen_plot]["chart_type"])
 
     def event_for_new_file(self, chart_creator):
-        GUICreator.ChartCreator.chart_type.set("")
-        GUICreator.ChartCreator.chosen_plot_label = None
-        chart_creator.new_file = True
-        PropertiesDictionaries.axes_properties_dict = PropertiesDictionaries.create_axes_properties_dict()
-        PropertiesDictionaries.grid_properties_dict = PropertiesDictionaries.create_grid_properties_dict()
-        PropertiesDictionaries.ticks_properties_dict = PropertiesDictionaries.create_ticks_properties_dict()
-        PropertiesDictionaries.legend_properties_dict = PropertiesDictionaries.create_legend_properties_dict()
-        chart_creator.quit()
-        chart_creator.destroy()
+        if (self.popup_creator.popup_for_new_file()):
+            GUICreator.ChartCreator.chart_type.set("")
+            GUICreator.ChartCreator.chosen_plot_label = None
+            chart_creator.new_file = True
+            PropertiesDictionaries.axes_properties_dict = PropertiesDictionaries.create_axes_properties_dict()
+            PropertiesDictionaries.grid_properties_dict = PropertiesDictionaries.create_grid_properties_dict()
+            PropertiesDictionaries.ticks_properties_dict = PropertiesDictionaries.create_ticks_properties_dict()
+            PropertiesDictionaries.legend_properties_dict = PropertiesDictionaries.create_legend_properties_dict()
+            chart_creator.quit()
+            chart_creator.destroy()
 
     def event_for_save_file(self):
         path_to_file = self.popup_creator.popup_for_save_file()

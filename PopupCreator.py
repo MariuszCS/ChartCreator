@@ -43,6 +43,10 @@ class PopupCreator(object):
     def popup_for_colorchooser(self):
         return colorchooser.askcolor(initialcolor="#000000")[1]
 
+    def popup_for_new_file(self):
+        return messagebox.askyesno(message="Are you sure you want to open a new file?\n"
+                                           "If not saved, all the changes will be discarded.")
+
     def popup_for_provide_name(self, file_name, event_for_submit_name_button, event_for_close_name_popup_button):
         self.provide_name_popup = tk.Toplevel()
         self.provide_name_popup.grab_set()
