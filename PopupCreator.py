@@ -73,8 +73,8 @@ class PopupCreator(object):
                               event_for_add_row_button):
         self.excel_sheet_popup = tk.Toplevel()
         self.excel_sheet_popup.grab_set()
-        self.excel_sheet_popup.wm_minsize(400, 340)
-        self.excel_sheet_popup.wm_maxsize(400, 340)
+        self.excel_sheet_popup.wm_minsize(390, 340)
+        self.excel_sheet_popup.wm_maxsize(390, 340)
         self.excel_sheet_popup.wm_title(window_title)
         self.excel_sheet_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
         self.excel_sheet_validation_function = self.excel_sheet_popup.register(self.validate_entry_data)
