@@ -7,12 +7,12 @@ import matplotlib.artist as mat_art
 import matplotlib.patches
 from matplotlib import ticker
 
+
 class EventHandler(object):
     def __init__(self):
         self.parser = Parser()
         self.popup_creator = PopupCreator()
         self.data_series_name = ""
-        # data series dict with key = "data_series_name" value = self.create_coordinates_dict()
         self.data_series_dict = {}
         self.proper_name = True
         self.color = "#000000"
@@ -743,3 +743,13 @@ class EventHandler(object):
         chart_creator.new_file = True
         chart_creator.quit()
         chart_creator.destroy()
+
+    def event_for_save_file(self):
+        path_to_file = self.popup_creator.popup_for_save_file()
+        if (path_to_file):
+            self.parser.write_dicts_to_file(path_to_file, self.data_series_dict)
+                
+    def event_for_open_file(self):
+        path_to_file = self.popup_creator.popup_for_openfile()
+        if (path_to_file):
+            self.parser.read_dicts_from_file(path_to_file, self.data_series_dict)

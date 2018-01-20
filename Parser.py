@@ -95,3 +95,59 @@ class Parser(object):
         if (not z_present):
             temp_series_properties_dict["z"] = []
         return True
+
+    def write_dicts_to_file(self, path_to_file, data_series_dict):
+        with open(path_to_file, "w") as file_to_write:
+            writer = csv.writer(file_to_write)
+            for data_series_name, properties_dict in data_series_dict.items():
+                writer.writerow([data_series_name])
+                for key, value in properties_dict.items():
+                    if (value is None):
+                        writer.writerow([key, "None"])
+                    else:
+                        writer.writerow([key, value])
+    
+    def read_dicts_from_file(self, path_to_file, data_series_dict):
+        with open(path_to_file, "r") as file_to_read:
+            reader = csv.reader(file_to_read)
+            data_series_name = ""
+            for line in reader:
+                if (len(line) == 1):
+                    data_series_name = line[0]
+                    data_series_dict[data_series_name] = PropertiesDictionaries.create_series_properties_dict()
+                elif (len(line) == 2):
+                    if (line[1] == "None"):
+                        data_series_dict[data_series_name][line[0]] = None
+                    elif (re.search("\[", line[1])):
+                        line[1] = line[1].replace("[", "")
+                        line[1] = line[1].replace("]", "")
+                        line[1] = line[1].replace(" ", "")
+                        line[1] = line[1].split(",")
+                        if (line[1] != [""]):
+                            data_series_dict[data_series_name][line[0]] = [float(value) for value in line[1]]
+                        else:
+                            data_series_dict[data_series_name][line[0]] = []
+                    elif (re.search("\{", line[1])):
+                        line[1] = line[1].replace("{", "")
+                        line[1] = line[1].replace("}", "")
+                        line[1] = line[1].replace(" ", "")
+                        line[1] = line[1].replace("\'", "")
+                        line[1] = line[1].split(",")
+                        data_series_dict[data_series_name][line[0]] = PropertiesDictionaries.create_dict_for_open_button(data_series_dict[data_series_name]["chart_type"])
+                        for dict_pair in line[1]:
+                            dict_pair = dict_pair.split(":")
+                            if (re.search("[0-9]", dict_pair[1]) and not re.search("[#]", dict_pair[1]) and
+                                dict_pair[0] != "marker"):
+                                data_series_dict[data_series_name][line[0]][dict_pair[0]] = float(dict_pair[1])
+                            elif (dict_pair[1] == "None"):
+                                data_series_dict[data_series_name][line[0]][dict_pair[0]] = None
+                            elif (dict_pair[1] == "True"):
+                                data_series_dict[data_series_name][line[0]][dict_pair[0]] = True
+                            elif (dict_pair[1] == "False"):
+                                data_series_dict[data_series_name][line[0]][dict_pair[0]] = False
+                            else:
+                                data_series_dict[data_series_name][line[0]][dict_pair[0]] = dict_pair[1]
+                    elif (line[0] == "artist"):
+                        data_series_dict[data_series_name][line[0]] = None
+                    else:
+                        data_series_dict[data_series_name][line[0]] = line[1]

@@ -283,3 +283,6 @@ class PopupCreator(object):
                                    cursor="hand2")
         cancel_button.grid(row=1, column=2, sticky="se", padx=15)
         self.plot_configuration_popup.mainloop()
+
+    def popup_for_save_file(self):
+        return filedialog.asksaveasfilename()

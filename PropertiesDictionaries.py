@@ -2,6 +2,26 @@ import numpy as np
 from Constants import *
 import matplotlib
 
+def create_dict_for_open_button(chart_type):
+    if (chart_type == "Line" or chart_type == "Stem plot"):   
+        return create_line_properties_dict()
+    elif (chart_type == "Points"):
+        return create_point_properties_dict()
+    elif (chart_type == "Bars"):
+        return create_bar_properties_dict()
+    elif (chart_type == "Horizontal bar"):
+        return create_horizontal_bar_properties_dict()
+    elif (chart_type == "Error bar"):
+        return create_error_bar_properties_dict()
+    elif (chart_type == "Histogram"):
+        return create_histogram_properties_dict()
+    elif (chart_type == "Stack plot"):
+        return create_stack_properties_dict()
+    elif (chart_type == "Step plot"):
+        return create_step_properties_dict()
+
+
+
 def choose_proper_dicts(chart_type):
     if (chart_type == "Line" or chart_type == "Stem plot"):   
         return line_properties_UI_dict, line_properties_mapping_dict
@@ -19,8 +39,6 @@ def choose_proper_dicts(chart_type):
         return stack_properties_UI_dict, stack_properties_mapping_dict
     elif (chart_type == "Step plot"):
         return step_properties_UI_dict, step_properties_mapping_dict
-
-
 
 color_dict = dict(
         {

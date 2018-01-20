@@ -55,10 +55,12 @@ class ChartCreator(tk.Tk):
         file_menu.add_command(label="New", command=
                                 lambda: self.event_handler.event_for_new_file(self))
         file_menu.add_separator()
-        file_menu.add_command(label="Open")
+        file_menu.add_command(label="Open", command=
+                                lambda: self.event_handler.event_for_open_file())
         file_menu.add_separator()
         file_menu.add_command(label="Save")
-        file_menu.add_command(label="Save as")
+        file_menu.add_command(label="Save as", command=
+                                lambda: self.event_handler.event_for_save_file())
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=quit)
         parent_menu.add_cascade(label="File", menu=file_menu)
