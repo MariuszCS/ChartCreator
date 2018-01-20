@@ -734,7 +734,7 @@ class EventHandler(object):
         canvas.show()
 
     def event_for_submit_plot_config_button(self, plot, canvas):
-        self.event_for_apply_plot_config_button(plot, canvas)
+        self.event_for_apply_plot_config_button(plot, canvas, False)
         self.event_for_close_popup_button(
             self.popup_creator.plot_configuration_popup)
 
@@ -770,7 +770,7 @@ class EventHandler(object):
         if (path_to_file):
             self.parser.read_dicts_from_file(path_to_file, self.data_series_dict)
             for data_series_name in self.data_series_dict.keys():
-                if (self.data_series_dict[data_series_name]["chart_type"]):
+                if (self.data_series_dict[data_series_name]["chart_type"] and not self.data_series_dict[data_series_name]["artist"]):
                     self.data_series_name = data_series_name
                     self.draw_plot(plot)
                     self.chosen_plot = data_series_name

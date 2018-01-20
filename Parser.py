@@ -192,7 +192,7 @@ class Parser(object):
                         legend_config = True
 
     def assign_value_to_key(self, properties_dict, key, value):
-        if (key == "scatterpoints"):
+        if (key == "scatterpoints" or key == "ncol"):
             properties_dict[key] = int(value)
         elif (value == "True"):
             properties_dict[key] = True
