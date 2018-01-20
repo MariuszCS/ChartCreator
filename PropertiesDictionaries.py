@@ -64,7 +64,6 @@ def create_series_properties_dict():
         {
             "x": [],
             "y": [],
-            "z": [],
             "artist": None,
             "chart_type": "",
             "color": "",

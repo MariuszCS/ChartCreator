@@ -37,13 +37,10 @@ class EventHandler(object):
         else:
             self.data_series_dict[self.data_series_name]["x"] = []
             self.data_series_dict[self.data_series_name]["y"] = []
-            self.data_series_dict[self.data_series_name]["z"] = []
         self.data_series_dict[self.data_series_name]["x"] = [
             float(element) for element in temp_series_properties_dict["x"]]
         self.data_series_dict[self.data_series_name]["y"] = [
             float(element) for element in temp_series_properties_dict["y"]]
-        self.data_series_dict[self.data_series_name]["z"] = [
-            float(element) for element in temp_series_properties_dict["z"]]
 
     def event_for_submit_name_button(self, temp_series_properties_dict, data_series_combobox):
         if (self.check_name()):
@@ -181,17 +178,15 @@ class EventHandler(object):
             self.popup_creator.excel_sheet_popup.lift()
 
     def check_format_and_rewrite_to_dict(self, data_series_combobox, window_title):
-        temp_series_properties_dict = PropertiesDictionariescreate_series_properties_dict()
-        for entry_number in range(0, len(self.popup_creator.entry_list), 3):
+        temp_series_properties_dict = PropertiesDictionaries.create_series_properties_dict()
+        for entry_number in range(0, len(self.popup_creator.entry_list), 2):
             x_entry_content = self.popup_creator.entry_list[entry_number].get()
             y_entry_content = self.popup_creator.entry_list[entry_number + 1].get()
-            z_entry_content = self.popup_creator.entry_list[entry_number + 2].get()
-            if (not x_entry_content and not y_entry_content and not z_entry_content):
+            if (not x_entry_content and not y_entry_content):
                 pass
             else:
                 temp_series_properties_dict["x"].append(x_entry_content)
                 temp_series_properties_dict["y"].append(y_entry_content)
-                temp_series_properties_dict["z"].append(z_entry_content)
         if (self.parser.check_inserted_data_format(temp_series_properties_dict)):
             self.rewrite_values_to_data_series_dict(
                 temp_series_properties_dict)
@@ -231,19 +226,16 @@ class EventHandler(object):
 
     def fill_excel_sheet_popup(self, data_series_combobox):
         self.popup_creator.name_entry.insert(0, self.data_series_name)
-        if (len(self.data_series_dict[self.data_series_name]["x"]) > int(len(self.popup_creator.entry_list) / 3)):
-            for _ in range(0, len(self.data_series_dict[self.data_series_name]["x"]) - int(len(self.popup_creator.entry_list) / 3)):
+        if (len(self.data_series_dict[self.data_series_name]["x"]) > int(len(self.popup_creator.entry_list) / 2)):
+            for _ in range(0, len(self.data_series_dict[self.data_series_name]["x"]) - int(len(self.popup_creator.entry_list) / 2)):
                 self.popup_creator.add_entry()
                 self.popup_creator.update_scroll_region()
-        # every list is the same length (despite z which can be 0)
+        # every list is the same length
         for value_index in range(0, len(self.data_series_dict[self.data_series_name]["x"])):
-            self.popup_creator.entry_list[int(value_index * 3)].insert(0,  # position
+            self.popup_creator.entry_list[int(value_index * 2)].insert(0,  # position
                                                                        self.data_series_dict[self.data_series_name]["x"][value_index])  # value
-            self.popup_creator.entry_list[int(value_index * 3) + 1].insert(0,
+            self.popup_creator.entry_list[int(value_index * 2) + 1].insert(0,
                                                                            self.data_series_dict[self.data_series_name]["y"][value_index])
-            if (self.data_series_dict[self.data_series_name]["z"]):
-                self.popup_creator.entry_list[int(value_index * 3) + 2].insert(0,
-                                                                               self.data_series_dict[self.data_series_name]["z"][value_index])
 
     def event_for_submit_modify_button(self, data_series_combobox, window_title, canvas, plot):
         if (self.data_series_name != self.popup_creator.name_entry.get()):

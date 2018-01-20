@@ -55,21 +55,14 @@ class Parser(object):
                     proper_file_format = False
                     break
                 temp_series_properties_dict["y"].append(value_line[1])
-            elif (len(value_line) == 3):
-                if (not value_line[1] or not value_line[2]):
-                    proper_file_format = False
-                    break
-                temp_series_properties_dict["y"].append(value_line[1])
-                temp_series_properties_dict["z"].append(value_line[2])
-            elif (len(value_line) > 3):
+            elif (len(value_line) > 2):
                 proper_file_format = False
                 break
         if (proper_file_format):
             return temp_series_properties_dict
         self.popup_creator.messagebox_popup("Wrong file structure.\n"
-                                            "Provide file that contains max of 3 numbers in one row (x,y,z) "
-                                            "each in a separate column, number of columns in each row must be the same.\n"
-                                            "x, y, z are floats/ints and use \".\" or \",\" for decimal part.\n"
+                                            "Provide file that contains 2 columns of numbers per row (x,y).\n"
+                                            "x, y are floats/ints and use \".\" or \",\" for decimal part.\n"
                                             "In case of .txt file, columns should be separated with \";\"\n"
                                             "Line to check: {0}".format(value_line))
         return False
@@ -78,22 +71,13 @@ class Parser(object):
         dict_length = len(temp_series_properties_dict["x"])
         if (not dict_length):
             return False
-        z_present = False
-        if (temp_series_properties_dict["z"].count("") != len(temp_series_properties_dict["z"])):
-            z_present = True
         for element_index in range(0, dict_length):
-            if (not temp_series_properties_dict["x"][element_index] and
-                (temp_series_properties_dict["y"][element_index] or z_present)):
-                # x empty, y or z is not
+            if (not temp_series_properties_dict["x"][element_index] and temp_series_properties_dict["y"][element_index]):
+                # x empty, y is not
                 return False
             elif(temp_series_properties_dict["x"][element_index] and not temp_series_properties_dict["y"][element_index]):
                 # x not empty, y empty
                 return False
-            elif(temp_series_properties_dict["x"][element_index] and temp_series_properties_dict["y"][element_index] and
-                not temp_series_properties_dict["z"][element_index] and z_present): # x not empty, y not empty, z empty but should be present
-                return False
-        if (not z_present):
-            temp_series_properties_dict["z"] = []
         return True
 
     def write_dicts_to_file(self, path_to_file, data_series_dict):

@@ -84,8 +84,8 @@ class PopupCreator(object):
         self.name_entry.grid(row=0, column=0, sticky="n", pady=10)
         scrollbar = ttk.Scrollbar(self.excel_sheet_popup, cursor="hand2")
         scrollbar.grid(row=1, column=1, sticky="ns")
-        self.canvas = tk.Canvas(self.excel_sheet_popup, yscrollcommand=scrollbar.set, highlightthickness=0)
-        self.canvas.grid(row=1, column=0)
+        self.canvas = tk.Canvas(self.excel_sheet_popup, yscrollcommand=scrollbar.set, highlightthickness=0, width=252)
+        self.canvas.grid(row=1, column=0, padx=60)
         scrollbar.config(command=self.canvas.yview)
         self.entry_frame = tk.Frame(self.canvas, takefocus=0)
         self.canvas.create_window((0, 1), window=self.entry_frame, anchor='nw')
@@ -93,8 +93,6 @@ class PopupCreator(object):
         x_label.grid(row=0, column=0, sticky="we")
         y_label = tk.Label(self.entry_frame, text="y", font=SMALL_BOLD_FONT, borderwidth=2, relief="groove")
         y_label.grid(row=0, column=1, sticky="we")
-        z_label = tk.Label(self.entry_frame, text="z", font=SMALL_BOLD_FONT, borderwidth=2, relief="groove")
-        z_label.grid(row=0, column=2, sticky="nwe")
         self.create_initial_entries()
         self.update_scroll_region()
         submit_button = ttk.Button(self.excel_sheet_popup, text="Submit", cursor="hand2",
@@ -119,8 +117,8 @@ class PopupCreator(object):
             self.entry_frame.winfo_height() + 1))
 
     def add_entry(self):
-        row_number = int((len(self.entry_list) / 3) + 1)
-        for column in range(0, 3):
+        row_number = int((len(self.entry_list) / 2) + 1)
+        for column in range(0, 2):
             entry = ttk.Entry(self.entry_frame, width=20, validatecommand=(self.excel_sheet_validation_function, "%P"),
                               validate="key")
             self.entry_list.append(entry)
