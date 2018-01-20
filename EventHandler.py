@@ -159,7 +159,7 @@ class EventHandler(object):
                 data_series_combobox.current(
                     data_series_combobox.current() + 1)
             else:
-                data_series_combobox.set("")
+                data_series_combobox.set("") 
             self.event_for_update_data_series_combobox(data_series_combobox)
             data_series_combobox.event_generate("<<ComboboxSelected>>")
         else:
@@ -736,3 +736,8 @@ class EventHandler(object):
                                                         lambda: self.event_for_submit_plot_config_button(plot, canvas),
                                                         self.data_series_dict[self.chosen_plot]["artist_properties_dict"],
                                                         self.data_series_dict[self.chosen_plot]["chart_type"])
+
+    def event_for_new_file(self, chart_creator):
+        chart_creator.new_file = True
+        chart_creator.quit()
+        chart_creator.destroy()

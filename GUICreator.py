@@ -17,6 +17,7 @@ class ChartCreator(tk.Tk):
 
     chart_type = tk.StringVar
     chosen_plot_label = ttk.Label
+    
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -30,6 +31,7 @@ class ChartCreator(tk.Tk):
         self.name_entry = None
         self.canvas = None
         self.plot = None
+        self.new_file = False
         ChartCreator.chart_type = tk.StringVar()
         ChartCreator.chosen_plot_label = None
 
@@ -50,7 +52,8 @@ class ChartCreator(tk.Tk):
 
     def setup_file_menu(self, parent_menu):
         file_menu = tk.Menu(parent_menu, tearoff=0)
-        file_menu.add_command(label="New")
+        file_menu.add_command(label="New", command=
+                                lambda: self.event_handler.event_for_new_file(self))
         file_menu.add_separator()
         file_menu.add_command(label="Open")
         file_menu.add_separator()
