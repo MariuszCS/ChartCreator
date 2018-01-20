@@ -1,5 +1,5 @@
-from Parser import *
-from PopupCreator import *
+import Parser
+import PopupCreator
 import PropertiesDictionaries
 import GUICreator
 
@@ -7,11 +7,10 @@ import matplotlib.artist as mat_art
 import matplotlib.patches
 from matplotlib import ticker
 
-
 class EventHandler(object):
     def __init__(self):
-        self.parser = Parser()
-        self.popup_creator = PopupCreator()
+        self.parser = Parser.Parser()
+        self.popup_creator = PopupCreator.PopupCreator()
         self.data_series_name = ""
         self.data_series_dict = {}
         self.proper_name = True
@@ -542,13 +541,13 @@ class EventHandler(object):
     def update_chosen_plot_label(self, plot_name):
         if (plot_name):
             if (len(plot_name) > 12):
-                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name[:12] + "...", font=("Consolas", 9))
+                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name[:12] + "...", font=Constants.MONOSPACED_FONT)
             else:
-                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name, font=("Consolas", 9))
+                GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: " + plot_name, font=Constants.MONOSPACED_FONT)
         elif (self.plot_is_chosen):
-            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: (Unnamed)", font=("Consolas", 9))
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen: (Unnamed)", font=Constants.MONOSPACED_FONT)
         else:
-            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen:", font=("Consolas", 9))
+            GUICreator.ChartCreator.chosen_plot_label.config(text="Chosen:", font=Constants.MONOSPACED_FONT)
 
     def event_for_chart_configuration(self, plot, canvas, tab_title):
         self.popup_creator.popup_for_chart_configuration(

@@ -1,7 +1,3 @@
-import numpy as np
-from Constants import *
-import matplotlib
-
 def create_dict_for_open_button(chart_type):
     if (chart_type == "Line" or chart_type == "Stem plot"):   
         return create_line_properties_dict()
@@ -113,7 +109,7 @@ grid_properties_UI_dict = dict(
                 False: "Hide"
             }
         ),
-        "Opacity": {round(x, 1): str(round(x, 1)) for x in np.linspace(0.1, 1, 10)},
+        "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
         "Color": color_dict,
         "Style": dict(
             {

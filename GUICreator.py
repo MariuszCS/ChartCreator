@@ -1,5 +1,5 @@
 import EventHandler
-from Constants import *
+import Constants
 import PropertiesDictionaries
 
 import tkinter as tk
@@ -60,7 +60,6 @@ class ChartCreator(tk.Tk):
                                                                                self.canvas,
                                                                                self.data_series_combobox))
         file_menu.add_separator()
-        file_menu.add_command(label="Save")
         file_menu.add_command(label="Save as", command=
                                 lambda: self.event_handler.event_for_save_file())
         file_menu.add_separator()
@@ -93,7 +92,7 @@ class ChartCreator(tk.Tk):
     def setup_top_frame(self, parent_frame):
         top_frame = tk.Frame(parent_frame)
         top_frame.grid(row=0, column=0, columnspan=2, sticky="nwse", padx=3, pady=3)
-        title_label = tk.Label(top_frame, text="~~Chart Creator~~", font=BIG_FONT)
+        title_label = tk.Label(top_frame, text="~~Chart Creator~~", font=Constants.BIG_FONT)
         title_label.pack(expand=True)
 
     def setup_right_frame(self, parent_frame):
@@ -166,7 +165,7 @@ class ChartCreator(tk.Tk):
                              **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
         mat_art.setp(self.plot, **PropertiesDictionaries.axes_properties_dict)
         self.plot.autoscale()
-        ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen: ", width=24, justify="left", font=("Consolas", 9))
+        ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen: ", width=24, justify="left", font=Constants.MONOSPACED_FONT)
         ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="ew")
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
         self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
@@ -205,11 +204,11 @@ class ChartCreator(tk.Tk):
                                         command=lambda: self.event_handler.event_for_modify_plot_button(self.plot,
                                                                                                         self.canvas))
         modify_plot_button.grid(row=0, column=5, padx=20)
-        copyright_label = tk.Label(parent_frame, text="Mariusz Chybicki \u00A9", font=SMALL_FONT)
+        copyright_label = tk.Label(parent_frame, text="Mariusz Chybicki \u00A9", font=Constants.SMALL_FONT)
         copyright_label.grid(row=1, column=0, columnspan=4, sticky="w")
 
     def setup_elements_for_option_frame(self, parent_frame):
-        name_label = tk.Label(parent_frame, text="Plot name (legend):", font=MEDIUM_BOLD_FONT)
+        name_label = tk.Label(parent_frame, text="Plot name (legend):", font=Constants.MEDIUM_BOLD_FONT)
         name_label.grid(row=0, column=0, columnspan=3, pady=10)
         self.name_entry = ttk.Entry(parent_frame, width=40)
         self.name_entry.grid(row=1, column=0, columnspan=3, padx=15)
@@ -217,7 +216,7 @@ class ChartCreator(tk.Tk):
                              lambda event: self.event_handler.name_entry_callback(self.name_entry.get(),
                                                                                   self.canvas,
                                                                                   self.plot))
-        type_label = tk.Label(parent_frame, text="Plot type:", font=MEDIUM_BOLD_FONT)
+        type_label = tk.Label(parent_frame, text="Plot type:", font=Constants.MEDIUM_BOLD_FONT)
         type_label.grid(row=2, column=0, columnspan=3, pady=10)
         line_type_radiobutton = ttk.Radiobutton(parent_frame, text="Line", variable=ChartCreator.chart_type, value="Line",
                                                 cursor="hand2",
@@ -244,7 +243,7 @@ class ChartCreator(tk.Tk):
                                                                                                                 self.canvas,
                                                                                                                 self.chosen_type_label))
         more_plot_types_button.grid(row=4, column=2, pady=10)
-        color_label = tk.Label(parent_frame, text="Plot color:", font=MEDIUM_BOLD_FONT)
+        color_label = tk.Label(parent_frame, text="Plot color:", font=Constants.MEDIUM_BOLD_FONT)
         color_label.grid(row=5, column=0, columnspan=3)
         color_chooser_button = ttk.Button(parent_frame, text="Color chooser", cursor="hand2",
                                           command=lambda: self.event_handler.event_for_color_chooser_button(self.chosen_color_label,

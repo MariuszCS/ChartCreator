@@ -1,5 +1,5 @@
-from Constants import *
-from PropertiesDictionaries import *
+import Constants
+import PropertiesDictionaries
 
 import tkinter as tk
 from tkinter import ttk
@@ -89,9 +89,9 @@ class PopupCreator(object):
         scrollbar.config(command=self.canvas.yview)
         self.entry_frame = tk.Frame(self.canvas, takefocus=0)
         self.canvas.create_window((0, 1), window=self.entry_frame, anchor='nw')
-        x_label = tk.Label(self.entry_frame, text="x", font=SMALL_BOLD_FONT, borderwidth=2, relief="groove")
+        x_label = tk.Label(self.entry_frame, text="x", font=Constants.SMALL_BOLD_FONT, borderwidth=2, relief="groove")
         x_label.grid(row=0, column=0, sticky="we")
-        y_label = tk.Label(self.entry_frame, text="y", font=SMALL_BOLD_FONT, borderwidth=2, relief="groove")
+        y_label = tk.Label(self.entry_frame, text="y", font=Constants.SMALL_BOLD_FONT, borderwidth=2, relief="groove")
         y_label.grid(row=0, column=1, sticky="we")
         self.create_initial_entries()
         self.update_scroll_region()
@@ -145,10 +145,11 @@ class PopupCreator(object):
         self.plot_popup.protocol("WM_DELETE_WINDOW", event_for_close_popup)
         figure = Figure(dpi=100)
         self.plot = figure.add_subplot(111)
-        mat_art.setp(self.plot, **axes_properties_dict)
-        self.plot.grid(**grid_properties_dict)
-        self.plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
-                             **dict(list(ticks_properties_dict.items())[8:]))
+        mat_art.setp(self.plot, **PropertiesDictionaries.axes_properties_dict)
+        self.plot.grid(**PropertiesDictionaries.grid_properties_dict)
+        self.plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]), 
+                             **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
+                             **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
         canvas = FigureCanvasTkAgg(figure, self.plot_popup)
         canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
         toolbar = NavigationToolbar2TkAgg(canvas, self.plot_popup)
@@ -164,7 +165,7 @@ class PopupCreator(object):
         self.chart_configuration_popup.wm_minsize(400, 600)
         self.chart_configuration_popup.wm_maxsize(400, 600)
         style = ttk.Style()
-        style.configure('TabFont.TNotebook.Tab', font=MEDIUM_FONT)
+        style.configure('TabFont.TNotebook.Tab', font=Constants.MEDIUM_FONT)
         option_notebook = ttk.Notebook(self.chart_configuration_popup, style="TabFont.TNotebook", width=380)
         option_notebook.grid(row=0, column=0, columnspan=2, sticky="nwse", padx=10, pady=5)
         submit_button = ttk.Button(self.chart_configuration_popup, text="Submit", command=event_for_submit_button,
@@ -178,16 +179,19 @@ class PopupCreator(object):
         cancel_button.grid(row=1, column=1, sticky="e", padx=12)
         self.axes_frame = tk.Frame(option_notebook)
         self.axes_frame.grid(sticky="nwse")
-        self.setup_options_for_config_tab(self.axes_frame, axes_properties_dict, axes_properties_UI_dict,
-                                          axes_properties_mapping_dict)
+        self.setup_options_for_config_tab(self.axes_frame, PropertiesDictionaries.axes_properties_dict, 
+                                          PropertiesDictionaries.axes_properties_UI_dict,
+                                          PropertiesDictionaries.axes_properties_mapping_dict)
         self.grid_frame = tk.Frame(option_notebook)
         self.grid_frame.grid(sticky="nwse")
-        self.setup_options_for_config_tab(self.grid_frame, grid_properties_dict, grid_properties_UI_dict,
-                                          gird_properties_mapping_dict)
+        self.setup_options_for_config_tab(self.grid_frame, PropertiesDictionaries.grid_properties_dict, 
+                                          PropertiesDictionaries.grid_properties_UI_dict,
+                                          PropertiesDictionaries.gird_properties_mapping_dict)
         self.ticks_frame = tk.Frame(option_notebook)
         self.ticks_frame.grid(sticky="nwse")
-        self.setup_options_for_config_tab(self.ticks_frame, ticks_properties_dict, ticks_properties_UI_dict,
-                                          ticks_properties_mapping_dict)
+        self.setup_options_for_config_tab(self.ticks_frame, PropertiesDictionaries.ticks_properties_dict, 
+                                          PropertiesDictionaries.ticks_properties_UI_dict,
+                                          PropertiesDictionaries.ticks_properties_mapping_dict)
         legend_tab_frame = tk.Frame(option_notebook)
         legend_tab_frame.columnconfigure(0, weight=22)
         legend_tab_frame.columnconfigure(1, weight=1)
@@ -198,8 +202,9 @@ class PopupCreator(object):
         canvas.grid(row=0, column=0, sticky="nwse")
         scrollbar.config(command=canvas.yview)
         self.legend_frame = tk.Frame(canvas, takefocus=0)
-        self.setup_options_for_config_tab(self.legend_frame, legend_properties_dict, legend_properties_UI_dict,
-                                          legend_properties_mapping_dict)
+        self.setup_options_for_config_tab(self.legend_frame, PropertiesDictionaries.legend_properties_dict, 
+                                          PropertiesDictionaries.legend_properties_UI_dict,
+                                          PropertiesDictionaries.legend_properties_mapping_dict)
         canvas.create_window((0, 1), window=self.legend_frame, anchor='nw', 
                             height=len(self.legend_frame.winfo_children()) * 45 / 2)
         canvas.configure(scrollregion=(0,0,0,len(self.legend_frame.winfo_children()) * 45 / 2))
@@ -216,14 +221,14 @@ class PopupCreator(object):
     def setup_options_for_config_tab(self, parent_frame, properties_dict, UI_dict, mapping_dict):
         for row_nr in range(0, len(mapping_dict.keys())):
             label = ttk.Label(parent_frame, text=list(mapping_dict.keys())[row_nr] + ":", justify="left",
-                              font=SMALL_FONT, width=20)
+                              font=Constants.SMALL_FONT, width=20)
             label.grid(row=row_nr, column=0, padx=10, pady=12, sticky="w")
             if (type(UI_dict[list(mapping_dict.keys())[row_nr]]) == str):
                 entry = ttk.Entry(parent_frame, width=26)
                 entry.insert(0, UI_dict[list(mapping_dict.keys())[row_nr]])
                 entry.grid(row=row_nr, column=1, padx=20, sticky="e")                           
             else:
-                combobox = ttk.Combobox(parent_frame, state="readonly", font=SMALL_FONT,
+                combobox = ttk.Combobox(parent_frame, state="readonly", font=Constants.SMALL_FONT,
                                         values=list(UI_dict[list(mapping_dict.keys())[row_nr]].values()))
                 combobox.set(UI_dict[list(mapping_dict.keys())[row_nr]]
                             [properties_dict[list(mapping_dict.values())[row_nr]]])
@@ -241,9 +246,9 @@ class PopupCreator(object):
         self.plot_types_popup.wm_minsize(250, 260)
         self.plot_types_popup.wm_maxsize(250, 260)
         plot_types = ["Horizontal bar", "Error bar", "Histogram", "Stack plot", "Stem plot", "Step plot"]
-        choose_plot_type_label = ttk.Label(self.plot_types_popup, text="Choose plot type:", font=SMALL_FONT)
+        choose_plot_type_label = ttk.Label(self.plot_types_popup, text="Choose plot type:", font=Constants.SMALL_FONT)
         choose_plot_type_label.grid(row=0, column=0, columnspan=2, padx=15, pady=10, sticky="w")
-        self.plot_types_listbox = tk.Listbox(self.plot_types_popup, activestyle="none", font=SMALL_FONT, 
+        self.plot_types_listbox = tk.Listbox(self.plot_types_popup, activestyle="none", font=Constants.SMALL_FONT, 
                                         height=10, width=30, highlightthickness=0)
         for plot_type in plot_types:
             self.plot_types_listbox.insert("end", " " + plot_type)
@@ -268,7 +273,7 @@ class PopupCreator(object):
         self.plot_options_frame = tk.Frame(self.plot_configuration_popup, height=570, width=350)
         self.plot_options_frame.grid(row=0, column=0, columnspan=3, sticky="nwse", pady=10, padx=10)
         self.plot_options_frame.grid_propagate(0)
-        UI_dict, mapping_dict = choose_proper_dicts(chosen_chart_type)
+        UI_dict, mapping_dict = PropertiesDictionaries.choose_proper_dicts(chosen_chart_type)
         self.setup_options_for_config_tab(self.plot_options_frame, chosen_plot_config_dict, UI_dict,
                                           mapping_dict)
         submit_button = ttk.Button(self.plot_configuration_popup, text="Submit", command=event_for_submit_button,
