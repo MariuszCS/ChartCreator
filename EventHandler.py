@@ -6,6 +6,7 @@ import Constants
 
 import os
 import tkinter as tk
+from tkinter import colorchooser
 
 import matplotlib.artist as mat_art
 import matplotlib.patches
