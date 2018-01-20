@@ -20,8 +20,6 @@ def create_dict_for_open_button(chart_type):
     elif (chart_type == "Step plot"):
         return create_step_properties_dict()
 
-
-
 def choose_proper_dicts(chart_type):
     if (chart_type == "Line" or chart_type == "Stem plot"):   
         return line_properties_UI_dict, line_properties_mapping_dict
@@ -79,17 +77,18 @@ def create_series_properties_dict():
 """
 Dictionary that will be passed as **kwargs to the .grid() function of the subplot object with all the settable grid properties
 """
-grid_properties_dict = dict(
-    {
-        "axis": "both",
-        "which": "major",
-        "visible": True,
-        "alpha": 0.8,
-        "color": "#b3b3b3",
-        "linestyle": "solid",
-        "linewidth": 1,
-    }
-)
+def create_grid_properties_dict():
+    return dict(
+        {
+            "axis": "both",
+            "which": "major",
+            "visible": True,
+            "alpha": 0.8,
+            "color": "#b3b3b3",
+            "linestyle": "solid",
+            "linewidth": 1,
+        }
+    )
 """
 Dictionary which keys and values (values of the sub dictionaries) are displayed in the GUI
 """
@@ -128,6 +127,8 @@ grid_properties_UI_dict = dict(
         "Width": {(x / 10): str((x / 10)) for x in range(1, 31)},
     }
 )
+
+grid_properties_dict = create_grid_properties_dict()
 """
 Dictionary mapping the key from the dictionary that it displayed in the GUI to the key from the dictionary that is passed
 as **kwargs to the drawing function
@@ -135,22 +136,23 @@ as **kwargs to the drawing function
 gird_properties_mapping_dict = {list(grid_properties_UI_dict.keys())[index]: list(grid_properties_dict.keys())[index]
                                 for index in range(0, len(grid_properties_dict.keys()))}
 
-ticks_properties_dict = dict(
-    {
-        "axis": "both",
-        "which": "major",
-        "visible": True,
-        "direction": "out",
-        "length": 4,
-        "width": 1,
-        "color": "#000000",
-        "label": True,
-        "pad": 2,
-        "labelsize": 10,
-        "labelcolor": "#000000",
-        "rotation": 0
-    }
-)
+def create_ticks_properties_dict():
+    return dict(
+        {
+            "axis": "both",
+            "which": "major",
+            "visible": True,
+            "direction": "out",
+            "length": 4,
+            "width": 1,
+            "color": "#000000",
+            "label": True,
+            "pad": 2,
+            "labelsize": 10,
+            "labelcolor": "#000000",
+            "rotation": 0
+        }
+    )
 
 ticks_properties_UI_dict = dict(
     {
@@ -197,19 +199,22 @@ ticks_properties_UI_dict = dict(
     }
 )
 
+ticks_properties_dict = create_ticks_properties_dict()
+
 ticks_properties_mapping_dict = {list(ticks_properties_UI_dict.keys())[index]: list(ticks_properties_dict.keys())[index]
                                 for index in range(0, len(ticks_properties_dict.keys()))}
 
-axes_properties_dict = dict(
-    {
-        "axisbelow": True,
-        "frame_on": True,
-        "title": "Chart",
-        "facecolor": "#ffffff",
-        "xlabel": "x",
-        "ylabel": "y",
-    }
-)
+def create_axes_properties_dict():
+    return dict(
+        {
+            "axisbelow": True,
+            "frame_on": True,
+            "title": "Chart",
+            "facecolor": "#ffffff",
+            "xlabel": "x",
+            "ylabel": "y",
+        }
+    )
 
 axes_properties_UI_dict = dict(
     {
@@ -232,33 +237,36 @@ axes_properties_UI_dict = dict(
     }
 )
 
+axes_properties_dict = create_axes_properties_dict()
+
 axes_properties_mapping_dict = {list(axes_properties_UI_dict.keys())[index]: list(axes_properties_dict.keys())[index]
                                 for index in range(0, len(axes_properties_dict.keys()))}
 
-legend_properties_dict = dict(
-    {
-        "visible": True,
-        "draggable": False,
-        "loc": 0,
-        "frameon": True,
-        "fancybox": True,
-        "shadow": False,
-        "framealpha": 0.8,
-        "edgecolor": "#b3b3b3",
-        "facecolor": "#ffffff",
-        "title": "Legend",
-        "fontsize": 10,
-        "borderpad": 1,
-        "labelspacing": 1,
-        "handletextpad": 1,
-        "borderaxespad": 1,
-        "columnspacing": 1,
-        "ncol": 1,
-        "markerscale": 1,
-        "markerfirst": True,
-        "scatterpoints": 1
-    }
-)
+def create_legend_properties_dict():
+    return dict(
+        {
+            "visible": True,
+            "draggable": False,
+            "loc": 0,
+            "frameon": True,
+            "fancybox": True,
+            "shadow": False,
+            "framealpha": 0.8,
+            "edgecolor": "#b3b3b3",
+            "facecolor": "#ffffff",
+            "title": "Legend",
+            "fontsize": 10,
+            "borderpad": 1,
+            "labelspacing": 1,
+            "handletextpad": 1,
+            "borderaxespad": 1,
+            "columnspacing": 1,
+            "ncol": 1,
+            "markerscale": 1,
+            "markerfirst": True,
+            "scatterpoints": 1
+        }
+    )
 
 legend_properties_UI_dict = dict(
     {
@@ -328,6 +336,8 @@ legend_properties_UI_dict = dict(
         "No. of scatter points": {x: str(x) for x in range(1, 4)},
     }
 )
+
+legend_properties_dict = create_legend_properties_dict()
 
 legend_properties_mapping_dict = {list(legend_properties_UI_dict.keys())[index]: list(legend_properties_dict.keys())[index]
                                 for index in range(0, len(legend_properties_dict.keys()))}

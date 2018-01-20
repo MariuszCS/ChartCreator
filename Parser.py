@@ -106,18 +106,35 @@ class Parser(object):
                         writer.writerow([key, "None"])
                     else:
                         writer.writerow([key, value])
+            writer.writerow(["Axes",""])
+            for key, value in PropertiesDictionaries.axes_properties_dict.items():
+                writer.writerow([key, value])
+            writer.writerow(["Grid",""])
+            for key, value in PropertiesDictionaries.grid_properties_dict.items():
+                writer.writerow([key, value])
+            writer.writerow(["Ticks",""])
+            for key, value in PropertiesDictionaries.ticks_properties_dict.items():
+                writer.writerow([key, value])
+            writer.writerow(["Legend",""])
+            for key, value in PropertiesDictionaries.legend_properties_dict.items():
+                writer.writerow([key, value])
     
     def read_dicts_from_file(self, path_to_file, data_series_dict):
         with open(path_to_file, "r") as file_to_read:
             reader = csv.reader(file_to_read)
             data_series_name = ""
+            axes_config = False
+            grid_config = False
+            ticks_config = False
+            legend_config = False
             for line in reader:
                 if (len(line) == 1):
                     data_series_name = line[0]
                     while data_series_name in list(data_series_dict.keys()):
                         data_series_name += "1"
                     data_series_dict[data_series_name] = PropertiesDictionaries.create_series_properties_dict()
-                elif (len(line) == 2):
+                elif (len(line) == 2 and line[0] != "Axes" and not axes_config and not grid_config and 
+                        not ticks_config and not legend_config):
                     if (line[1] == "None"):
                         data_series_dict[data_series_name][line[0]] = None
                     elif (re.search("\[", line[1])):
@@ -153,3 +170,35 @@ class Parser(object):
                         data_series_dict[data_series_name][line[0]] = None
                     else:
                         data_series_dict[data_series_name][line[0]] = line[1]
+                elif (line):
+                    if (axes_config and line[0] != "Grid"):
+                        self.assign_value_to_key(PropertiesDictionaries.axes_properties_dict, line[0], line[1])
+                    elif (grid_config and line[0] != "Ticks"):
+                        self.assign_value_to_key(PropertiesDictionaries.grid_properties_dict, line[0], line[1])
+                    elif (ticks_config and line[0] != "Legend"):
+                        self.assign_value_to_key(PropertiesDictionaries.ticks_properties_dict, line[0], line[1])
+                    elif (legend_config):
+                        self.assign_value_to_key(PropertiesDictionaries.legend_properties_dict, line[0], line[1])
+                    if (line[0] == "Axes"):
+                        axes_config = True
+                    elif (line[0] == "Grid"):
+                        axes_config = False
+                        grid_config = True
+                    elif (line[0] == "Ticks"):
+                        grid_config = False
+                        ticks_config = True
+                    elif (line[0] == "Legend"):
+                        ticks_config = False
+                        legend_config = True
+
+    def assign_value_to_key(self, properties_dict, key, value):
+        if (key == "scatterpoints"):
+            properties_dict[key] = int(value)
+        elif (value == "True"):
+            properties_dict[key] = True
+        elif (value == "False"):
+            properties_dict[key] = False
+        elif (re.search("[0-9]", value) and not re.search("[#]", value)):
+            properties_dict[key] = float(value)
+        else:
+            properties_dict[key] = value

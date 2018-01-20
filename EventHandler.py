@@ -563,7 +563,7 @@ class EventHandler(object):
             lambda: self.event_for_close_popup_button(
                 self.popup_creator.chart_configuration_popup),
             lambda: self.event_for_submit_config_button(plot, canvas),
-            lambda: self.event_for_apply_config_button(plot, canvas),
+            lambda: self.event_for_apply_config_button(plot, canvas, False),
             tab_title
         )
 
@@ -587,15 +587,16 @@ class EventHandler(object):
             properties_dict["artist"].remove()
         properties_dict["artist"] = None
 
-    def event_for_apply_config_button(self, plot, canvas):
-        self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), axes_properties_dict,
-                                              axes_properties_UI_dict, axes_properties_mapping_dict)
-        self.update_values_of_properties_dict(self.popup_creator.grid_frame.winfo_children(), grid_properties_dict,
-                                              grid_properties_UI_dict, gird_properties_mapping_dict)
-        self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), ticks_properties_dict,
-                                              ticks_properties_UI_dict, ticks_properties_mapping_dict)
-        self.update_values_of_properties_dict(self.popup_creator.legend_frame.winfo_children(), legend_properties_dict,
-                                              legend_properties_UI_dict, legend_properties_mapping_dict)
+    def event_for_apply_config_button(self, plot, canvas, open_file):
+        if (not open_file):
+            self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), axes_properties_dict,
+                                                axes_properties_UI_dict, axes_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.grid_frame.winfo_children(), grid_properties_dict,
+                                                grid_properties_UI_dict, gird_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), ticks_properties_dict,
+                                                ticks_properties_UI_dict, ticks_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.legend_frame.winfo_children(), legend_properties_dict,
+                                                legend_properties_UI_dict, legend_properties_mapping_dict)
         mat_art.setp(plot, **axes_properties_dict)
         plot.grid(**grid_properties_dict)
         # there is no visible attribute for ticks, alternative are 2 attributes bottom, left. 
@@ -662,7 +663,7 @@ class EventHandler(object):
                 axis.set_major_formatter(ticker.NullFormatter())
 
     def event_for_submit_config_button(self, plot, canvas):
-        self.event_for_apply_config_button(plot, canvas)
+        self.event_for_apply_config_button(plot, canvas, False)
         self.event_for_close_popup_button(
             self.popup_creator.chart_configuration_popup)
 
@@ -754,6 +755,11 @@ class EventHandler(object):
         chart_creator.new_file = True
         chart_creator.quit()
         chart_creator.destroy()
+        del PropertiesDictionaries.axes_properties_dict
+        PropertiesDictionaries.axes_properties_dict = create_axes_properties_dict()
+        PropertiesDictionaries.grid_properties_dict = create_grid_properties_dict()
+        PropertiesDictionaries.ticks_properties_dict = create_ticks_properties_dict()
+        PropertiesDictionaries.legend_properties_dict = create_legend_properties_dict()
 
     def event_for_save_file(self):
         path_to_file = self.popup_creator.popup_for_save_file()
@@ -763,7 +769,6 @@ class EventHandler(object):
     def event_for_open_file(self, plot, canvas, data_series_combobox):
         path_to_file = self.popup_creator.popup_for_openfile()
         if (path_to_file):
-            #self.event_for_new_file(chart_creator)
             self.parser.read_dicts_from_file(path_to_file, self.data_series_dict)
             for data_series_name in self.data_series_dict.keys():
                 if (self.data_series_dict[data_series_name]["chart_type"]):
@@ -778,3 +783,4 @@ class EventHandler(object):
                 len(data_series_combobox["values"]) - 1)
             self.data_series_name = data_series_combobox["values"][len(data_series_combobox["values"]) - 1]
             data_series_combobox.event_generate("<<ComboboxSelected>>")
+            self.event_for_apply_config_button(plot, canvas, True)
