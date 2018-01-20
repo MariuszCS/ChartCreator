@@ -3,6 +3,8 @@ import PopupCreator
 import PropertiesDictionaries
 import GUICreator
 
+import os
+
 import matplotlib.artist as mat_art
 import matplotlib.patches
 from matplotlib import ticker
