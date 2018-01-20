@@ -519,12 +519,12 @@ class EventHandler(object):
             
                 label_list.append(dictionary["plot_name"])
         if (artist_list):
-            plot.legend(artist_list, label_list, **dict(list(legend_properties_dict.items())[2:]))
+            plot.legend(artist_list, label_list, **dict(list(PropertiesDictionaries.legend_properties_dict.items())[2:]))
             try:
-                plot.get_legend().set(**legend_properties_dict)
+                plot.get_legend().set(**PropertiesDictionaries.legend_properties_dict)
             except AttributeError:
                 pass
-            plot.get_legend().draggable(state=legend_properties_dict["draggable"])
+            plot.get_legend().draggable(state=PropertiesDictionaries.legend_properties_dict["draggable"])
             return
         if (plot.get_legend()):
             plot.get_legend().set_visible(False)
