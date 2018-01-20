@@ -738,6 +738,8 @@ class EventHandler(object):
                                                         self.data_series_dict[self.chosen_plot]["chart_type"])
 
     def event_for_new_file(self, chart_creator):
+        GUICreator.ChartCreator.chart_type.set("")
+        GUICreator.ChartCreator.chosen_plot_label = None
         chart_creator.new_file = True
         chart_creator.quit()
         chart_creator.destroy()
