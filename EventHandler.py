@@ -6,7 +6,6 @@ import Constants
 
 import os
 import tkinter as tk
-from tkinter import colorchooser
 
 import matplotlib.artist as mat_art
 import matplotlib.patches
@@ -86,7 +85,7 @@ class EventHandler(object):
             values=[data_series_name for data_series_name in self.data_series_dict.keys()])
 
     def event_for_color_chooser_button(self, chosen_color_label, chosen_color_preview_label, canvas, plot):
-        new_color = colorchooser.askcolor(initialcolor="#000000")[1]
+        new_color = self.popup_creator.popup_for_colorchooser()
         if (new_color):
             # if the color has been chosen and is different than previous one
             self.color = new_color
@@ -314,8 +313,9 @@ class EventHandler(object):
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_line_properties_dict()
             else:
-                plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                          color=self.data_series_dict[self.data_series_name]["color"])
+                temp_artist = plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                                        color=self.data_series_dict[self.data_series_name]["color"])
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Bars"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -327,9 +327,10 @@ class EventHandler(object):
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_bar_properties_dict()
             else:
-                plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                         color=self.data_series_dict[self.data_series_name]["color"],
-                         width=5)
+                temp_artist = plot.bar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                                        color=self.data_series_dict[self.data_series_name]["color"],
+                                        width=2)
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Points"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -344,9 +345,12 @@ class EventHandler(object):
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_point_properties_dict()                                                                         
             else:
-                plot.scatter(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                             color=self.data_series_dict[self.data_series_name]["color"],
-                             s=1)
+                temp_artist = plot.plot(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                                            color=self.data_series_dict[self.data_series_name]["color"],
+                                            marker=".",
+                                            markersize=6,
+                                            linewidth=0)
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Horizontal bar"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -358,9 +362,10 @@ class EventHandler(object):
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_horizontal_bar_properties_dict()
             else:
-                plot.barh(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
-                         color=self.data_series_dict[self.data_series_name]["color"],
-                         height=5)
+                temp_artist = plot.barh(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
+                                        color=self.data_series_dict[self.data_series_name]["color"],
+                                        height=2)
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Error bar"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -378,9 +383,8 @@ class EventHandler(object):
             else:
                 plot.errorbar(self.data_series_dict[self.data_series_name]["x"], self.data_series_dict[self.data_series_name]["y"],
                         color=self.data_series_dict[self.data_series_name]["color"],
-                        yerr=1,
-                        xerr=1,
-                        fmt="none")
+                        fmt="none",
+                        **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Histogram"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -390,22 +394,23 @@ class EventHandler(object):
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):                                                          
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_histogram_properties_dict()
             else:
-                plot.hist(self.data_series_dict[self.data_series_name]["x"],
-                        color=self.data_series_dict[self.data_series_name]["color"],
-                        edgecolor="red")
+                _, _, temp_artist = plot.hist(self.data_series_dict[self.data_series_name]["x"],
+                                                color=self.data_series_dict[self.data_series_name]["color"])
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Stack plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                   picker=True).pop()
+                                                                                   picker=True)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_stack_properties_dict()
             else:
-                plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
-                        self.data_series_dict[self.data_series_name]["y"],
-                        color=self.data_series_dict[self.data_series_name]["color"])
+                temp_artist = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
+                                            self.data_series_dict[self.data_series_name]["y"],
+                                            color=self.data_series_dict[self.data_series_name]["color"])
+                mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Stem plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -432,9 +437,17 @@ class EventHandler(object):
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][0],picker = True)
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][1],picker = True)                                                                   
             else:
-                plot.stem(self.data_series_dict[self.data_series_name]["x"],
-                        self.data_series_dict[self.data_series_name]["y"],
-                        color=self.data_series_dict[self.data_series_name]["color"])
+                temp_artist = plot.stem(self.data_series_dict[self.data_series_name]["x"],
+                                        self.data_series_dict[self.data_series_name]["y"],
+                                        color=self.data_series_dict[self.data_series_name]["color"],
+                                        basefmt="none")
+                mat_art.setp(temp_artist[0],
+                            **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[0:1]),
+                            **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[4:9]),
+                            **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[11:]))
+                mat_art.setp(temp_artist[1], 
+                        **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[0:4]),
+                        **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[9:11]))
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Step plot"):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
@@ -448,7 +461,9 @@ class EventHandler(object):
             else:
                 plot.step(self.data_series_dict[self.data_series_name]["x"],
                         self.data_series_dict[self.data_series_name]["y"],
-                        color=self.data_series_dict[self.data_series_name]["color"])
+                        where=self.data_series_dict[self.data_series_name]["artist_properties_dict"]["where"],
+                        **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[0:1]),
+                        **dict(list(self.data_series_dict[self.data_series_name]["artist_properties_dict"].items())[2:]))
                 return
         self.update_legend(plot)
 
@@ -460,7 +475,7 @@ class EventHandler(object):
             if (self.data_series_dict[dict_name]["artist"]):
                 self.data_series_name = dict_name
                 self.draw_plot(self.popup_creator.plot)
-                self.update_legend(self.popup_creator.plot)
+        self.update_legend(self.popup_creator.plot)
         self.data_series_name = data_series_name
         self.popup_creator.plot_popup.mainloop()
 
@@ -511,18 +526,26 @@ class EventHandler(object):
         label_list = []
         for dictionary in self.data_series_dict.values():
             if (dictionary["artist"]):
-                if (type(dictionary["artist"]) != matplotlib.cbook.silent_list):
-                        artist_list.append(dictionary["artist"])
-                else:
+                if (dictionary["chart_type"] == "Histogram"):
                     artist_list.append(matplotlib.patches.Patch(edgecolor=dictionary["artist"][0].get_edgecolor(), 
                                                                 facecolor=dictionary["artist"][0].get_facecolor(),
                                                                 hatch=dictionary["artist_properties_dict"]["hatch"],
                                                                 fill=dictionary["artist_properties_dict"]["fill"],
                                                                 alpha=dictionary["artist_properties_dict"]["alpha"]))
-            
+                elif (dictionary["chart_type"] == "Stack plot"):
+                    artist_list.append(matplotlib.patches.Patch(edgecolor=dictionary["artist_properties_dict"]["edgecolor"], 
+                                                            facecolor=dictionary["artist_properties_dict"]["facecolor"],
+                                                            linestyle=dictionary["artist_properties_dict"]["linestyle"],
+                                                            linewidth=dictionary["artist_properties_dict"]["linewidth"],
+                                                            alpha=dictionary["artist_properties_dict"]["alpha"]))
+                else:
+                    artist_list.append(dictionary["artist"])
                 label_list.append(dictionary["plot_name"])
         if (artist_list):
-            plot.legend(artist_list, label_list, **dict(list(PropertiesDictionaries.legend_properties_dict.items())[2:]))
+            try:
+                plot.legend(artist_list, label_list, **dict(list(PropertiesDictionaries.legend_properties_dict.items())[2:]))
+            except RuntimeError:
+                pass
             try:
                 plot.get_legend().set(**PropertiesDictionaries.legend_properties_dict)
             except AttributeError:

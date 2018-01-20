@@ -40,6 +40,9 @@ class PopupCreator(object):
     def popup_for_openfile(self):
         return filedialog.askopenfilename()
 
+    def popup_for_colorchooser(self):
+        return colorchooser.askcolor(initialcolor="#000000")[1]
+
     def popup_for_provide_name(self, file_name, event_for_submit_name_button, event_for_close_name_popup_button):
         self.provide_name_popup = tk.Toplevel()
         self.provide_name_popup.grab_set()
