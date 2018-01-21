@@ -771,7 +771,7 @@ class EventHandler(object):
     def event_for_modify_plot_button(self, plot, canvas):
         if (not self.chosen_plot):
             self.popup_creator.messagebox_popup("No plot chosen for modification. "
-                                                "First click on a specific plot to pick it and then click on the \"Modify chosen\" button.")
+                                                "First click on a specific plot to pick it and then click on the \"Modify plot\" button.")
             return
         self.popup_creator.popup_for_plot_configuration(lambda: self.event_for_close_popup_button(self.popup_creator.plot_configuration_popup),
                                                         lambda: self.event_for_apply_plot_config_button(plot, canvas, False),
@@ -809,6 +809,7 @@ class EventHandler(object):
                     self.chosen_plot = data_series_name
                     self.event_for_apply_plot_config_button(plot, canvas, True)
             self.chosen_plot = ""
+            self.plot_is_chosen = False
             self.update_chosen_plot_label(self.chosen_plot)
             self.event_for_update_data_series_combobox(data_series_combobox)
             data_series_combobox.current(
