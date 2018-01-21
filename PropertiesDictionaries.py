@@ -659,15 +659,15 @@ histogram_properties_UI_dict = dict(
             }
         ),
         "Bar body color": color_dict,
-        "Edge style": dict(
+        "Bar edge style": dict(
             {
                 "solid": "Solid (-)",
-                "dashed": "Dashed (--)",
+                "dashed": "Dash (--)",
                 "dashdot": "Dashdot (-.)",
                 "dotted": "Dotted (..)"
             }
         ),
-        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Bar edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
         "Bar edge/hatch color": color_dict,
         "Hatch type": dict(
             {

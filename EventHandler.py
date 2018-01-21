@@ -403,13 +403,13 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                   picker=True)
+                                                                                   picker=True).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_stack_properties_dict()
             else:
                 temp_artist = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                             self.data_series_dict[self.data_series_name]["y"],
-                                            color=self.data_series_dict[self.data_series_name]["color"])
+                                            color=self.data_series_dict[self.data_series_name]["color"]).pop()
                 mat_art.setp(temp_artist, **self.data_series_dict[self.data_series_name]["artist_properties_dict"])
                 return
         elif (self.data_series_dict[self.data_series_name]["chart_type"] == "Stem plot"):
@@ -586,7 +586,6 @@ class EventHandler(object):
             tab_title
         )
 
-    # remember about ticks
     def clear_series_properties(self, properties_dict):
         self.remove_artist(properties_dict)
         properties_dict["artist_properties_dict"] = None
