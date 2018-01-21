@@ -56,7 +56,7 @@ class Parser(object):
             if (len(value_line) == 1):
                 proper_file_format = False
                 break
-            elif (len(value_line) == 2):
+            if (len(value_line) == 2):
                 if (not value_line[1]):
                     proper_file_format = False
                     break

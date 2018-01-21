@@ -40,7 +40,6 @@ class EventHandler(object):
         else:
             self.data_series_dict[self.data_series_name]["x"] = []
             self.data_series_dict[self.data_series_name]["y"] = []
-        print(temp_series_properties_dict)
         self.data_series_dict[self.data_series_name]["x"] = [
             float(element) for element in temp_series_properties_dict["x"]]
         self.data_series_dict[self.data_series_name]["y"] = [
@@ -407,6 +406,8 @@ class EventHandler(object):
                                                                                    picker=True).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_stack_properties_dict()
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"]["facecolor"] = self.data_series_dict[self.data_series_name]["color"]
+                    self.data_series_dict[self.data_series_name]["artist_properties_dict"]["edgecolor"] = self.data_series_dict[self.data_series_name]["color"]
             else:
                 temp_artist = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                             self.data_series_dict[self.data_series_name]["y"],
