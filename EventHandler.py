@@ -812,8 +812,7 @@ class EventHandler(object):
             self.plot_is_chosen = False
             self.update_chosen_plot_label(self.chosen_plot)
             self.event_for_update_data_series_combobox(data_series_combobox)
-            data_series_combobox.current(
-                len(data_series_combobox["values"]) - 1)
+            data_series_combobox.current(len(data_series_combobox["values"]) - 1)
             self.data_series_name = data_series_combobox["values"][len(data_series_combobox["values"]) - 1]
             data_series_combobox.event_generate("<<ComboboxSelected>>")
             self.event_for_apply_config_button(plot, canvas, True)

@@ -445,7 +445,7 @@ bar_properties_UI_dict = dict(
             }
         ),
         "Bar body color": color_dict,
-        "Edge style": dict(
+        "Bar edge style": dict(
             {
                 "solid": "Solid (-)",
                 "dashed": "Dashed (--)",
@@ -453,20 +453,20 @@ bar_properties_UI_dict = dict(
                 "dotted": "Dotted (..)"
             }
         ),
-        "Edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
+        "Bar edge width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
         "Bar edge/hatch color": color_dict,
         "Hatch type": dict(
             {
-                "/": "diagonal hatching",
-                "\\": "back diagonal",
-                "|": "vertical",
-                "-": "horizontal",
-                "+": "crossed",
-                "x": "crossed diagonal",
-                "o": "small circle",
-                "O": "large circle",
-                ".": "dots",
-                "*": "stars"
+                "/": "Diagonal",
+                "\\": "Back diagonal",
+                "|": "Vertical",
+                "-": "Horizontal",
+                "+": "Crossed",
+                "x": "Crossed Diagonal",
+                "o": "Small circle",
+                "O": "Large circle",
+                ".": "Dots",
+                "*": "Stars"
             }
         ),
         "Dashed edge end type": dict(
