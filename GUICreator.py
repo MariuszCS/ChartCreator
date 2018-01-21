@@ -24,6 +24,7 @@ class ChartCreator(tk.Tk):
         self.wm_title("Chart Creator")
         self.minsize(1000, 650)
         self.event_handler = EventHandler.EventHandler()
+        self.protocol("WM_DELETE_WINDOW", lambda: self.event_handler.event_for_exit(self))
         self.data_series_combobox = None
         self.chosen_color_label = None
         self.chosen_type_label = None
