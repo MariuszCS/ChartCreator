@@ -620,8 +620,8 @@ def create_error_bar_properties_dict():
 error_bar_properties_UI_dict = dict(
     {
         "Opacity": {(x / 10): str((x / 10)) for x in range(1, 11)},
-        "X width": {(x / 10): str((x / 10)) for x in range(1, 21)},
-        "Y height": {(x / 10): str((x / 10)) for x in range(1, 21)},
+        "X width": {(x / 10): str((x / 10)) for x in range(1, 201)},
+        "Y height": {(x / 10): str((x / 10)) for x in range(1, 201)},
         "Line width": {(x / 10): str((x / 10)) for x in range(2, 52, 2)},
         "Line color": color_dict,
         "Cap size": {(x / 10): str((x / 10)) for x in range(0, 82, 2)},

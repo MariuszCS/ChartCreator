@@ -309,7 +309,8 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"], = plot.plot(self.data_series_dict[self.data_series_name]["x"],
                                                                                     self.data_series_dict[self.data_series_name]["y"],
                                                                                     color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                    picker=True)
+                                                                                    picker=True,
+                                                                                    zorder=10)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_line_properties_dict()
             else:
@@ -323,7 +324,8 @@ class EventHandler(object):
                                                                                   self.data_series_dict[self.data_series_name]["y"],
                                                                                   color=self.data_series_dict[self.data_series_name]["color"],
                                                                                   picker=True,
-                                                                                  width=2)
+                                                                                  width=2,
+                                                                                  zorder=10)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_bar_properties_dict()
             else:
@@ -341,7 +343,8 @@ class EventHandler(object):
                                                                                     picker=True,
                                                                                     marker=".",
                                                                                     markersize=6,
-                                                                                    linewidth=0)
+                                                                                    linewidth=0,
+                                                                                    zorder=10)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_point_properties_dict()                                                                         
             else:
@@ -358,7 +361,8 @@ class EventHandler(object):
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True,
-                                                                                   height=2)
+                                                                                   height=2,
+                                                                                   zorder=10)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_horizontal_bar_properties_dict()
             else:
@@ -375,7 +379,8 @@ class EventHandler(object):
                                                                                    picker=True,
                                                                                    yerr=0.2,
                                                                                    xerr=0.2,
-                                                                                   fmt="none")
+                                                                                   fmt="none",
+                                                                                   zorder=10)
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][2][0],picker = True)
                 mat_art.setp(self.data_series_dict[self.data_series_name]["artist"][2][1],picker = True)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
@@ -390,7 +395,8 @@ class EventHandler(object):
             if (not self.data_series_dict[self.data_series_name]["artist"]):
                 _, _, self.data_series_dict[self.data_series_name]["artist"] = plot.hist(self.data_series_dict[self.data_series_name]["x"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                   picker=True)        
+                                                                                   picker=True,
+                                                                                   zorder=10)        
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):                                                          
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_histogram_properties_dict()
             else:
@@ -403,7 +409,8 @@ class EventHandler(object):
                 self.data_series_dict[self.data_series_name]["artist"] = plot.stackplot(self.data_series_dict[self.data_series_name]["x"],
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
-                                                                                   picker=True).pop()
+                                                                                   picker=True,
+                                                                                   zorder=10).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_stack_properties_dict()
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"]["facecolor"] = self.data_series_dict[self.data_series_name]["color"]
@@ -420,7 +427,8 @@ class EventHandler(object):
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True,
-                                                                                   basefmt="none")
+                                                                                   basefmt="none",
+                                                                                   zorder=10)
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_line_properties_dict()
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"]["marker"] = "."
@@ -457,7 +465,8 @@ class EventHandler(object):
                                                                                    self.data_series_dict[self.data_series_name]["y"],
                                                                                    color=self.data_series_dict[self.data_series_name]["color"],
                                                                                    picker=True,
-                                                                                   linewidth=1).pop()
+                                                                                   linewidth=1,
+                                                                                   zorder=10).pop()
                 if (not self.data_series_dict[self.data_series_name]["artist_properties_dict"]):
                     self.data_series_dict[self.data_series_name]["artist_properties_dict"] = PropertiesDictionaries.create_step_properties_dict()
             else:
