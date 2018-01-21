@@ -351,7 +351,7 @@ def create_line_properties_dict():
             "markeredgewidth": 1,
             "solid_capstyle": "projecting",
             "dash_capstyle": "projecting",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -430,7 +430,7 @@ def create_bar_properties_dict():
             "edgecolor": "#000000",
             "hatch": ".",
             "capstyle": "projecting",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -493,7 +493,7 @@ def create_point_properties_dict():
             "markeredgecolor": "#000000",
             "markerfacecolor": "#000000",
             "markeredgewidth": 1,
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -550,7 +550,7 @@ def create_horizontal_bar_properties_dict():
             "edgecolor": "#000000",
             "hatch": ".",
             "capstyle": "projecting",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -613,7 +613,7 @@ def create_error_bar_properties_dict():
             "elinewidth": 1,
             "ecolor": "#000000",
             "capsize": 0,
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -645,7 +645,7 @@ def create_histogram_properties_dict():
             "edgecolor": "#000000",
             "hatch": ".",
             "capstyle": "projecting",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -706,7 +706,7 @@ def create_stack_properties_dict():
             "linestyle": "solid",
             "linewidth": 1,
             "edgecolor": "#000000",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
@@ -748,7 +748,7 @@ def create_step_properties_dict():
             "markeredgewidth": 1,
             "solid_capstyle": "projecting",
             "dash_capstyle": "projecting",
-            "zorder": 1
+            "zorder": 10
         }
     )
 
