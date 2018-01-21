@@ -819,3 +819,8 @@ class EventHandler(object):
             self.event_for_apply_config_button(plot, canvas, True)
         elif (path_to_file):
             self.popup_creator.messagebox_popup("Wrong file format. Only .cc files can be opened.")
+
+    def event_for_exit(self, chart_creator):
+        if (self.popup_creator.popup_for_exit()):
+            chart_creator.quit()
+            chart_creator.destroy()
