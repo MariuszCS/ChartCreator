@@ -481,7 +481,8 @@ class EventHandler(object):
     def event_for_open_in_a_new_window_button(self):
         data_series_name = self.data_series_name
         self.popup_creator.popup_for_plot(
-            lambda: self.event_for_close_popup_button(self.popup_creator.plot_popup))
+            lambda: self.event_for_close_popup_button(self.popup_creator.plot_popup),
+            lambda: self.handle_ticks_visibility(self.popup_creator.plot))
         for dict_name in self.data_series_dict.keys():
             if (self.data_series_dict[dict_name]["artist"]):
                 self.data_series_name = dict_name
@@ -798,6 +799,10 @@ class EventHandler(object):
             PropertiesDictionaries.grid_properties_dict = PropertiesDictionaries.create_grid_properties_dict()
             PropertiesDictionaries.ticks_properties_dict = PropertiesDictionaries.create_ticks_properties_dict()
             PropertiesDictionaries.legend_properties_dict = PropertiesDictionaries.create_legend_properties_dict()
+            PropertiesDictionaries.axes_properties_UI_dict["Title"] = "Chart"
+            PropertiesDictionaries.axes_properties_UI_dict["X axis label"] = "x"
+            PropertiesDictionaries.axes_properties_UI_dict["Y axis label"] = "y"
+            PropertiesDictionaries.legend_properties_UI_dict["Title"] = "Legend"
             chart_creator.quit()
             chart_creator.destroy()
 

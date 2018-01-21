@@ -148,7 +148,7 @@ class PopupCreator(object):
         if (event.widget.get() == "-"):
             event.widget.delete(0, 1)
 
-    def popup_for_plot(self, event_for_close_popup):
+    def popup_for_plot(self, event_for_close_popup, handle_ticks_configuration):
         self.plot_popup = tk.Toplevel()
         self.plot_popup.grab_set()
         self.plot_popup.wm_title("Plot")
@@ -160,6 +160,7 @@ class PopupCreator(object):
         self.plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]), 
                              **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
                              **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
+        handle_ticks_configuration()
         canvas = FigureCanvasTkAgg(figure, self.plot_popup)
         canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
         toolbar = NavigationToolbar2TkAgg(canvas, self.plot_popup)
