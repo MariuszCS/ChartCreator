@@ -596,11 +596,11 @@ class EventHandler(object):
 
     def remove_artist(self, properties_dict):
         # in case of list of artist we need to remove them one by one from the plot
-        if (type(self.data_series_dict[self.data_series_name]["artist"]) == list):
-            for artist in reversed(self.data_series_dict[self.data_series_name]["artist"][2]):
+        if (type(properties_dict["artist"]) == list):
+            for artist in reversed(properties_dict["artist"][2]):
                 artist.remove()
-        elif (type(self.data_series_dict[self.data_series_name]["artist"]) == matplotlib.cbook.silent_list):
-            for artist in reversed(self.data_series_dict[self.data_series_name]["artist"]):
+        elif (type(properties_dict["artist"]) == matplotlib.cbook.silent_list):
+            for artist in reversed(properties_dict["artist"]):
                 artist.remove()
         else:
             properties_dict["artist"].remove()
@@ -608,33 +608,44 @@ class EventHandler(object):
 
     def event_for_apply_config_button(self, plot, canvas, open_file):
         if (not open_file):
-            self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), axes_properties_dict,
-                                                axes_properties_UI_dict, axes_properties_mapping_dict)
-            self.update_values_of_properties_dict(self.popup_creator.grid_frame.winfo_children(), grid_properties_dict,
-                                                grid_properties_UI_dict, gird_properties_mapping_dict)
-            self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), ticks_properties_dict,
-                                                ticks_properties_UI_dict, ticks_properties_mapping_dict)
-            self.update_values_of_properties_dict(self.popup_creator.legend_frame.winfo_children(), legend_properties_dict,
-                                                legend_properties_UI_dict, legend_properties_mapping_dict)
-        mat_art.setp(plot, **axes_properties_dict)
-        plot.grid(**grid_properties_dict)
+            self.update_values_of_properties_dict(self.popup_creator.axes_frame.winfo_children(), 
+                                                PropertiesDictionaries.axes_properties_dict,
+                                                PropertiesDictionaries.axes_properties_UI_dict, 
+                                                PropertiesDictionaries.axes_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.grid_frame.winfo_children(), 
+                                                PropertiesDictionaries.grid_properties_dict,
+                                                PropertiesDictionaries.grid_properties_UI_dict, 
+                                                PropertiesDictionaries.gird_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.ticks_frame.winfo_children(), 
+                                                PropertiesDictionaries.ticks_properties_dict,
+                                                PropertiesDictionaries.ticks_properties_UI_dict, 
+                                                PropertiesDictionaries.ticks_properties_mapping_dict)
+            self.update_values_of_properties_dict(self.popup_creator.legend_frame.winfo_children(), 
+                                                PropertiesDictionaries.legend_properties_dict,
+                                                PropertiesDictionaries.legend_properties_UI_dict, 
+                                                PropertiesDictionaries.legend_properties_mapping_dict)
+        mat_art.setp(plot, **PropertiesDictionaries.axes_properties_dict)
+        plot.grid(**PropertiesDictionaries.grid_properties_dict)
         # there is no visible attribute for ticks, alternative are 2 attributes bottom, left. 
         # There is no point to put them into the GUI so it needs to
         # be changed into visibility in the GUI, and GUI dict needs to have as many attributes as prop dict
         # so there is visible att in the prop dict which needs to be omitted while passing to configuration function
-        plot.tick_params(**dict(list(ticks_properties_dict.items())[:2]), **dict(list(ticks_properties_dict.items())[3:7]),
-                        **dict(list(ticks_properties_dict.items())[8:]))
+        plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]),
+                         **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
+                        **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
         self.handle_ticks_visibility(plot)
         self.update_legend(plot)
         canvas.show()
 
     def handle_ticks_visibility(self, plot):
-        plot.tick_params(axis=ticks_properties_dict["axis"], which=ticks_properties_dict["which"],
-                        bottom=ticks_properties_dict["visible"], left=ticks_properties_dict["visible"])
-        if (ticks_properties_dict["axis"] == "x"):
+        plot.tick_params(axis=PropertiesDictionaries.ticks_properties_dict["axis"], 
+                        which=PropertiesDictionaries.ticks_properties_dict["which"],
+                        bottom=PropertiesDictionaries.ticks_properties_dict["visible"], 
+                        left=PropertiesDictionaries.ticks_properties_dict["visible"])
+        if (PropertiesDictionaries.ticks_properties_dict["axis"] == "x"):
             self.change_ticks_locator(plot.xaxis)
             self.change_ticks_formatter(plot.xaxis)
-        elif (ticks_properties_dict["axis"] == "y"):
+        elif (PropertiesDictionaries.ticks_properties_dict["axis"] == "y"):
             self.change_ticks_locator(plot.yaxis)
             self.change_ticks_formatter(plot.yaxis)
         else:
@@ -644,18 +655,18 @@ class EventHandler(object):
             self.change_ticks_formatter(plot.yaxis)
 
     def change_ticks_locator(self, axis):
-        if (ticks_properties_dict["which"] == "minor"):
-            if (ticks_properties_dict["visible"]):
+        if (PropertiesDictionaries.ticks_properties_dict["which"] == "minor"):
+            if (PropertiesDictionaries.ticks_properties_dict["visible"]):
                 axis.set_minor_locator(ticker.AutoMinorLocator(4))
             else:
                 axis.set_minor_locator(ticker.NullLocator())
-        elif (ticks_properties_dict["which"] == "major"):
-            if (ticks_properties_dict["visible"]):
+        elif (PropertiesDictionaries.ticks_properties_dict["which"] == "major"):
+            if (PropertiesDictionaries.ticks_properties_dict["visible"]):
                 axis.set_major_locator(ticker.AutoLocator())
             else:
                 axis.set_major_locator(ticker.NullLocator())
         else:
-            if (ticks_properties_dict["visible"]):
+            if (PropertiesDictionaries.ticks_properties_dict["visible"]):
                 axis.set_minor_locator(ticker.AutoMinorLocator(4))
                 axis.set_major_locator(ticker.AutoLocator())
             else:
@@ -663,18 +674,18 @@ class EventHandler(object):
                 axis.set_major_locator(ticker.NullLocator())
 
     def change_ticks_formatter(self, axis):
-        if (ticks_properties_dict["which"] == "minor"):
-            if (ticks_properties_dict["label"]):
+        if (PropertiesDictionaries.ticks_properties_dict["which"] == "minor"):
+            if (PropertiesDictionaries.ticks_properties_dict["label"]):
                 axis.set_minor_formatter(ticker.ScalarFormatter())
             else:
                 axis.set_minor_formatter(ticker.NullFormatter())
-        elif (ticks_properties_dict["which"] == "major"):
-            if (ticks_properties_dict["label"]):
+        elif (PropertiesDictionaries.ticks_properties_dict["which"] == "major"):
+            if (PropertiesDictionaries.ticks_properties_dict["label"]):
                 axis.set_major_formatter(ticker.ScalarFormatter())
             else:
                 axis.set_major_formatter(ticker.NullFormatter())
         else:
-            if (ticks_properties_dict["label"]):
+            if (PropertiesDictionaries.ticks_properties_dict["label"]):
                 axis.set_minor_formatter(ticker.ScalarFormatter())
                 axis.set_major_formatter(ticker.ScalarFormatter())
             else:
