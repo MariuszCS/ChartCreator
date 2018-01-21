@@ -40,6 +40,7 @@ class EventHandler(object):
         else:
             self.data_series_dict[self.data_series_name]["x"] = []
             self.data_series_dict[self.data_series_name]["y"] = []
+        print(temp_series_properties_dict)
         self.data_series_dict[self.data_series_name]["x"] = [
             float(element) for element in temp_series_properties_dict["x"]]
         self.data_series_dict[self.data_series_name]["y"] = [

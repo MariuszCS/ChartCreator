@@ -41,8 +41,9 @@ class Parser(object):
         proper_file_format = True
         value_line = ""
         for value_line in list_of_value_lines:
+            value_line[0] = value_line[0].replace(",", ".")
+            value_line[1] = value_line[1].replace(",", ".")
             for item in value_line:
-                item = item.replace(",", ".")
                 if (re.search("[^-0-9.]", item) or re.search(".+[-]|[-]\..*", item) or item == "." or item == "-" or 
                     item.count(".") > 1 or item.count("-") > 1):
                     proper_file_format = False
@@ -55,15 +56,15 @@ class Parser(object):
             if (len(value_line) == 1):
                 proper_file_format = False
                 break
-            temp_series_properties_dict["x"].append(value_line[0])
-            if (len(value_line) == 2):
+            elif (len(value_line) == 2):
                 if (not value_line[1]):
                     proper_file_format = False
                     break
-                temp_series_properties_dict["y"].append(value_line[1])
             elif (len(value_line) > 2):
                 proper_file_format = False
                 break
+            temp_series_properties_dict["x"].append(value_line[0])
+            temp_series_properties_dict["y"].append(value_line[1])
         if (proper_file_format):
             return temp_series_properties_dict
         self.popup_creator.messagebox_popup("Wrong file structure.\n"
