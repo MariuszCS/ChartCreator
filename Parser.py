@@ -185,9 +185,9 @@ class Parser(object):
     def assign_value_to_key(self, properties_dict, key, value):
         if (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "title"):
             PropertiesDictionaries.axes_properties_UI_dict["Title"] = value
-        elif (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "xlabel"):
+        elif (key == "xlabel"):
             PropertiesDictionaries.axes_properties_UI_dict["X axis label"] = value
-        elif (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "ylabel"):
+        elif (key == "ylabel"):
             PropertiesDictionaries.axes_properties_UI_dict["Y axis label"] = value
         elif (properties_dict == PropertiesDictionaries.legend_properties_dict and key == "title"):
             PropertiesDictionaries.legend_properties_UI_dict["Title"] = value
