@@ -183,6 +183,14 @@ class Parser(object):
                         legend_config = True
 
     def assign_value_to_key(self, properties_dict, key, value):
+        if (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "title"):
+            PropertiesDictionaries.axes_properties_UI_dict["Title"] = value
+        elif (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "xlabel"):
+            PropertiesDictionaries.axes_properties_UI_dict["X axis label"] = value
+        elif (properties_dict == PropertiesDictionaries.axes_properties_dict and key == "ylabel"):
+            PropertiesDictionaries.axes_properties_UI_dict["Y axis label"] = value
+        elif (properties_dict == PropertiesDictionaries.legend_properties_dict and key == "title"):
+            PropertiesDictionaries.legend_properties_UI_dict["Title"] = value
         if (key == "scatterpoints" or key == "ncol"):
             properties_dict[key] = int(value)
         elif (value == "True"):
