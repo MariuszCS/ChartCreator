@@ -760,7 +760,7 @@ class EventHandler(object):
                         **dict(list(self.data_series_dict[self.chosen_plot]["artist_properties_dict"].items())[11:]))
             mat_art.setp(self.data_series_dict[self.chosen_plot]["artist"][1], 
                         **dict(list(self.data_series_dict[self.chosen_plot]["artist_properties_dict"].items())[0:4]),
-                        **dict(list(self.data_series_dict[self.chosen_plot]["artist_properties_dict"].items())[9:11]))
+                        **dict(list(self.data_series_dict[self.chosen_plot]["artist_properties_dict"].items())[9:]))
         elif (self.data_series_dict[self.chosen_plot]["chart_type"] == "Step plot"):
             self.remove_artist(self.data_series_dict[self.chosen_plot])
             self.data_series_dict[self.chosen_plot]["artist"] = plot.step(self.data_series_dict[self.chosen_plot]["x"],
