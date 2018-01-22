@@ -41,19 +41,10 @@ class Parser(object):
         proper_file_format = True
         value_line = ""
         for value_line in list_of_value_lines:
-            value_line[0] = value_line[0].replace(",", ".")
-            value_line[1] = value_line[1].replace(",", ".")
-            for item in value_line:
-                if (re.search("[^-0-9.]", item) or re.search(".+[-]|[-]\..*", item) or item == "." or item == "-" or 
-                    item.count(".") > 1 or item.count("-") > 1):
-                    proper_file_format = False
-                    break
-            if (not proper_file_format):
-                break
-            if (not value_line[0]):
+            if (len(value_line) <= 1):
                 proper_file_format = False
                 break
-            if (len(value_line) == 1):
+            if (not value_line[0]):
                 proper_file_format = False
                 break
             if (len(value_line) == 2):
@@ -62,6 +53,15 @@ class Parser(object):
                     break
             elif (len(value_line) > 2):
                 proper_file_format = False
+                break
+            value_line[0] = value_line[0].replace(",", ".")
+            value_line[1] = value_line[1].replace(",", ".")
+            for item in value_line:
+                if (re.search("[^-0-9.]", item) or re.search(".+[-]|[-]\..*", item) or item == "." or item == "-" or 
+                    item.count(".") > 1 or item.count("-") > 1):
+                    proper_file_format = False
+                    break
+            if (not proper_file_format):
                 break
             temp_series_properties_dict["x"].append(value_line[0])
             temp_series_properties_dict["y"].append(value_line[1])
