@@ -80,10 +80,8 @@ class Parser(object):
             return False
         for element_index in range(0, dict_length):
             if (not temp_series_properties_dict["x"][element_index] and temp_series_properties_dict["y"][element_index]):
-                # x empty, y is not
                 return False
             elif(temp_series_properties_dict["x"][element_index] and not temp_series_properties_dict["y"][element_index]):
-                # x not empty, y empty
                 return False
         return True
 

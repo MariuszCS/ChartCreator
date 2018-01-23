@@ -272,7 +272,6 @@ class PopupCreator(object):
         cancel_button.grid(row=2, column=1, sticky="e", padx=15, pady=10)
         self.plot_types_popup.mainloop()
 
-
     def popup_for_plot_configuration(self, event_for_close_popup, event_for_apply_button, event_for_submit_button,
                                      chosen_plot_config_dict, chosen_chart_type):
         self.plot_configuration_popup = tk.Toplevel()

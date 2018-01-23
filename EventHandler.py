@@ -59,7 +59,6 @@ class EventHandler(object):
             self.popup_creator.provide_name_popup.lift()
 
     def check_name(self):
-        # checks if the name is not empty or if it already exists
         provided_name = self.popup_creator.name_entry.get()
         if (not provided_name):
             self.popup_creator.messagebox_popup("Name must not be empty.")
@@ -73,25 +72,21 @@ class EventHandler(object):
 
     def event_for_close_popup_button(self, popup):
         if (self.popup_creator.excel_sheet_popup == popup):
-            # clear entries list if the popup was excel_sheet_popup
             self.popup_creator.entry_list = []
-        popup.grab_release()  # release focus
-        popup.quit()  # escape the mainloop()
-        popup.destroy()  # destroy the popup
+        popup.grab_release()
+        popup.quit()
+        popup.destroy()
 
     def event_for_update_data_series_combobox(self, data_series_combobox):
-        # command run every time user clicks on the arrow of the combobox
         data_series_combobox.config(
             values=[data_series_name for data_series_name in self.data_series_dict.keys()])
 
     def event_for_color_chooser_button(self, chosen_color_label, chosen_color_preview_label, canvas, plot):
         new_color = self.popup_creator.popup_for_colorchooser()
         if (new_color):
-            # if the color has been chosen and is different than previous one
             self.color = new_color
             self.update_color_labels(
                 chosen_color_label, chosen_color_preview_label, self.color)
-            # if the data series is plotted, change its color
             if (self.data_series_dict and self.data_series_dict[self.data_series_name]["artist"]):
                 if (self.data_series_dict[self.data_series_name]["chart_type"] == "Stem plot"):
                     mat_art.setp(
@@ -110,21 +105,15 @@ class EventHandler(object):
         self.data_series_name = data_series_name
         if (self.data_series_dict.keys()):
             if (self.data_series_dict[self.data_series_name]["artist"]):
-                # update color in hex and preview in the color label to the color of the plot of this data series
                 self.color = self.data_series_dict[self.data_series_name]["color"]
                 self.update_color_labels(
                     chosen_color_label, chosen_color_preview_label, self.color)
             else:
-                # update color in hex and preview in the color label to the default color (black)
                 self.color = "#000000"
                 self.update_color_labels(
                     chosen_color_label, chosen_color_preview_label, self.color)
-            # set radiobutton to the chart_type of the data series (if plotted data series is line, line radiobutton will be set,
-            # if the data series is not plotted, all radio buttons will be cleared etc.)
             GUICreator.ChartCreator.chart_type.set(value=self.data_series_dict[self.data_series_name]["chart_type"])
             chosen_type_label.config(text="Chosen type: " + GUICreator.ChartCreator.chart_type.get())
-            # remove anything that is present in name_entry, but only in case if it is different than the plot_name of current data series,
-            # and set it to the plot_name of current data series
             if (name_entry.get() != self.data_series_dict[self.data_series_name]["plot_name"]):
                 name_entry.delete(0, len(name_entry.get()))
                 name_entry.insert(
@@ -136,7 +125,6 @@ class EventHandler(object):
                 chosen_color_label, chosen_color_preview_label, "")
 
     def update_color_labels(self, chosen_color_label, chosen_color_preview_label, color):
-        # update text and color in preview label
         chosen_color_label.config(text="Chosen color (hex): {0}".format(color))
         chosen_color_preview_label.config(background=color)
 
@@ -220,9 +208,7 @@ class EventHandler(object):
                     data_series_combobox, "Modify data series...", canvas, plot),
                 lambda: self.event_for_add_row_button())
             self.fill_excel_sheet_popup(data_series_combobox)
-            # needs to be here so self.fill_excel_sheet_popup(data_series_combobox)
             self.popup_creator.excel_sheet_popup.mainloop()
-            # will be executed before the popup will show
         else:
             self.popup_creator.messagebox_popup("No data series selected.")
             return
@@ -233,10 +219,9 @@ class EventHandler(object):
             for _ in range(0, len(self.data_series_dict[self.data_series_name]["x"]) - int(len(self.popup_creator.entry_list) / 2)):
                 self.popup_creator.add_entry()
                 self.popup_creator.update_scroll_region()
-        # every list is the same length
         for value_index in range(0, len(self.data_series_dict[self.data_series_name]["x"])):
-            self.popup_creator.entry_list[int(value_index * 2)].insert(0,  # position
-                                                                       self.data_series_dict[self.data_series_name]["x"][value_index])  # value
+            self.popup_creator.entry_list[int(value_index * 2)].insert(0,
+                                                                       self.data_series_dict[self.data_series_name]["x"][value_index])
             self.popup_creator.entry_list[int(value_index * 2) + 1].insert(0,
                                                                            self.data_series_dict[self.data_series_name]["y"][value_index])
 
@@ -292,8 +277,6 @@ class EventHandler(object):
         self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
         self.data_series_dict[self.data_series_name]["color"] = self.color
         self.draw_plot(plot)
-        # If someone passes wrong name in the legend for example: ${_y_t}$, this is double subscript written in a wrong way,
-        # so the built in exception will be raised
         try:
             canvas.show()
         except ValueError:
@@ -510,7 +493,6 @@ class EventHandler(object):
         self.event_for_auto_scale_button(plot, canvas)
 
     def event_for_radiobutton(self, plot, canvas, chosen_type_label):
-        # changes the drawn plot to the new type
         self.handle_chart_type_change(plot, canvas, chosen_type_label)
 
     def name_entry_callback(self, plot_name, canvas, plot):
@@ -519,8 +501,6 @@ class EventHandler(object):
             old_plot_name = self.data_series_dict[self.data_series_name]["plot_name"]
             self.data_series_dict[self.data_series_name]["plot_name"] = plot_name
             self.update_legend(plot)
-            # If someone passes wrong name in the legend for example: ${_y_t}$, this is double subscript written in a wrong way,
-            # so the built in exception will be raised
             try:
                 canvas.show()
             except ValueError:
@@ -606,7 +586,6 @@ class EventHandler(object):
         properties_dict["plot_name"] = ""
 
     def remove_artist(self, properties_dict):
-        # in case of list of artist we need to remove them one by one from the plot
         if (type(properties_dict["artist"]) == list):
             for artist in reversed(properties_dict["artist"][2]):
                 artist.remove()
@@ -637,10 +616,6 @@ class EventHandler(object):
                                                 PropertiesDictionaries.legend_properties_mapping_dict)
         mat_art.setp(plot, **PropertiesDictionaries.axes_properties_dict)
         plot.grid(**PropertiesDictionaries.grid_properties_dict)
-        # there is no visible attribute for ticks, alternative are 2 attributes bottom, left. 
-        # There is no point to put them into the GUI so it needs to
-        # be changed into visibility in the GUI, and GUI dict needs to have as many attributes as prop dict
-        # so there is visible att in the prop dict which needs to be omitted while passing to configuration function
         plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]),
                          **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
                         **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))

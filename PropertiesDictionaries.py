@@ -51,10 +51,6 @@ color_dict = dict(
         }
     )
 
-"""
-Every data series that is plotted has its own series properties dict, so no instance created here, but only function, to create one during
-plotting and configuration (temp objects for config.)
-"""
 def create_series_properties_dict():
     return dict(
         {
@@ -68,10 +64,6 @@ def create_series_properties_dict():
         }
     )
 
-
-"""
-Dictionary that will be passed as **kwargs to the .grid() function of the subplot object with all the settable grid properties
-"""
 def create_grid_properties_dict():
     return dict(
         {
@@ -84,9 +76,7 @@ def create_grid_properties_dict():
             "linewidth": 1,
         }
     )
-"""
-Dictionary which keys and values (values of the sub dictionaries) are displayed in the GUI
-"""
+
 grid_properties_UI_dict = dict(
     {
         "Apply to axis": dict(
@@ -124,10 +114,7 @@ grid_properties_UI_dict = dict(
 )
 
 grid_properties_dict = create_grid_properties_dict()
-"""
-Dictionary mapping the key from the dictionary that it displayed in the GUI to the key from the dictionary that is passed
-as **kwargs to the drawing function
-"""
+
 gird_properties_mapping_dict = {list(grid_properties_UI_dict.keys())[index]: list(grid_properties_dict.keys())[index]
                                 for index in range(0, len(grid_properties_dict.keys()))}
 

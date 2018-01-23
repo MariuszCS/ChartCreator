@@ -170,8 +170,7 @@ class ChartCreator(tk.Tk):
         ChartCreator.chosen_plot_label = ttk.Label(parent_frame, text="Chosen: ", width=24, justify="left", font=Constants.MONOSPACED_FONT)
         ChartCreator.chosen_plot_label.grid(row=1, column=1, sticky="ew")
         self.canvas = FigureCanvasTkAgg(figure, parent_frame)
-        self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback) # callback for clicking on the chosen plot event
-        #self.canvas.mpl_connect("scroll_event", lambda event: self.event_handler.scroll_callback(event, self.plot, self.canvas))
+        self.canvas.mpl_connect("pick_event", self.event_handler.click_artist_callback)
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=2, sticky="nwse")
         toolbar_frame = tk.Frame(parent_frame)
