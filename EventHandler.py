@@ -614,14 +614,53 @@ class EventHandler(object):
                                                 PropertiesDictionaries.legend_properties_dict,
                                                 PropertiesDictionaries.legend_properties_UI_dict, 
                                                 PropertiesDictionaries.legend_properties_mapping_dict)
-        mat_art.setp(plot, **PropertiesDictionaries.axes_properties_dict)
         plot.grid(**PropertiesDictionaries.grid_properties_dict)
         plot.tick_params(**dict(list(PropertiesDictionaries.ticks_properties_dict.items())[:2]),
                          **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[3:7]),
                         **dict(list(PropertiesDictionaries.ticks_properties_dict.items())[8:]))
         self.handle_ticks_visibility(plot)
         self.update_legend(plot)
-        canvas.show()
+        try:
+            canvas.show()
+        except ValueError:
+            PropertiesDictionaries.legend_properties_dict["title"] = ""
+            PropertiesDictionaries.legend_properties_UI_dict["Title"] = ""
+            self.popup_creator.messagebox_popup("Wrong mathtext syntax in the legend entry. "
+                                                "Please check the matplotlib docs for more information "
+                                                "about mathtext used in matplotlib.")
+            self.update_legend(plot)
+        mat_art.setp(plot, **dict(list(PropertiesDictionaries.axes_properties_dict.items())[0:4]))
+        try:
+            canvas.show()
+        except ValueError:
+            PropertiesDictionaries.axes_properties_dict["title"] = ""
+            PropertiesDictionaries.axes_properties_UI_dict["Title"] = ""
+            self.popup_creator.messagebox_popup("Wrong mathtext syntax in the axes title entry. "
+                                                "Please check the matplotlib docs for more information "
+                                                "about mathtext used in matplotlib.")
+            mat_art.setp(plot, title="")
+        mat_art.setp(plot, xlabel=PropertiesDictionaries.axes_properties_dict["xlabel"])
+        try:
+            canvas.show()
+        except ValueError:
+            PropertiesDictionaries.axes_properties_dict["xlabel"] = ""
+            PropertiesDictionaries.axes_properties_UI_dict["X axis label"] = ""
+            self.popup_creator.messagebox_popup("Wrong mathtext syntax in the x axis label entry. "
+                                                "Please check the matplotlib docs for more information "
+                                                "about mathtext used in matplotlib.")
+            mat_art.setp(plot, xlabel="")
+        mat_art.setp(plot, ylabel=PropertiesDictionaries.axes_properties_dict["ylabel"])
+        try:
+            canvas.show()
+        except ValueError:
+            PropertiesDictionaries.axes_properties_dict["ylabel"] = ""
+            PropertiesDictionaries.axes_properties_UI_dict["Y axis label"] = ""
+            self.popup_creator.messagebox_popup("Wrong mathtext syntax in the y axis label entry. "
+                                                "Please check the matplotlib docs for more information "
+                                                "about mathtext used in matplotlib.")
+            mat_art.setp(plot, ylabel="")
+            canvas.show()
+        
 
     def handle_ticks_visibility(self, plot):
         plot.tick_params(axis=PropertiesDictionaries.ticks_properties_dict["axis"], 
